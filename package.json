@@ -1,0 +1,14 @@
+{
+  "name": "contore",
+  "version": "1.0.0",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": "https://github.com/Al-Mikan/contore.git",
+  "author": "Sippo",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^20.0.2"
+  }
+}
