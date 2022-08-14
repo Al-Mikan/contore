@@ -1,4 +1,9 @@
 {
+  "name": "contore",
+  "repository": "https://github.com/Al-Mikan/contore.git",
+  "version": "1.0.0",
+  "author": "Sippo,almikan,karintou,Today",
+  "license": "MIT",
   "private": true,
   "main": "main/index.js",
   "productName": "ElectronTypescriptNext",
