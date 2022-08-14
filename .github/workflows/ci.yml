@@ -3,8 +3,8 @@ name: CI
 on:
   pull_request:
     branches: [main, develop]
-  
-   workflow_dispatch:
+
+  workflow_dispatch:
 
 jobs:
   client:
@@ -15,19 +15,19 @@ jobs:
 
       - uses: actions/setup-node@v2
         with:
-          node-version: '16'
-      
+          node-version: "16"
+
       - name: install package
         run: yarn install --frozen-lockfile
-      
+
       - name: run lint
         run: yarn run lint
-      
+
       - name: check format
         run: yarn run format:check
-      
+
       - name: build test
         run: yarn run build
-      
+
       - name: code test
         run: yarn run test
