@@ -26,7 +26,8 @@
     "electron-is-dev": "^1.1.0",
     "electron-next": "^3.1.5",
     "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "react-dom": "^17.0.2",
+    "react-icons": "^4.4.0"
   },
   "devDependencies": {
     "@types/jest": "^28.1.6",
