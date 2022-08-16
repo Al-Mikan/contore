@@ -11,22 +11,31 @@ import prepareNext from 'electron-next'
 import Store from 'electron-store'
 const store = new Store()
 
+
 // Prepare the renderer once the app is ready
 app.on('ready', async () => {
   await prepareNext('./renderer')
 
   const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: false,
       preload: join(__dirname, 'preload.js'),
     },
+    
   })
+  const {screen}  = require('electron')
+  const display = screen.getPrimaryDisplay()
+  const w = display.size.width
 
+  
+  mainWindow.setAspectRatio(16/9)
+  mainWindow.setSize(w/2,w/2 / 16 * 9)
+  mainWindow.center()
+  mainWindow.setMinimumSize(w/4,w/4 / 16 * 9)
+  
   const url = isDev
-    ? 'http://localhost:8000/'
+  ? 'http://localhost:8000/'
     : format({
         pathname: join(__dirname, '../renderer/out/index.html'),
         protocol: 'file:',
@@ -36,7 +45,6 @@ app.on('ready', async () => {
   mainWindow.loadURL(url)
 })
 
-// Quit the app once all windows are closed
 app.on('window-all-closed', app.quit)
 
 // レンダラープロセスはメインプロセスにプロセス間通信でデータ取得を要求する
