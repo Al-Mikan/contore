@@ -3,7 +3,7 @@ import { join } from 'path'
 import { format } from 'url'
 
 // Packages
-import { BrowserWindow, app, ipcMain } from 'electron'
+import { BrowserWindow, app, ipcMain, screen } from 'electron'
 import isDev from 'electron-is-dev'
 import prepareNext from 'electron-next'
 
@@ -16,14 +16,20 @@ app.on('ready', async () => {
   await prepareNext('./renderer')
 
   const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: false,
       preload: join(__dirname, 'preload.js'),
     },
   })
+  const display = screen.getPrimaryDisplay()
+  const w = display.size.width
+
+  const apr = 16 / 9
+  mainWindow.setAspectRatio(apr)
+  mainWindow.setSize(w / 2, w / 2 / apr)
+  mainWindow.center()
+  mainWindow.setMinimumSize(w / 4, w / 4 / apr)
 
   const url = isDev
     ? 'http://localhost:8000/'
@@ -36,7 +42,6 @@ app.on('ready', async () => {
   mainWindow.loadURL(url)
 })
 
-// Quit the app once all windows are closed
 app.on('window-all-closed', app.quit)
 
 // レンダラープロセスはメインプロセスにプロセス間通信でデータ取得を要求する
