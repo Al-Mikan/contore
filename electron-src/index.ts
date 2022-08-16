@@ -3,9 +3,13 @@ import { join } from 'path'
 import { format } from 'url'
 
 // Packages
-import { BrowserWindow, app } from 'electron'
+import { BrowserWindow, app, ipcMain } from 'electron'
 import isDev from 'electron-is-dev'
 import prepareNext from 'electron-next'
+
+// electron-storeの初期化
+import Store from 'electron-store'
+const store = new Store()
 
 // Prepare the renderer once the app is ready
 app.on('ready', async () => {
@@ -34,3 +38,8 @@ app.on('ready', async () => {
 
 // Quit the app once all windows are closed
 app.on('window-all-closed', app.quit)
+
+// レンダラープロセスはメインプロセスにプロセス間通信でデータ取得を要求する
+ipcMain.handle('getStoreValue', (_, key) => {
+  return store.get(key)
+})
