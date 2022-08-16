@@ -3,14 +3,13 @@ import { join } from 'path'
 import { format } from 'url'
 
 // Packages
-import { BrowserWindow, app, ipcMain } from 'electron'
+import { BrowserWindow, app, ipcMain, screen } from 'electron'
 import isDev from 'electron-is-dev'
 import prepareNext from 'electron-next'
 
 // electron-storeの初期化
 import Store from 'electron-store'
 const store = new Store()
-
 
 // Prepare the renderer once the app is ready
 app.on('ready', async () => {
@@ -22,20 +21,18 @@ app.on('ready', async () => {
       contextIsolation: false,
       preload: join(__dirname, 'preload.js'),
     },
-    
   })
-  const {screen}  = require('electron')
   const display = screen.getPrimaryDisplay()
   const w = display.size.width
 
-  
-  mainWindow.setAspectRatio(16/9)
-  mainWindow.setSize(w/2,w/2 / 16 * 9)
+  const apr = 16 / 9
+  mainWindow.setAspectRatio(apr)
+  mainWindow.setSize(w / 2, w / 2 / apr)
   mainWindow.center()
-  mainWindow.setMinimumSize(w/4,w/4 / 16 * 9)
-  
+  mainWindow.setMinimumSize(w / 4, w / 4 / apr)
+
   const url = isDev
-  ? 'http://localhost:8000/'
+    ? 'http://localhost:8000/'
     : format({
         pathname: join(__dirname, '../renderer/out/index.html'),
         protocol: 'file:',
