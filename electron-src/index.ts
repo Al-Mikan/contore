@@ -17,8 +17,7 @@ app.on('ready', async () => {
 
   const mainWindow = new BrowserWindow({
     webPreferences: {
-      nodeIntegration: false,
-      contextIsolation: false,
+      contextIsolation: true,
       preload: join(__dirname, 'preload.js'),
     },
   })
@@ -47,4 +46,9 @@ app.on('window-all-closed', app.quit)
 // レンダラープロセスはメインプロセスにプロセス間通信でデータ取得を要求する
 ipcMain.handle('getStoreValue', (_, key) => {
   return store.get(key)
+})
+
+ipcMain.handle('getDisplaySize', (_) => {
+  const display = screen.getPrimaryDisplay()
+  return display.size
 })

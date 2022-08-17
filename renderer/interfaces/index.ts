@@ -13,4 +13,8 @@ declare global {
       ipcRenderer: IpcRenderer
     }
   }
+
+  var electronAPI: {
+    getDisplaySize: () => Promise<any>
+  }
 }
