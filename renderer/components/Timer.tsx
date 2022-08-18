@@ -3,11 +3,11 @@ import { Text } from '@inlet/react-pixi'
 import { TextStyle } from 'pixi.js'
 
 interface Props {
-  time: string;
-  setTime: (v: string) => void;
+  time: string
+  setTime: (v: string) => void
 }
 
-const Timer = ({time, setTime}: Props) => {
+const Timer = ({ time, setTime }: Props) => {
   const dateToTimeString = (d: Date) => d.toTimeString().slice(0, 8)
 
   useEffect(() => {
@@ -29,12 +29,12 @@ const Timer = ({time, setTime}: Props) => {
   return (
     <Text
       text={time}
-      x={400}
-      y={150}
+      x={550}
+      y={250}
       style={
         new TextStyle({
           fontFamily: '"Source Sans Pro", Helvetica, sans-serif',
-          fontSize: 70,
+          fontSize: 150,
           letterSpacing: 20,
           fill: '#ffffff',
         })

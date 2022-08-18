@@ -13,14 +13,24 @@ const ConcentratePage = () => {
 
   return (
     <Layout title="集中画面 | こんとれ！！">
-      <Stage height={1000} width={2000} options={{ backgroundAlpha: 0 }}>
-        <Timer time={time} setTime={(v) => {setTime(v)}}/>
-        <Sprite image="/img/cat.gif" x={350} y={250} />
-      </Stage>
+      <StyledStage height={1080} width={1920} options={{ backgroundAlpha: 0 }}>
+        <Timer
+          time={time}
+          setTime={(v) => {
+            setTime(v)
+          }}
+        />
+        <Sprite image="/img/cat.gif" x={650} y={550} />
+      </StyledStage>
       <StyledA onClick={handleStopClick}>終了</StyledA>
     </Layout>
   )
 }
+
+const StyledStage = styled(Stage)`
+  width: 100% !important;
+  height: 100% !important;
+`
 
 const StyledA = styled.a`
   font-size: 1.2rem;
