@@ -21,8 +21,8 @@ const Layout = ({ children, title = 'こんとれ！！' }: Props) => (
 const StyledConteiner = styled.div`
   width: 100vw;
   height: 100vh;
-  background-image: url('/img/forest.jpg');
-  background-size: cover;
+  background-image: url('/img/background.png');
+  background-size: 100% 100%;
   overflow: hidden;
   color: white;
   position: relative;

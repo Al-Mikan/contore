@@ -16,6 +16,8 @@ app.on('ready', async () => {
   await prepareNext('./renderer')
 
   const mainWindow = new BrowserWindow({
+    frame: false,
+    transparent: true,
     webPreferences: {
       contextIsolation: true,
       preload: join(__dirname, 'preload.js'),
