@@ -18,8 +18,8 @@
     "type-check": "tsc -p ./renderer/tsconfig.json && tsc -p ./electron-src/tsconfig.json",
     "lint": "next lint renderer electron-src",
     "lint:fix": "yarn lint --fix",
-    "format:check": "prettier --check ./**/*.{js,jsx,ts,tsx,json}",
-    "format": "prettier --write ./**/*.{js,jsx,ts,tsx,json}",
+    "format:check": "prettier --check \"./**/*.{js,jsx,ts,tsx,json}\"",
+    "format": "prettier --write \"./**/*.{js,jsx,ts,tsx,json}\"",
     "test": "jest"
   },
   "dependencies": {
