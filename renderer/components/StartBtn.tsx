@@ -6,7 +6,6 @@ const StartBtn = () => {
     font-size: 1.2rem;
     font-weight: 900;
     padding: 1rem 0.8rem;
-    cursor: pointer;
     user-select: none;
     text-align: center;
     vertical-align: middle;
@@ -15,6 +14,7 @@ const StartBtn = () => {
     background-color: #4cfcbe;
     border-radius: 1.3rem;
     border: 5px solid white;
+    cursor: inherit;
   `
 
   const StyledHiOutlineBookOpen = styled(HiOutlineBookOpen)`

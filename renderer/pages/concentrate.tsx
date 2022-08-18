@@ -20,7 +20,7 @@ const ConcentratePage = () => {
             setTime(v)
           }}
         />
-        <Sprite image="/img/cat.gif" x={650} y={550} />
+        <Sprite image="/img/cat.gif" x={450} y={350} scale={2} />
       </StyledStage>
       <StyledA onClick={handleStopClick}>終了</StyledA>
     </Layout>
@@ -36,7 +36,6 @@ const StyledA = styled.a`
   font-size: 1.2rem;
   font-weight: 900;
   padding: 1rem 2rem;
-  cursor: pointer;
   user-select: none;
   text-align: center;
   vertical-align: middle;
