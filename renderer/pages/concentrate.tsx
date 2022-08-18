@@ -1,14 +1,21 @@
 import styled from 'styled-components'
 import { Stage, Sprite } from '@inlet/react-pixi'
-import { useState } from 'react'
+import { useState, MouseEventHandler } from 'react'
+import { useDisclosure } from '@chakra-ui/react'
 
 import Layout from '../components/Layout'
 import Timer from '../components/Timer'
+import ResultModal from '../components/ResultModal'
 
 const ConcentratePage = () => {
   let [time, setTime] = useState('00:00:00')
-  const handleStopClick = () => {
-    console.log(time)
+  let [resultTime, setResultTime] = useState('00:00:00')
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  const dateToTimeString = (d: Date) => d.toTimeString().slice(0, 8)
+  const handleStopClick: MouseEventHandler<HTMLAnchorElement> = (e) => {
+    e.preventDefault()
+    setResultTime(time)
+    onOpen()
   }
 
   return (
@@ -23,6 +30,12 @@ const ConcentratePage = () => {
         <Sprite image="/img/cat.gif" x={450} y={350} scale={2} />
       </StyledStage>
       <StyledA onClick={handleStopClick}>終了</StyledA>
+      <ResultModal
+        isOpen={isOpen}
+        onOpen={onOpen}
+        onClose={onClose}
+        time={resultTime}
+      ></ResultModal>
     </Layout>
   )
 }
