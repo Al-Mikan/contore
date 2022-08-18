@@ -1,20 +1,23 @@
-import Layout from '../components/Layout'
-import Link from 'next/link'
 import styled from 'styled-components'
 import { Stage, Sprite } from '@inlet/react-pixi'
+import { useState } from 'react'
 
+import Layout from '../components/Layout'
 import Timer from '../components/Timer'
 
 const ConcentratePage = () => {
+  let [time, setTime] = useState('00:00:00')
+  const handleStopClick = () => {
+    console.log(time)
+  }
+
   return (
     <Layout title="集中画面 | こんとれ！！">
       <Stage height={1000} width={2000} options={{ backgroundAlpha: 0 }}>
-        <Timer />
+        <Timer time={time} setTime={(v) => {setTime(v)}}/>
         <Sprite image="/img/cat.gif" x={350} y={250} />
       </Stage>
-      <Link href="/">
-        <StyledA>終了</StyledA>
-      </Link>
+      <StyledA onClick={handleStopClick}>終了</StyledA>
     </Layout>
   )
 }

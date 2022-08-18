@@ -1,11 +1,15 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import { Text } from '@inlet/react-pixi'
 import { TextStyle } from 'pixi.js'
 
-function Timer() {
+interface Props {
+  time: string;
+  setTime: (v: string) => void;
+}
+
+const Timer = ({time, setTime}: Props) => {
   const dateToTimeString = (d: Date) => d.toTimeString().slice(0, 8)
 
-  let [time, setTime] = useState('00:00:00')
   useEffect(() => {
     const d = new Date()
     d.setDate(0)
