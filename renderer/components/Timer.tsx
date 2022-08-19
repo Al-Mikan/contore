@@ -1,6 +1,5 @@
 import { useEffect } from 'react'
-import { Text } from '@inlet/react-pixi'
-import { TextStyle } from 'pixi.js'
+import { Container, Sprite } from '@inlet/react-pixi'
 
 interface Props {
   time: string
@@ -27,19 +26,16 @@ const Timer = ({ time, setTime }: Props) => {
   }, [])
 
   return (
-    <Text
-      text={time}
-      x={550}
-      y={250}
-      style={
-        new TextStyle({
-          fontFamily: '"Source Sans Pro", Helvetica, sans-serif',
-          fontSize: 150,
-          letterSpacing: 20,
-          fill: '#ffffff',
-        })
-      }
-    ></Text>
+    <Container x={0} y={-100}>
+      <Sprite image={'/img/number/' + time[0] + '.png'} x={100} scale={2} />
+      <Sprite image={'/img/number/' + time[1] + '.png'} x={200} scale={2} />
+      <Sprite image="/img/number/colon.png" x={300} y={15} scale={2} />
+      <Sprite image={'/img/number/' + time[3] + '.png'} x={400} scale={2} />
+      <Sprite image={'/img/number/' + time[4] + '.png'} x={500} scale={2} />
+      <Sprite image="/img/number/colon.png" x={600} y={15} scale={2} />
+      <Sprite image={'/img/number/' + time[6] + '.png'} x={700} scale={2} />
+      <Sprite image={'/img/number/' + time[7] + '.png'} x={800} scale={2} />
+    </Container>
   )
 }
 
