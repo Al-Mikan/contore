@@ -12,25 +12,25 @@ const MiniCat = () => {
     '/img/mini-cat/2.png',
   ]
   const move_w = 800
-  
+
   const [visibleList, setVisibleList] = useState([true, false])
   const [moveTick, setMoveTick] = useState(0)
 
   const character_move_pos = (p: number) => {
     /* 0を基準に -move_w/4 <= x <= move_w/4で移動をする */
-    const quarter = move_w/4;
-    if (p < 1*quarter) {
+    const quarter = move_w / 4
+    if (p < 1 * quarter) {
       // ->
       return p
-    } else if (p < 2*quarter) {
+    } else if (p < 2 * quarter) {
       // <-
       return quarter - (p - quarter)
-    } else if (p < 3*quarter) {
+    } else if (p < 3 * quarter) {
       // <-
       return 2 * quarter - p
     } else {
       // ->
-      return -quarter + (p-3*quarter)
+      return -quarter + (p - 3 * quarter)
     }
   }
   /* clickでアニメーションを切り替え */

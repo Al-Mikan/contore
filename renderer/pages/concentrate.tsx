@@ -2,6 +2,8 @@ import styled from 'styled-components'
 import { Stage } from '@inlet/react-pixi'
 import { useState, MouseEventHandler } from 'react'
 import { useDisclosure } from '@chakra-ui/react'
+import Image from 'next/image'
+import { FaRegHandPaper } from 'react-icons/fa'
 
 import Layout from '../components/Layout'
 import Timer from '../components/Timer'
@@ -12,7 +14,7 @@ const ConcentratePage = () => {
   let [time, setTime] = useState('00:00:00')
   let [resultTime, setResultTime] = useState('00:00:00')
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const handleStopClick: MouseEventHandler<HTMLAnchorElement> = (e) => {
+  const handleStopClick: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault()
     setResultTime(time)
     onOpen()
@@ -29,8 +31,13 @@ const ConcentratePage = () => {
         />
         <MiniCat />
       </StyledStage>
-      <DragButton>Drag</DragButton>
-      <StyledA onClick={handleStopClick}>終了</StyledA>
+      <DragButton>
+        <FaRegHandPaper />
+      </DragButton>
+      <StyledImageButton onClick={handleStopClick}>
+        <Image src="/img/end-btn.png" layout="fill" />
+      </StyledImageButton>
+
       <ResultModal
         isOpen={isOpen}
         onOpen={onOpen}
@@ -46,30 +53,21 @@ const StyledStage = styled(Stage)`
   height: 100% !important;
 `
 
-const StyledA = styled.a`
-  font-size: 1.2rem;
-  font-weight: 900;
-  padding: 1rem 2rem;
-  user-select: none;
-  text-align: center;
-  vertical-align: middle;
-  text-decoration: none;
-  color: #455d55;
-  background-color: #4cfcbe;
-  border-radius: 1.3rem;
-  border: 5px solid white;
+const StyledImageButton = styled.button`
   position: absolute;
   right: 5%;
-  bottom: 5%;
+  bottom: 2%;
+  width: 13%;
+  height: 10%;
   &:hover {
-    opacity: 0.8;
+    opacity: 0.6;
   }
 `
 
 const DragButton = styled.a`
-  font-size: 0.5rem;
-  font-weight: 500;
-  padding: 0.5rem 0.5rem;
+  font-size: 1rem;
+  font-weight: 900;
+  padding: 0.3rem 0.3rem;
   user-select: none;
   text-align: center;
   vertical-align: middle;
@@ -82,9 +80,6 @@ const DragButton = styled.a`
   right: 1%;
   top: 1%;
   -webkit-app-region: drag;
-  &:hover {
-    opacity: 0.8;
-  }
 `
 
 export default ConcentratePage
