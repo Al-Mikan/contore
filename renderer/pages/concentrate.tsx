@@ -1,17 +1,17 @@
 import styled from 'styled-components'
-import { Stage, Sprite } from '@inlet/react-pixi'
+import { Stage } from '@inlet/react-pixi'
 import { useState, MouseEventHandler } from 'react'
 import { useDisclosure } from '@chakra-ui/react'
 
 import Layout from '../components/Layout'
 import Timer from '../components/Timer'
 import ResultModal from '../components/ResultModal'
+import MiniCat from '../components/characters/MiniCat'
 
 const ConcentratePage = () => {
   let [time, setTime] = useState('00:00:00')
   let [resultTime, setResultTime] = useState('00:00:00')
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const dateToTimeString = (d: Date) => d.toTimeString().slice(0, 8)
   const handleStopClick: MouseEventHandler<HTMLAnchorElement> = (e) => {
     e.preventDefault()
     setResultTime(time)
@@ -27,8 +27,9 @@ const ConcentratePage = () => {
             setTime(v)
           }}
         />
-        <Sprite image="/img/cat.gif" x={450} y={350} scale={2} />
+        <MiniCat />
       </StyledStage>
+      <DragButton>Drag</DragButton>
       <StyledA onClick={handleStopClick}>終了</StyledA>
       <ResultModal
         isOpen={isOpen}
@@ -60,6 +61,27 @@ const StyledA = styled.a`
   position: absolute;
   right: 5%;
   bottom: 5%;
+  &:hover {
+    opacity: 0.8;
+  }
+`
+
+const DragButton = styled.a`
+  font-size: 0.5rem;
+  font-weight: 500;
+  padding: 0.5rem 0.5rem;
+  user-select: none;
+  text-align: center;
+  vertical-align: middle;
+  text-decoration: none;
+  color: #455d55;
+  background-color: #4cfcbe;
+  border-radius: 0.5rem;
+  border: 1px solid white;
+  position: absolute;
+  right: 1%;
+  top: 1%;
+  -webkit-app-region: drag;
   &:hover {
     opacity: 0.8;
   }
