@@ -27,9 +27,9 @@ app.on('ready', async () => {
 
   const apr = 16 / 9
   mainWindow.setAspectRatio(apr)
-  mainWindow.setSize(w / 2, w / 2 / apr)
+  mainWindow.setSize(Math.floor(w / 2), Math.floor(w / 2 / apr))
   mainWindow.center()
-  mainWindow.setMinimumSize(w / 4, w / 4 / apr)
+  mainWindow.setMinimumSize(Math.floor(w / 4), Math.floor(w / 4 / apr))
 
   const url = isDev
     ? 'http://localhost:8000/'
