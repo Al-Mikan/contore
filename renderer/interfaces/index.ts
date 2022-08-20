@@ -16,5 +16,9 @@ declare global {
 
   var electronAPI: {
     getDisplaySize: () => Promise<any>
+    setIgnoreMouseEvents: (
+      flag: boolean,
+      options?: { forward: boolean }
+    ) => Promise<void>
   }
 }

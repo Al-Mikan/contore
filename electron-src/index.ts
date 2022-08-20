@@ -54,3 +54,13 @@ ipcMain.handle('getDisplaySize', (_) => {
   const display = screen.getPrimaryDisplay()
   return display.size
 })
+
+ipcMain.handle(
+  'set-ignore-mouse-events',
+  (event, flag: boolean, options?: { forward: boolean }) => {
+    BrowserWindow.fromWebContents(event.sender)?.setIgnoreMouseEvents(
+      flag,
+      options
+    )
+  }
+)
