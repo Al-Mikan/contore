@@ -26,7 +26,7 @@ const StyledConteiner = styled.div`
   overflow: hidden;
   color: white;
   position: relative;
-  cursor: url('/img/pad.png') 15 15, auto;
+  cursor: url('/img/mini-pad.png') 15 15, auto;
 `
 
 export default Layout
