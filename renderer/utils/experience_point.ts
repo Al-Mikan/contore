@@ -1,52 +1,40 @@
-export {};
-var exp_point : number = 0;
-var times = Array(101);
-var acc = Array(101);
+export default class experience_point {
+    exp_point : number = 0;
+    times = Array(101);
+    acc = Array(102);
 
-/*
-    経験値の仕様
-    時間(秒) - 10が得られる経験値
-    自分のレベルによる傾斜は行わない
-*/
-
-// 初期化
-function init() {
-    for (var i = 0; i <= 100; i++) {
-        times[i] = 600 + 60 * i;
-    }
-
-    for (var i = 0; i <= 100; i++) {
-        acc[i + 1] = acc[i] + times[i];
-    }
-}
-
-// プレイヤーの現在のレベルを取得
-function get_level(exp: number): number {
-    var res: number = 0;
-    for (var i = 0; i<= 100; i++) {
-        if (acc[i] <= exp) {
-            res = i;
+    constructor() {
+        // electron-storeから引っ張ってくる
+        this.exp_point = 0;
+        for (var i = 0; i <= 100; i++) {
+            this.times[i] = 600 + i * 60;
+            this.acc[i + 1] = this.acc[i] + this.times[i];
         }
     }
 
-    return res;
-}
+    // プレイヤーの現在のレべルを取得
+    get_level(): number {
+        var res: number = 0;
+        for (var i = 0; i <= 100; i++) {
+            if (this.acc[i] <= this.exp_point) {
+                res = i;
+            }
+        }
 
-// 入力された時間を経験値に変化して加算
-function add_point(time: number) {
-    var exp = time_to_point(time);
-    exp_point += exp;
-}
+        return res;
+    }
 
-// 入力された時間を経験値に変換
-function time_to_point(time: number): number {
-    var time_minute: number = time / 60;
-    var time_point: number = time_minute - 10;
-    return time_point;
-}
+    // 入力された時間を経験値に変換して加算
+    add_point(time: number) {
+        var exp = this.time_to_point(time);
+        this.exp_point += exp;
 
-function main() {
-    init();
-}
+        // exp_pointをデータベースに格納する
+    }
 
-main();
+    time_to_point(time: number): number {
+        var time_minute: number = time / 60;
+        var time_point: number = Math.max(0, time_minute - 10);
+        return time_point;
+    }
+}

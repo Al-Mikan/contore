@@ -11,6 +11,13 @@ import prepareNext from 'electron-next'
 import Store from 'electron-store'
 const store = new Store()
 
+function db_init() {
+  if (!store.has('exp_point')) {
+    store.set('exp_point', 0);
+  }
+}
+db_init();
+
 // Prepare the renderer once the app is ready
 app.on('ready', async () => {
   await prepareNext('./renderer')
