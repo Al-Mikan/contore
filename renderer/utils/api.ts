@@ -5,3 +5,7 @@
 export const sampleFunction = () => {
   return 0
 }
+
+export function getRandomInt(min: number, max: number) {
+  return Math.floor(Math.random() * (max - min) + min) //The maximum is exclusive and the minimum is inclusive
+}
