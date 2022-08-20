@@ -59,6 +59,7 @@ const StyledImageButton = styled.button`
   bottom: 2%;
   width: 13%;
   height: 10%;
+  cursor: inherit;
   &:hover {
     opacity: 0.6;
   }
