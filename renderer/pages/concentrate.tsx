@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { Stage } from '@inlet/react-pixi'
+import { Container, Sprite, Stage } from '@inlet/react-pixi'
 import { useState } from 'react'
 import { useDisclosure } from '@chakra-ui/react'
 import { FaRegHandPaper } from 'react-icons/fa'
@@ -23,6 +23,7 @@ const ConcentratePage = () => {
   return (
     <Layout title="集中画面 | こんとれ！！">
       <StyledStage height={1080} width={1920} options={{ backgroundAlpha: 0 }}>
+        <Sprite image="/img/background.png" height={1080} width={1920} />
         <Timer
           time={time}
           setTime={(v) => {
