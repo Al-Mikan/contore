@@ -1,21 +1,21 @@
 import styled from 'styled-components'
 import { Stage } from '@inlet/react-pixi'
-import { useState, MouseEventHandler } from 'react'
+import { useState } from 'react'
 import { useDisclosure } from '@chakra-ui/react'
-import Image from 'next/image'
 import { FaRegHandPaper } from 'react-icons/fa'
 
 import Layout from '../components/Layout'
 import Timer from '../components/Timer'
 import ResultModal from '../components/ResultModal'
 import MiniCat from '../components/characters/MiniCat'
+import EndBtn from '../components/EndBtn'
+import { InteractionEvent } from 'pixi.js'
 
 const ConcentratePage = () => {
   let [time, setTime] = useState('00:00:00')
   let [resultTime, setResultTime] = useState('00:00:00')
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const handleStopClick: MouseEventHandler<HTMLButtonElement> = (e) => {
-    e.preventDefault()
+  const handleStopClick: (event: InteractionEvent) => void = (event) => {
     setResultTime(time)
     onOpen()
   }
@@ -30,13 +30,11 @@ const ConcentratePage = () => {
           }}
         />
         <MiniCat />
+        <EndBtn handleStopClick={handleStopClick} />
       </StyledStage>
       <DragButton>
         <FaRegHandPaper />
       </DragButton>
-      <StyledImageButton onClick={handleStopClick}>
-        <Image src="/img/end-btn.png" layout="fill" />
-      </StyledImageButton>
 
       <ResultModal
         isOpen={isOpen}
@@ -51,18 +49,6 @@ const ConcentratePage = () => {
 const StyledStage = styled(Stage)`
   width: 100% !important;
   height: 100% !important;
-`
-
-const StyledImageButton = styled.button`
-  position: absolute;
-  right: 5%;
-  bottom: 2%;
-  width: 13%;
-  height: 10%;
-  cursor: inherit;
-  &:hover {
-    opacity: 0.6;
-  }
 `
 
 const DragButton = styled.a`
