@@ -64,3 +64,10 @@ ipcMain.handle(
     )
   }
 )
+
+ipcMain.handle(
+  'set-always-on-top',
+  (event, flag:boolean) => {
+    BrowserWindow.fromWebContents(event.sender)?.setAlwaysOnTop(flag)
+  }
+)

@@ -2,6 +2,8 @@ import { Sprite } from '@inlet/react-pixi'
 import { InteractionEvent } from 'pixi.js'
 import { useState } from 'react'
 
+import { containsPoint } from '../utils/pixi_api'
+
 interface Props {
   handleStopClick: (event: InteractionEvent) => void
 }
@@ -22,6 +24,7 @@ const EndBtn = ({ handleStopClick }: Props) => {
       click={handleStopClick}
       mouseover={mouseover}
       mouseout={mouseout}
+      containsPoint={containsPoint}
     />
   )
 }

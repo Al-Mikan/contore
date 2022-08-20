@@ -20,5 +20,6 @@ declare global {
       flag: boolean,
       options?: { forward: boolean }
     ) => Promise<void>
+    setAlwaysOnTop: (flag: boolean) => Promise<void>
   }
 }

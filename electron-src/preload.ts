@@ -20,4 +20,5 @@ contextBridge.exposeInMainWorld('electronAPI', {
   getDisplaySize: () => ipcRenderer.invoke('getDisplaySize'),
   setIgnoreMouseEvents: (flag: boolean, options?: { forward: boolean }) =>
     ipcRenderer.invoke('set-ignore-mouse-events', flag, options),
+  setAlwaysOnTop: (flag: boolean) => ipcRenderer.invoke('set-always-on-top', flag),
 })
