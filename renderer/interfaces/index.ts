@@ -21,5 +21,7 @@ declare global {
       options?: { forward: boolean }
     ) => Promise<void>
     setAlwaysOnTop: (flag: boolean) => Promise<void>
+    setWindowRightBottom: () => Promise<void>
+    setWindowCenter: () => Promise<void>
   }
 }

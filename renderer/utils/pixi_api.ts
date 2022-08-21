@@ -59,9 +59,9 @@ export function containsPoint(point) {
     let ind2 = (ind / 32) | 0
     return (hitmap[ind2] & (1 << ind1)) !== 0
   }
-  return lambda()
+  // return lambda()
   // 透過部分だけクリックスルーを適用したのは下のコード
-  // return click_throuth(lambda())
+  return click_throuth(lambda())
 }
 
 function genHitmap(baseTex, threshold) {

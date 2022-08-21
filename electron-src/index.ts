@@ -65,9 +65,34 @@ ipcMain.handle(
   }
 )
 
-ipcMain.handle(
-  'set-always-on-top',
-  (event, flag:boolean) => {
-    BrowserWindow.fromWebContents(event.sender)?.setAlwaysOnTop(flag)
-  }
-)
+ipcMain.handle('set-always-on-top', (event, flag: boolean) => {
+  BrowserWindow.fromWebContents(event.sender)?.setAlwaysOnTop(flag)
+})
+
+ipcMain.handle('set-window-right-bottom', (event) => {
+  const mainWindow = BrowserWindow.fromWebContents(event.sender)
+  if (mainWindow === null) return
+  const display = screen.getPrimaryDisplay()
+  const apr = 16 / 9
+  const w = Math.floor(display.size.width / 3)
+  const h = Math.floor(w / apr)
+  mainWindow.setAspectRatio(apr)
+  mainWindow.setSize(w, h)
+  /* タスクバーのサイズを考慮するためにworkAreaSizeを使用 */
+  mainWindow.setPosition(
+    display.workAreaSize.width - w,
+    display.workAreaSize.height - h
+  )
+})
+
+ipcMain.handle('set-window-center', (event) => {
+  const mainWindow = BrowserWindow.fromWebContents(event.sender)
+  if (mainWindow === null) return
+  const display = screen.getPrimaryDisplay()
+  const apr = 16 / 9
+  const w = Math.floor(display.size.width / 2)
+  const h = Math.floor(w / apr)
+  mainWindow.setAspectRatio(apr)
+  mainWindow.setSize(w, h)
+  mainWindow.center()
+})

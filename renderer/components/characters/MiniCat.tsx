@@ -16,7 +16,7 @@ const MiniCat = () => {
     '/img/mini-cat/2.png',
   ]
   const defaultX = 900
-  const defaultY = 750
+  const defaultY = 850
   const [moveTick, setMoveTick] = useState(0) // 提起的に移動を実行する
   const [targetX, setTargetX] = useState(defaultX) // 移動先のX座標
   const [targetY, setTargetY] = useState(defaultY) // 移動先のY座標
