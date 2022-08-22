@@ -23,5 +23,6 @@ declare global {
     setAlwaysOnTop: (flag: boolean) => Promise<void>
     setWindowRightBottom: () => Promise<void>
     setWindowCenter: () => Promise<void>
+    setWindowFullscreen: () => Promise<void>
   }
 }

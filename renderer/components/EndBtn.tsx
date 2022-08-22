@@ -16,9 +16,9 @@ const EndBtn = ({ handleStopClick }: Props) => {
   return (
     <Sprite
       image="/img/end-btn.png"
-      x={1600}
-      y={900}
-      scale={3}
+      x={1800}
+      y={1000}
+      scale={1}
       interactive={true}
       alpha={alpha}
       click={handleStopClick}

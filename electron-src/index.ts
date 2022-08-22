@@ -96,3 +96,11 @@ ipcMain.handle('set-window-center', (event) => {
   mainWindow.setSize(w, h)
   mainWindow.center()
 })
+
+ipcMain.handle('set-window-fullscreen', (event) => {
+  const mainWindow = BrowserWindow.fromWebContents(event.sender)
+  if (mainWindow === null) return
+  const display = screen.getPrimaryDisplay()
+  mainWindow.setSize(display.workAreaSize.width, display.workAreaSize.height)
+  mainWindow.center()
+})

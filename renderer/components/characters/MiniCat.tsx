@@ -3,6 +3,7 @@ import { useState } from 'react'
 
 import { containsPoint } from '../../utils/pixi_api'
 import { getRandomInt } from '../../utils/api'
+import { InteractionEvent } from 'pixi.js'
 
 const BASIC_ANIMATION = 0
 const BLINK_ANIMATION = 1
@@ -16,13 +17,14 @@ const MiniCat = () => {
     '/img/mini-cat/2.png',
   ]
   const defaultX = 900
-  const defaultY = 850
+  const defaultY = 950
   const [moveTick, setMoveTick] = useState(0) // 提起的に移動を実行する
   const [targetX, setTargetX] = useState(defaultX) // 移動先のX座標
   const [targetY, setTargetY] = useState(defaultY) // 移動先のY座標
   const [nowX, setNowX] = useState(defaultX) // 現在位置のX座標
   const [nowY, setNowY] = useState(defaultY) // 現在位置のY座標
   const [currentAnimation, setCurrentAnimation] = useState(0) // 現在のアニメーション
+  const [dragMode, setDragMode] = useState(false)
 
   /* 次の位置に移動する */
   const next_posX = () => {
@@ -75,6 +77,34 @@ const MiniCat = () => {
     setCurrentAnimation(BASIC_ANIMATION)
   }
 
+  // ドラッグ操作
+  const mouseDown = (event: InteractionEvent) => {
+    const x = event.data.global.x
+    /* キャラの中心を掴んでいるように見せるため-100 */
+    const y = event.data.global.y - 100
+    setNowX(x)
+    setNowY(y)
+    setDragMode(true)
+  }
+
+  const mouseMove = (event: InteractionEvent) => {
+    if (!dragMode) return
+    const x = event.data.global.x
+    /* キャラの中心を掴んでいるように見せるため-100 */
+    const y = event.data.global.y - 100
+    setNowX(x)
+    setNowY(y)
+  }
+
+  const mouseUp = (event: InteractionEvent) => {
+    const x = event.data.global.x
+    /* キャラの中心を掴んでいるように見せるため-100 */
+    const y = event.data.global.y - 100
+    setNowX(x)
+    setNowY(y)
+    setDragMode(false)
+  }
+
   const startJump = () => {
     const height = 50
     /* 2段ジャンプは不可 */
@@ -82,11 +112,13 @@ const MiniCat = () => {
     setTargetY(defaultY - height)
   }
 
+  /* animation */
   useTick((_) => {
+    if (dragMode) return
     /* durationごとにターゲットを変更 */
-    const interval = 500
+    const interval = 1000
     if (moveTick == 0) {
-      setTargetX(getRandomInt(500, 1100))
+      setTargetX(getRandomInt(200, 1800))
     }
     next_posX()
     next_posY()
@@ -114,11 +146,14 @@ const MiniCat = () => {
         animationSpeed={0.05}
         x={nowX}
         y={nowY}
-        scale={1.5}
+        scale={1}
         interactive={true}
         visible={currentAnimation == BASIC_ANIMATION}
-        pointerdown={startJump} /* jump */
         containsPoint={containsPoint}
+        mousedown={mouseDown}
+        mousemove={mouseMove}
+        mouseup={mouseUp}
+        mouseupoutside={mouseUp}
       />
       {/* 瞬き */}
       <AnimatedSprite
@@ -129,11 +164,16 @@ const MiniCat = () => {
         animationSpeed={0.1}
         x={nowX}
         y={nowY}
-        scale={1.5}
+        scale={1}
         visible={currentAnimation == BLINK_ANIMATION}
         loop={false}
+        interactive={true}
         onComplete={handleComplete}
         containsPoint={containsPoint}
+        mousedown={mouseDown}
+        mousemove={mouseMove}
+        mouseup={mouseUp}
+        mouseupoutside={mouseUp}
       />
     </Container>
   )

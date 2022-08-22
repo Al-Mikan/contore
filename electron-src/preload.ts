@@ -24,4 +24,5 @@ contextBridge.exposeInMainWorld('electronAPI', {
     ipcRenderer.invoke('set-always-on-top', flag),
   setWindowRightBottom: () => ipcRenderer.invoke('set-window-right-bottom'),
   setWindowCenter: () => ipcRenderer.invoke('set-window-center'),
+  setWindowFullscreen: () => ipcRenderer.invoke('set-window-fullscreen'),
 })

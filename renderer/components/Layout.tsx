@@ -23,7 +23,8 @@ const StyledConteiner = styled.div`
   height: 100vh;
   overflow: hidden;
   position: relative;
-  cursor: url('/img/mini-pad.png') 15 15, auto;
+  /* 動作不安定のためoff */
+  /* cursor: url('/img/mini-pad.png') 15 15, auto; */
 `
 
 export default Layout
