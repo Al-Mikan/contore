@@ -79,29 +79,19 @@ const MiniCat = () => {
 
   // ドラッグ操作
   const mouseDown = (event: InteractionEvent) => {
-    const x = event.data.global.x
-    /* キャラの中心を掴んでいるように見せるため-100 */
-    const y = event.data.global.y - 100
-    setNowX(x)
-    setNowY(y)
     setDragMode(true)
   }
 
   const mouseMove = (event: InteractionEvent) => {
     if (!dragMode) return
+    /* キャラの中心を掴んでいるように見せるため位置を調整 */
     const x = event.data.global.x
-    /* キャラの中心を掴んでいるように見せるため-100 */
     const y = event.data.global.y - 100
     setNowX(x)
     setNowY(y)
   }
 
   const mouseUp = (event: InteractionEvent) => {
-    const x = event.data.global.x
-    /* キャラの中心を掴んでいるように見せるため-100 */
-    const y = event.data.global.y - 100
-    setNowX(x)
-    setNowY(y)
     setDragMode(false)
   }
 
