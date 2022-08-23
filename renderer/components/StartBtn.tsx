@@ -1,30 +1,29 @@
-import styled from 'styled-components'
-import { HiOutlineBookOpen } from 'react-icons/hi'
+import { Sprite } from '@inlet/react-pixi'
+import { InteractionEvent } from 'pixi.js'
+import { useState } from 'react'
 
-const StartBtn = () => {
-  const BtnBasic = styled.button`
-    font-size: 1.2rem;
-    font-weight: 900;
-    padding: 1rem 0.8rem;
-    user-select: none;
-    text-align: center;
-    vertical-align: middle;
-    text-decoration: none;
-    color: #455d55;
-    background-color: #4cfcbe;
-    border-radius: 1.3rem;
-    border: 5px solid white;
-    cursor: inherit;
-  `
+interface Props {
+  handleStartClick: (event: InteractionEvent) => void
+}
 
-  const StyledHiOutlineBookOpen = styled(HiOutlineBookOpen)`
-    vertical-align: top;
-  `
+const StartBtn = ({ handleStartClick }: Props) => {
+  const [alpha, setAlpha] = useState(1)
+  const mouseover = () => setAlpha(0.8)
+  const mouseout = () => setAlpha(1)
 
   return (
-    <BtnBasic>
-      <StyledHiOutlineBookOpen size="1.8rem" /> 集中
-    </BtnBasic>
+    <Sprite
+      image="/img/start-btn.png"
+      x={1600}
+      y={900}
+      scale={2}
+      interactive={true}
+      alpha={alpha}
+      click={handleStartClick}
+      mouseover={mouseover}
+      mouseout={mouseout}
+      buttonMode={true}
+    />
   )
 }
 

@@ -8,7 +8,11 @@ import { InteractionEvent } from 'pixi.js'
 const BASIC_ANIMATION = 0
 const BLINK_ANIMATION = 1
 
-const MiniCat = () => {
+interface Props {
+  isClickThrough: boolean
+}
+
+const MiniCat = ({ isClickThrough = false }: Props) => {
   const basicAnimationImages = ['/img/mini-cat/1.png']
   const blinkAnimationImages = [
     '/img/mini-cat/1.png',
@@ -139,7 +143,7 @@ const MiniCat = () => {
         scale={1}
         interactive={true}
         visible={currentAnimation == BASIC_ANIMATION}
-        containsPoint={containsPoint}
+        containsPoint={isClickThrough && containsPoint}
         mousedown={mouseDown}
         mousemove={mouseMove}
         mouseup={mouseUp}
@@ -159,7 +163,7 @@ const MiniCat = () => {
         loop={false}
         interactive={true}
         onComplete={handleComplete}
-        containsPoint={containsPoint}
+        containsPoint={isClickThrough && containsPoint}
         mousedown={mouseDown}
         mousemove={mouseMove}
         mouseup={mouseUp}

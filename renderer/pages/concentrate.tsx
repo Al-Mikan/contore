@@ -1,15 +1,14 @@
-import styled from 'styled-components'
-import { Stage } from '@inlet/react-pixi'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from '@chakra-ui/react'
+import { InteractionEvent } from 'pixi.js'
+import { useRouter } from 'next/router'
 
 import Layout from '../components/Layout'
 import Timer from '../components/Timer'
 import ResultModal from '../components/ResultModal'
 import MiniCat from '../components/characters/MiniCat'
 import EndBtn from '../components/EndBtn'
-import { InteractionEvent } from 'pixi.js'
-import { useRouter } from 'next/router'
+import Canvas from '../components/Canvas'
 
 const ConcentratePage = () => {
   const router = useRouter()
@@ -35,7 +34,7 @@ const ConcentratePage = () => {
 
   return (
     <Layout title="集中画面 | こんとれ！！">
-      <StyledStage height={1080} width={1920} options={{ backgroundAlpha: 0 }}>
+      <Canvas>
         {/* Timerは常に表示すると非常に重たい */}
         {/* <Timer
           time={time}
@@ -43,9 +42,9 @@ const ConcentratePage = () => {
             setTime(v)
           }}
         /> */}
-        <MiniCat />
+        <MiniCat isClickThrough={true} />
         <EndBtn handleStopClick={handleStopClick} />
-      </StyledStage>
+      </Canvas>
 
       <ResultModal
         isOpen={isOpen}
@@ -56,10 +55,5 @@ const ConcentratePage = () => {
     </Layout>
   )
 }
-
-const StyledStage = styled(Stage)`
-  width: 100% !important;
-  height: 100% !important;
-`
 
 export default ConcentratePage

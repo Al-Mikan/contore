@@ -1,22 +1,30 @@
-import Layout from '../components/Layout'
-import Link from 'next/link'
 import styled from 'styled-components'
+import { useRouter } from 'next/router'
+import { InteractionEvent } from 'pixi.js'
+
+import Canvas from '../components/Canvas'
+import Layout from '../components/Layout'
+import StartBtn from '../components/StartBtn'
 
 const IndexPage = () => {
+  const router = useRouter()
+  const handleStartClick: (event: InteractionEvent) => void = (event) => {
+    router.push('/concentrate')
+  }
+
   return (
     <Layout title="Home | こんとれ！！">
       <Container>
-        <h1>はろー こんとれ！！</h1>
-        <Link href="/concentrate">
-          <a>集中開始</a>
-        </Link>
+        <Canvas>
+          <StartBtn handleStartClick={handleStartClick} />
+        </Canvas>
       </Container>
     </Layout>
   )
 }
 
 const Container = styled.div`
-  background-color: rgba(255, 255, 255, 0.5);
+  background-color: rgba(255, 255, 255, 0.8);
   width: 100vw;
   height: 100vh;
 `
