@@ -8,6 +8,7 @@ import isDev from 'electron-is-dev'
 import prepareNext from 'electron-next'
 
 // electron-storeの初期化
+const path = require('path')
 import Store from 'electron-store'
 const store = new Store()
 
