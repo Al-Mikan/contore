@@ -35,13 +35,12 @@ const ConcentratePage = () => {
   return (
     <Layout title="集中画面 | こんとれ！！">
       <Canvas>
-        {/* Timerは常に表示すると非常に重たい */}
-        {/* <Timer
+        <Timer
           time={time}
           setTime={(v) => {
             setTime(v)
           }}
-        /> */}
+        />
         <MiniCat isClickThrough={true} />
         <EndBtn handleStopClick={handleStopClick} />
       </Canvas>
