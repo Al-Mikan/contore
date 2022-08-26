@@ -4,7 +4,7 @@ import { InteractionEvent } from 'pixi.js'
 
 import Canvas from '../components/Canvas'
 import Layout from '../components/Layout'
-import StartBtn from '../components/StartBtn'
+import StartBtn from '../components/buttons/StartBtn'
 
 const IndexPage = () => {
   const router = useRouter()

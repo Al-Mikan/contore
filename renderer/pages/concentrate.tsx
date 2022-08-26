@@ -6,7 +6,7 @@ import Layout from '../components/Layout'
 import Timer from '../components/Timer'
 import ResultModal from '../components/ResultModal'
 import MiniCat from '../components/characters/MiniCat'
-import EndBtn from '../components/EndBtn'
+import EndBtn from '../components/buttons/EndBtn'
 import Canvas from '../components/Canvas'
 
 const ConcentratePage = () => {
