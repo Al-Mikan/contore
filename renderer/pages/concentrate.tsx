@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { useDisclosure } from '@chakra-ui/react'
 import { InteractionEvent } from 'pixi.js'
 import { useRouter } from 'next/router'
 
@@ -14,12 +13,9 @@ const ConcentratePage = () => {
   const router = useRouter()
   let [time, setTime] = useState('00:00:00')
   let [resultTime, setResultTime] = useState('00:00:00')
-  const { isOpen, onOpen, onClose } = useDisclosure()
   const handleStopClick: (event: InteractionEvent) => void = (event) => {
     setResultTime(time)
     router.push('/')
-    /* モーダルはpixiで実装する */
-    // onOpen()
   }
 
   useEffect(() => {
@@ -45,12 +41,7 @@ const ConcentratePage = () => {
         <EndBtn handleStopClick={handleStopClick} />
       </Canvas>
 
-      <ResultModal
-        isOpen={isOpen}
-        onOpen={onOpen}
-        onClose={onClose}
-        time={resultTime}
-      ></ResultModal>
+      <ResultModal time={resultTime}></ResultModal>
     </Layout>
   )
 }
