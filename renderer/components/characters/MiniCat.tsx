@@ -54,7 +54,7 @@ const setNextTargetAndPosition = (state: State) => {
   const setNextTargetPos = (characterState: State) => {
     /* X座標の決定 */
     if (characterState.moveTick == 0) {
-      characterState.targetPos.x = getRandomInt(100, 1820)
+      characterState.targetPos.x = getRandomInt(1500, 1820)
     }
   }
 
@@ -214,7 +214,7 @@ const MiniCat = ({ isClickThrough = false }: Props) => {
     const ny = event.data.global.y
     setBeforeMousePos({ x: nx, y: ny })
     setPrevTimestamp(Date.now())
-    setCharacterState((prev) => ({ ...prev, dragMode: true }))
+    setCharacterState((prev) => ({ ...prev, dragMode: true, angle: 0 }))
   }
 
   const mouseMove = (event: InteractionEvent) => {
@@ -240,8 +240,8 @@ const MiniCat = ({ isClickThrough = false }: Props) => {
   const mouseUp = (event: InteractionEvent) => {
     /* クリックを離したタイミングで速度を加える */
     const nx = event.data.global.x
-    const ny = event.data.global.y - 100
-    const dt = (Date.now() - prevTimestamp) / 50 // 50は手動で調整した値
+    const ny = event.data.global.y
+    const dt = (Date.now() - prevTimestamp) / 100 // 50は手動で調整した値
     setCharacterState((prev) => ({
       ...prev,
       dragMode: false,
