@@ -5,8 +5,8 @@ import { InteractionEvent } from 'pixi.js'
 import Canvas from '../components/Canvas'
 import Layout from '../components/Layout'
 import StartBtn from '../components/buttons/StartBtn'
-import Bg from '../components/Bg'
-import Bar from '../components/Bars'
+import Background from '../components/Background'
+import LevelBar from '../components/LevelBar'
 import MiniCat from '../components/characters/MiniCat'
 import Level from '../components/Level'
 import Heart from '../components/hearts'
@@ -21,12 +21,11 @@ const IndexPage = () => {
     <Layout title="Home | こんとれ！！">
       <Container>
         <Canvas>
-          <Bg />
-          <Bar n="1" />
+          <Background />
+          <LevelBar n={1} />
           <StartBtn handleStartClick={handleStartClick} />
+          <Level level={20} />
           <MiniCat isClickThrough={false} />
-          <Level level="100" />
-          <Heart />
         </Canvas>
       </Container>
     </Layout>
