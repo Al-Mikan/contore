@@ -13,11 +13,7 @@ const ResultModal = ({ time }: Props) => {
     router.push('/')
   }
 
-  return (
-    <Sprite>
-      <Sprite></Sprite>
-    </Sprite>
-  )
+  return <Sprite></Sprite>
 }
 
 export default ResultModal

@@ -5,12 +5,27 @@ import { containsPoint } from '../../utils/pixi_api'
 import { getRandomInt } from '../../utils/api'
 import { InteractionEvent } from 'pixi.js'
 
-const BASIC_ANIMATION = 0
-const BLINK_ANIMATION = 1
+type Animation = 0 | 1
 
 interface Props {
   isClickThrough: boolean
 }
+
+interface Position {
+  x: number
+  y: number
+}
+
+interface State {
+  currentPos: Position // 現在位置
+  targetPos: Position // 最終的な目標位置 (次フレームの位置ではない)
+  currentAnimation: Animation
+  moveTick: number
+  dragMode: boolean
+}
+
+const BASIC_ANIMATION: Animation = 0
+const BLINK_ANIMATION: Animation = 1
 
 const MiniCat = ({ isClickThrough = false }: Props) => {
   const basicAnimationImages = ['/img/mini-cat/1.png']
@@ -22,111 +37,162 @@ const MiniCat = ({ isClickThrough = false }: Props) => {
   ]
   const defaultX = 900
   const defaultY = 950
-  const [moveTick, setMoveTick] = useState(0) // 提起的に移動を実行する
-  const [targetX, setTargetX] = useState(defaultX) // 移動先のX座標
-  const [targetY, setTargetY] = useState(defaultY) // 移動先のY座標
-  const [nowX, setNowX] = useState(defaultX) // 現在位置のX座標
-  const [nowY, setNowY] = useState(defaultY) // 現在位置のY座標
-  const [currentAnimation, setCurrentAnimation] = useState(0) // 現在のアニメーション
-  const [dragMode, setDragMode] = useState(false)
 
-  /* 次の位置に移動する */
-  const next_posX = () => {
-    const speed = 2
-    if (nowX == targetX) return
+  const [characterState, setCharacterState] = useState<State>({
+    currentPos: { x: defaultX, y: defaultY },
+    targetPos: { x: defaultX, y: defaultY },
+    currentAnimation: BASIC_ANIMATION,
+    moveTick: 0,
+    dragMode: false,
+  })
 
-    const directionX = (targetX - nowX) / Math.abs(targetX - nowX)
-    if (directionX > 0) {
-      /* -> */
-      setNowX((prev) => Math.min(prev + directionX * speed, targetX))
-    } else {
-      /* <- */
-      setNowX((prev) => Math.max(prev + directionX * speed, targetX))
+  /* 次のターゲットポジションを決定する */
+  const setNextTargetPos = () => {
+    let targetX = characterState.targetPos.x
+    let targetY = characterState.targetPos.y
+    /* X座標の決定 */
+    if (characterState.moveTick == 0) {
+      targetX = getRandomInt(0, 1920)
     }
-  }
 
-  const next_posY = () => {
-    const speed = 2
-
-    if (targetY == nowY) {
-      if (defaultY == nowY) {
+    /* Y座標の決定 */
+    if (characterState.targetPos.y == characterState.currentPos.y) {
+      if (defaultY == characterState.currentPos.y) {
         /* 初期位置 */
-        return
       } else {
         /* ジャンプの頂上。落下を開始 */
-        setTargetY(defaultY)
-        return
+        targetY = defaultY
       }
     }
 
-    const directionY = (targetY - nowY) / Math.abs(targetY - nowY)
+    setCharacterState((prev) => ({
+      ...prev,
+      targetPos: { x: targetX, y: targetY },
+    }))
+  }
+
+  /* 次の位置に移動する */
+  const setNextPosX = () => {
+    if (characterState.currentPos.x == characterState.targetPos.x) return
+    const speed = 2
+
+    const directionX =
+      (characterState.targetPos.x - characterState.currentPos.x) /
+      Math.abs(characterState.targetPos.x - characterState.currentPos.x)
+    if (directionX > 0) {
+      /* -> */
+      setCharacterState((prev) => ({
+        ...prev,
+        currentPos: {
+          x: Math.min(prev.currentPos.x + directionX * speed, prev.targetPos.x),
+          y: prev.currentPos.y,
+        },
+      }))
+    } else {
+      /* <- */
+      setCharacterState((prev) => ({
+        ...prev,
+        currentPos: {
+          x: Math.max(prev.currentPos.x + directionX * speed, prev.targetPos.x),
+          y: prev.currentPos.y,
+        },
+      }))
+    }
+  }
+
+  const setNextPosY = () => {
+    if (characterState.currentPos.y == characterState.targetPos.y) return
+
+    const speed = 2
+    const directionY =
+      (characterState.targetPos.y - characterState.currentPos.y) /
+      Math.abs(characterState.targetPos.y - characterState.currentPos.y)
     if (directionY > 0) {
       /* 落下中 */
-      setNowY((prev) => Math.min(prev + directionY * speed, targetY))
+      setCharacterState((prev) => ({
+        ...prev,
+        currentPos: {
+          x: prev.currentPos.x,
+          y: Math.min(prev.currentPos.y + directionY * speed, prev.targetPos.y),
+        },
+      }))
     } else {
       /* 上昇中 */
-      setNowY((prev) => Math.max(prev + directionY * speed, targetY))
+      setCharacterState((prev) => ({
+        ...prev,
+        currentPos: {
+          x: prev.currentPos.x,
+          y: Math.max(prev.currentPos.y + directionY * speed, prev.targetPos.y),
+        },
+      }))
     }
   }
 
   /* clickでアニメーションを切り替え */
   const switchAnimation = (targetAnimation: 0 | 1) => {
     /* 基本型からのみ変更を許可 */
-    if (currentAnimation !== BASIC_ANIMATION) return
-    setCurrentAnimation(targetAnimation)
+    if (characterState.currentAnimation !== BASIC_ANIMATION) return
+    setCharacterState({ ...characterState, currentAnimation: targetAnimation })
   }
 
   /* 基本アニメーション以外で使用 */
   const handleComplete = () => {
-    setCurrentAnimation(BASIC_ANIMATION)
+    setCharacterState({ ...characterState, currentAnimation: BASIC_ANIMATION })
   }
 
   // ドラッグ操作
   const mouseDown = (event: InteractionEvent) => {
-    setDragMode(true)
+    setCharacterState({ ...characterState, dragMode: true })
   }
 
   const mouseMove = (event: InteractionEvent) => {
-    if (!dragMode) return
+    if (!characterState.dragMode) return
     /* キャラの中心を掴んでいるように見せるため位置を調整 */
     const x = event.data.global.x
     const y = event.data.global.y - 100
-    setNowX(x)
-    setNowY(y)
+    setCharacterState({ ...characterState, currentPos: { x, y } })
   }
 
   const mouseUp = (event: InteractionEvent) => {
-    setDragMode(false)
+    setCharacterState({ ...characterState, dragMode: false })
   }
 
   const startJump = () => {
     const height = 50
     /* 2段ジャンプは不可 */
-    if (nowY != defaultY) return
-    setTargetY(defaultY - height)
+    if (characterState.currentPos.y != defaultY) return
+
+    setCharacterState((prev) => ({
+      ...prev,
+      targetPos: { x: prev.targetPos.x, y: defaultY - height },
+    }))
   }
 
   /* animation */
   useTick((_) => {
-    if (dragMode) return
+    if (characterState.dragMode) return
     /* durationごとにターゲットを変更 */
     const interval = 1000
-    if (moveTick == 0) {
-      setTargetX(getRandomInt(200, 1800))
-    }
-    next_posX()
-    next_posY()
-    setMoveTick((prev) => (prev + 1) % interval)
+    setNextTargetPos()
+    setNextPosX()
+    setNextPosY()
 
-    /* たまに瞬きをする */
-    if (Math.random() <= 0.005) {
-      switchAnimation(BLINK_ANIMATION)
+    if (characterState.currentAnimation == BASIC_ANIMATION) {
+      /* たまに瞬きをする */
+      if (Math.random() <= 0.005) {
+        switchAnimation(BLINK_ANIMATION)
+      }
+
+      /* たまにジャンプする */
+      if (Math.random() <= 0.001) {
+        startJump()
+      }
     }
 
-    /* たまにジャンプする */
-    if (Math.random() <= 0.001) {
-      startJump()
-    }
+    setCharacterState((prev) => ({
+      ...prev,
+      moveTick: (prev.moveTick + 1) % interval,
+    }))
   })
 
   return (
@@ -138,11 +204,11 @@ const MiniCat = ({ isClickThrough = false }: Props) => {
         isPlaying={true}
         initialFrame={0}
         animationSpeed={0.05}
-        x={nowX}
-        y={nowY}
+        x={characterState.currentPos.x}
+        y={characterState.currentPos.y}
         scale={1}
         interactive={true}
-        visible={currentAnimation == BASIC_ANIMATION}
+        visible={characterState.currentAnimation == BASIC_ANIMATION}
         containsPoint={isClickThrough && containsPoint}
         mousedown={mouseDown}
         mousemove={mouseMove}
@@ -153,13 +219,13 @@ const MiniCat = ({ isClickThrough = false }: Props) => {
       <AnimatedSprite
         anchor={0.5}
         images={blinkAnimationImages}
-        isPlaying={currentAnimation == BLINK_ANIMATION}
+        isPlaying={characterState.currentAnimation == BLINK_ANIMATION}
         initialFrame={0}
         animationSpeed={0.1}
-        x={nowX}
-        y={nowY}
+        x={characterState.currentPos.x}
+        y={characterState.currentPos.y}
         scale={1}
-        visible={currentAnimation == BLINK_ANIMATION}
+        visible={characterState.currentAnimation == BLINK_ANIMATION}
         loop={false}
         interactive={true}
         onComplete={handleComplete}
