@@ -21,6 +21,7 @@ interface State {
   targetPos: Position // 最終的な目標位置 (次フレームの位置ではない)
   vx: number // x軸方向の速度
   vy: number
+  angle: number
   currentAnimation: Animation
   moveTick: number
   dragMode: boolean
@@ -42,7 +43,11 @@ const leftAnimationImages = ['/img/mini-cat/left.png']
 const rightAnimationImages = ['/img/mini-cat/right.png']
 
 const defaultX = 900
-const defaultY = 950
+const defaultY = 1050
+const minX = 0
+const maxX = 1850 /* 画面右 */
+const minY = 30
+const maxY = defaultY /* 画面下 */
 
 const setNextTargetAndPosition = (state: State) => {
   /* 次のターゲットポジションを決定する */
@@ -55,10 +60,6 @@ const setNextTargetAndPosition = (state: State) => {
 
   /* 速度がある時に壁に当たると止まるようにする */
   const judgeWall = (characterState: State) => {
-    const minX = 0
-    const maxX = 1850 /* 画面右 */
-    const minY = -50
-    const maxY = defaultY /* 画面下 */
     if (characterState.currentPos.x <= minX) {
       characterState.vx = 0
       characterState.vy = 0
@@ -123,8 +124,17 @@ const setNextTargetAndPosition = (state: State) => {
     characterState.vy += gravity * dt
   }
 
+  const setNextAngle = (characterState: State) => {
+    if (characterState.currentPos.y <= minY) {
+      characterState.angle = 180
+    } else {
+      characterState.angle = 0
+    }
+  }
+
   setNextTargetPos(state)
   judgeWall(state)
+  setNextAngle(state)
   setNextPosX(state)
   setNextPosY(state)
 }
@@ -140,12 +150,22 @@ const playMoveAnimation = (beforeState: State, characterState: State) => {
   }
 
   const dx = characterState.currentPos.x - beforeState.currentPos.x
-  if (dx > 0) {
-    characterState.currentAnimation = RIGHT_ANIMATION
-  } else if (dx < 0) {
-    characterState.currentAnimation = LEFT_ANIMATION
-  } else {
-    characterState.currentAnimation = BASIC_ANIMATION
+  if (characterState.angle === 0) {
+    if (dx > 0) {
+      characterState.currentAnimation = RIGHT_ANIMATION
+    } else if (dx < 0) {
+      characterState.currentAnimation = LEFT_ANIMATION
+    } else {
+      characterState.currentAnimation = BASIC_ANIMATION
+    }
+  } else if (characterState.angle == 180) {
+    if (dx > 0) {
+      characterState.currentAnimation = LEFT_ANIMATION
+    } else if (dx < 0) {
+      characterState.currentAnimation = RIGHT_ANIMATION
+    } else {
+      characterState.currentAnimation = BASIC_ANIMATION
+    }
   }
 }
 
@@ -172,6 +192,7 @@ const MiniCat = ({ isClickThrough = false }: Props) => {
     dragMode: false,
     vx: 0,
     vy: 0,
+    angle: 0,
   })
   const [beforeMousePos, setBeforeMousePos] = useState<Position>({
     x: 0,
@@ -190,7 +211,7 @@ const MiniCat = ({ isClickThrough = false }: Props) => {
   // ドラッグ操作
   const mouseDown = (event: InteractionEvent) => {
     const nx = event.data.global.x
-    const ny = event.data.global.y - 100
+    const ny = event.data.global.y
     setBeforeMousePos({ x: nx, y: ny })
     setPrevTimestamp(Date.now())
     setCharacterState((prev) => ({ ...prev, dragMode: true }))
@@ -201,7 +222,7 @@ const MiniCat = ({ isClickThrough = false }: Props) => {
     /* キャラの中心を掴んでいるように見せるため位置を調整 */
     const interval = 1000
     const nx = event.data.global.x
-    const ny = event.data.global.y - 100
+    const ny = event.data.global.y
 
     /* 速度を求める為に一定時間ごとにマウスの位置と時刻を記録する */
     if (characterState.moveTick % 20 == 0) {
@@ -269,7 +290,8 @@ const MiniCat = ({ isClickThrough = false }: Props) => {
         animationSpeed={0.05}
         x={characterState.currentPos.x}
         y={characterState.currentPos.y}
-        scale={1}
+        scale={0.8}
+        angle={characterState.angle}
         interactive={true}
         visible={characterState.currentAnimation == BASIC_ANIMATION}
         containsPoint={isClickThrough && containsPoint}
@@ -287,7 +309,8 @@ const MiniCat = ({ isClickThrough = false }: Props) => {
         animationSpeed={0.05}
         x={characterState.currentPos.x}
         y={characterState.currentPos.y}
-        scale={1}
+        scale={0.8}
+        angle={characterState.angle}
         interactive={true}
         visible={characterState.currentAnimation == RIGHT_ANIMATION}
         containsPoint={isClickThrough && containsPoint}
@@ -305,7 +328,8 @@ const MiniCat = ({ isClickThrough = false }: Props) => {
         animationSpeed={0.05}
         x={characterState.currentPos.x}
         y={characterState.currentPos.y}
-        scale={1}
+        scale={0.8}
+        angle={characterState.angle}
         interactive={true}
         visible={characterState.currentAnimation == LEFT_ANIMATION}
         containsPoint={isClickThrough && containsPoint}
@@ -323,7 +347,8 @@ const MiniCat = ({ isClickThrough = false }: Props) => {
         animationSpeed={0.1}
         x={characterState.currentPos.x}
         y={characterState.currentPos.y}
-        scale={1}
+        scale={0.8}
+        angle={characterState.angle}
         visible={characterState.currentAnimation == BLINK_ANIMATION}
         loop={false}
         interactive={true}
