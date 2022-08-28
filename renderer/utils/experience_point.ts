@@ -5,7 +5,7 @@ export default class experience_point {
 
     constructor() {
         // electron-storeから引っ張ってくる
-        this.exp_point = 0;
+        this.exp_point = db.read('exp_point')
         for (var i = 0; i <= 100; i++) {
             this.times[i] = 600 + i * 60;
             this.acc[i + 1] = this.acc[i] + this.times[i];
@@ -30,6 +30,7 @@ export default class experience_point {
         this.exp_point += exp;
 
         // exp_pointをデータベースに格納する
+        db.update('exp_point', this.exp_point)
     }
 
     time_to_point(time: number): number {
