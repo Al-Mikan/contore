@@ -27,6 +27,7 @@
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
     "@inlet/react-pixi": "^6.8.0",
+    "child_process": "^1.0.2",
     "electron-is-dev": "^1.1.0",
     "electron-next": "^3.1.5",
     "electron-store": "^8.1.0",

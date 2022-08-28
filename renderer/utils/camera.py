@@ -20,6 +20,9 @@ import cv2
 def main():
     cap = cv2.VideoCapture(0)
     while cap.isOpened:
+        ans = {}
+        is_cat = False 
+
         success,image = cap.read()
         if not success:
             print("[Error] failed to read camera")
@@ -30,11 +33,13 @@ def main():
         nose_y = poses["NOSE"][1]
         chest_width = abs(poses["L_SHOULDER"][0] - poses["R_SHOULDER"][0])
 
-        print(abs(chest_y - nose_y))
-        print(chest_width)
+
         if abs(chest_y - nose_y)*gap < chest_width:
-            print("Are You a Cat ?")
-            print("--------------")
+            is_cat = True 
+
+        ans["is_cat"] = is_cat
+        print(ans)
+
 
 
 
@@ -56,13 +61,13 @@ def detect(image):
             results = pose.process(image)
 
             # Draw the pose annotation on the image.
-            image.flags.writeable = True
-            image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
-            mp_drawing.draw_landmarks(
-                image,
-                results.pose_landmarks,
-                mp_pose.POSE_CONNECTIONS,
-                landmark_drawing_spec=mp_drawing_styles.get_default_pose_landmarks_style())
+            # image.flags.writeable = True
+            # image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+            # mp_drawing.draw_landmarks(
+            #     image,
+            #     results.pose_landmarks,
+            #     mp_pose.POSE_CONNECTIONS,
+            #     landmark_drawing_spec=mp_drawing_styles.get_default_pose_landmarks_style())
 
             #{体の部位：座標}として返す
             ans = {}
@@ -76,16 +81,25 @@ def detect(image):
                 }
 
                 for name,point in landmark_dic.items():
-                    ans[name] = [results.pose_landmarks.landmark[point].x * image_x,
-                                results.pose_landmarks.landmark[point].y * image_y]
+                    try:
+                        ans[name] = [results.pose_landmarks.landmark[point].x * image_x,
+                                    results.pose_landmarks.landmark[point].y * image_y]
+                    except KeyError:
+                        ans[name] = None 
 
                 # print(vars(mp_pose.PoseLandmark))
                 # print(mp_pose.PoseLandmark._member_names_)
 
             # print(ans)
             # Flip the image horizontally for a selfie-view display.
-            cv2.imshow('MediaPipe Pose', cv2.flip(image, 1))
+            # cv2.imshow('MediaPipe Pose', cv2.flip(image, 1))
             cv2.waitKey(wait)
             return ans 
+
+
+def test():
+    print("test")
+
+
 
 main()
