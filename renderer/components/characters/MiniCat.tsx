@@ -4,33 +4,16 @@ import { InteractionEvent } from 'pixi.js'
 
 import { containsPoint } from '../../utils/pixi_api'
 import { getRandomInt } from '../../utils/api'
-
-type Animation = 0 | 1 | 2 | 3
+import { State, Position, MiniCatAnimation } from '../../types/character'
 
 interface Props {
   isClickThrough: boolean
 }
 
-interface Position {
-  x: number
-  y: number
-}
-
-interface State {
-  currentPos: Position // 現在位置
-  targetPos: Position // 最終的な目標位置 (次フレームの位置ではない)
-  vx: number // x軸方向の速度
-  vy: number
-  angle: number
-  currentAnimation: Animation
-  moveTick: number
-  dragMode: boolean
-}
-
-const BASIC_ANIMATION: Animation = 0
-const BLINK_ANIMATION: Animation = 1
-const LEFT_ANIMATION: Animation = 2
-const RIGHT_ANIMATION: Animation = 3
+const BASIC_ANIMATION: MiniCatAnimation = 0
+const BLINK_ANIMATION: MiniCatAnimation = 1
+const LEFT_ANIMATION: MiniCatAnimation = 2
+const RIGHT_ANIMATION: MiniCatAnimation = 3
 
 const basicAnimationImages = ['/img/mini-cat/1.png']
 const blinkAnimationImages = [
@@ -54,7 +37,7 @@ const setNextTargetAndPosition = (state: State) => {
   const setNextTargetPos = (characterState: State) => {
     /* X座標の決定 */
     if (characterState.moveTick == 0) {
-      characterState.targetPos.x = getRandomInt(1500, 1820)
+      characterState.targetPos.x = getRandomInt(1400, 1620)
     }
   }
 
