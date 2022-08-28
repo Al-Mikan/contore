@@ -8,17 +8,18 @@ import isDev from 'electron-is-dev'
 import prepareNext from 'electron-next'
 
 // electron-storeの初期化
-import Store from 'electron-store'
-const store = new Store()
-const path = require('path')
+// import Store from 'electron-store'
+const Store = require('electron-store');
 
-function db_init() {
-  if (!store.has('exp_point')) {
-    store.set('exp_point', 0);
+const schema = {
+  exp_point: {
+    type: 'number',
+    default: 0
   }
-}
+};
+const store = new Store({schema})
+// const path = require('path')
 
-db_init();
 
 // Prepare the renderer once the app is ready
 app.on('ready', async () => {
