@@ -8,10 +8,10 @@ interface Props {
   x?: number
   y?: number
   scale?: number
-  handleStopClick: (event: InteractionEvent) => void
+  handleClick: (event: InteractionEvent) => void
 }
 
-const EndBtn = ({ x = 0, y = 0, scale = 1, handleStopClick }: Props) => {
+const EndBtn = ({ x = 0, y = 0, scale = 1, handleClick }: Props) => {
   const [alpha, setAlpha] = useState(1)
   const mouseover = () => setAlpha(0.8)
   const mouseout = () => setAlpha(1)
@@ -24,7 +24,7 @@ const EndBtn = ({ x = 0, y = 0, scale = 1, handleStopClick }: Props) => {
       scale={scale}
       interactive={true}
       alpha={alpha}
-      click={handleStopClick}
+      click={handleClick}
       mouseover={mouseover}
       mouseout={mouseout}
       containsPoint={containsPoint}

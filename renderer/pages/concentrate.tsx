@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { InteractionEvent } from 'pixi.js'
-import { useRouter } from 'next/router'
 
 import Layout from '../components/Layout'
 import Timer from '../components/Timer'
@@ -8,15 +7,20 @@ import ResultModal from '../components/ResultModal'
 import MiniCat from '../components/characters/MiniCat'
 import EndBtn from '../components/buttons/EndBtn'
 import Canvas from '../components/Canvas'
+import { useRouter } from 'next/router'
 
 const ConcentratePage = () => {
   const router = useRouter()
   let [time, setTime] = useState('00:00:00')
   let [resultTime, setResultTime] = useState('00:00:00')
   let [isOpen, setIsOpen] = useState(false)
-  const handleStopClick: (event: InteractionEvent) => void = (event) => {
+  const handleClickOpenModal = (event: InteractionEvent) => {
     setResultTime(time)
     setIsOpen(true)
+  }
+  const handleClickToHome = (event: InteractionEvent) => {
+    router.push('/')
+    event.stopPropagation() // modalにクリック判定を与えない
   }
 
   useEffect(() => {
@@ -40,7 +44,7 @@ const ConcentratePage = () => {
             scale={1.5}
             time={resultTime}
             isOpen={isOpen}
-            setIsOpen={(flag: boolean) => setIsOpen(flag)}
+            handleClickToHome={handleClickToHome}
           ></ResultModal>
         ) : (
           // 集中画面はモーダル表示時には出さない
@@ -56,7 +60,7 @@ const ConcentratePage = () => {
             />
             <MiniCat isClickThrough={true} />
             <EndBtn
-              handleStopClick={handleStopClick}
+              handleClick={handleClickOpenModal}
               x={1800}
               y={1000}
               scale={1}

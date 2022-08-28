@@ -1,10 +1,10 @@
-import { useRouter } from 'next/router'
-import { MouseEventHandler, useState } from 'react'
+import { useState } from 'react'
 import { Sprite } from '@inlet/react-pixi'
 import { InteractionEvent } from 'pixi.js'
 
 import { Position } from '../types/character'
 import { containsPoint } from '../utils/pixi_api'
+import EndBtn from './buttons/EndBtn'
 
 interface Props {
   x?: number
@@ -12,7 +12,7 @@ interface Props {
   scale?: number
   time: string
   isOpen: boolean
-  setIsOpen: (flag: boolean) => void
+  handleClickToHome: (event: InteractionEvent) => void // Note: useRouterをResultModalから呼ぶとnullが返るのでpropsとして受け取る
 }
 
 const ResultModal = ({
@@ -21,26 +21,33 @@ const ResultModal = ({
   scale = 1,
   time,
   isOpen,
-  setIsOpen,
+  handleClickToHome,
 }: Props) => {
-  const router = useRouter()
   const [dragMode, setDragMode] = useState(false)
   const [pos, setPos] = useState<Position>({ x: x, y: y })
-  const handleClick: MouseEventHandler<HTMLButtonElement> = (e) => {
-    e.preventDefault()
-    router.push('/')
-  }
+  const [beforeMousePos, setBeforeMousePos] = useState<Position>({ x: 0, y: 0 })
 
   // ドラッグ操作
   const mouseDown = (event: InteractionEvent) => {
+    const nx = event.data.global.x
+    const ny = event.data.global.y
     setDragMode(true)
+    setBeforeMousePos({ x: nx, y: ny })
   }
 
   const mouseMove = (event: InteractionEvent) => {
     if (!dragMode) return
+    /* クリックした場所から移動した差だけ移動する */
+    /* nx,nyにセットすると、端っこをクリックすると始め瞬間移動するので必要 */
     const nx = event.data.global.x
     const ny = event.data.global.y
-    setPos({ x: nx, y: ny })
+    const currentCharacterPosX = event.target.x
+    const currentCharacterPosY = event.target.y
+    setPos({
+      x: currentCharacterPosX + (nx - beforeMousePos.x),
+      y: currentCharacterPosY + (ny - beforeMousePos.y),
+    })
+    setBeforeMousePos({ x: nx, y: ny })
   }
 
   const mouseUp = (event: InteractionEvent) => {
@@ -61,7 +68,9 @@ const ResultModal = ({
       mousemove={mouseMove}
       mouseup={mouseUp}
       mouseupoutside={mouseUp}
-    ></Sprite>
+    >
+      <EndBtn handleClick={handleClickToHome} x={80} y={120}></EndBtn>
+    </Sprite>
   )
 }
 
