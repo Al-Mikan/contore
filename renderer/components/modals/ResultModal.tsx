@@ -69,6 +69,7 @@ const ResultModal = ({
       mouseup={mouseUp}
       mouseupoutside={mouseUp}
     >
+      <Sprite anchor={0.5} image="/img/result-text.png" y={-130} scale={0.9} />
       <EndBtn handleClick={handleClickToHome} x={80} y={120}></EndBtn>
     </Sprite>
   )
