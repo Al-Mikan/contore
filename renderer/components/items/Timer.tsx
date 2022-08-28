@@ -1,11 +1,19 @@
 import { useEffect } from 'react'
 import { Container, Sprite } from '@inlet/react-pixi'
 
+import Num from './Num'
+
+const shouldStrToNum = (nStr: string) => {
+  const n = Number(nStr)
+  if (isNaN(n)) throw new Error('非数値の文字は数値に変換できません')
+  return n
+}
+
 interface Props {
   x?: number
   y?: number
   scale?: number
-  time: string
+  time: String
   setTime: (v: string) => void
 }
 
@@ -30,14 +38,14 @@ const Timer = ({ x = 0, y = 0, scale = 1, time, setTime }: Props) => {
 
   return (
     <Container x={x} y={y} scale={scale}>
-      <Sprite image={'/img/number/' + time[0] + '.png'} x={0} />
-      <Sprite image={'/img/number/' + time[1] + '.png'} x={50} />
+      <Num n={shouldStrToNum(time[0])} x={0} />
+      <Num n={shouldStrToNum(time[1])} x={50} />
       <Sprite image="/img/number/colon.png" x={100} />
-      <Sprite image={'/img/number/' + time[3] + '.png'} x={150} />
-      <Sprite image={'/img/number/' + time[4] + '.png'} x={200} />
+      <Num n={shouldStrToNum(time[3])} x={150} />
+      <Num n={shouldStrToNum(time[4])} x={200} />
       <Sprite image="/img/number/colon.png" x={250} />
-      <Sprite image={'/img/number/' + time[6] + '.png'} x={300} />
-      <Sprite image={'/img/number/' + time[7] + '.png'} x={350} />
+      <Num n={shouldStrToNum(time[6])} x={300} />
+      <Num n={shouldStrToNum(time[7])} x={350} />
     </Container>
   )
 }
