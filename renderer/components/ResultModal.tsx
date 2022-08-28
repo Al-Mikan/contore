@@ -7,15 +7,25 @@ import { Position } from '../types/character'
 import { containsPoint } from '../utils/pixi_api'
 
 interface Props {
+  x?: number
+  y?: number
+  scale?: number
   time: string
   isOpen: boolean
   setIsOpen: (flag: boolean) => void
 }
 
-const ResultModal = ({ time, isOpen, setIsOpen }: Props) => {
+const ResultModal = ({
+  x = 0,
+  y = 0,
+  scale = 1,
+  time,
+  isOpen,
+  setIsOpen,
+}: Props) => {
   const router = useRouter()
   const [dragMode, setDragMode] = useState(false)
-  const [pos, setPos] = useState<Position>({ x: 910, y: 520 })
+  const [pos, setPos] = useState<Position>({ x: x, y: y })
   const handleClick: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault()
     router.push('/')
@@ -44,7 +54,7 @@ const ResultModal = ({ time, isOpen, setIsOpen }: Props) => {
       visible={isOpen}
       x={pos.x}
       y={pos.y}
-      scale={1.5}
+      scale={scale}
       interactive={true}
       containsPoint={containsPoint}
       mousedown={mouseDown}

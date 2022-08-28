@@ -22,9 +22,14 @@ const IndexPage = () => {
       <Container>
         <Canvas>
           <Background />
-          <LevelBar n={1} />
-          <StartBtn handleStartClick={handleStartClick} />
-          <Level level={20} />
+          <LevelBar n={1} x={1500} y={80} scale={2} />
+          <StartBtn
+            handleStartClick={handleStartClick}
+            x={1600}
+            y={900}
+            scale={2}
+          />
+          <Level level={20} x={1300} y={80} />
           <MiniCat isClickThrough={false} />
         </Canvas>
       </Container>

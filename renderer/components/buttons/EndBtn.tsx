@@ -5,10 +5,13 @@ import { useState } from 'react'
 import { containsPoint } from '../../utils/pixi_api'
 
 interface Props {
+  x?: number
+  y?: number
+  scale?: number
   handleStopClick: (event: InteractionEvent) => void
 }
 
-const EndBtn = ({ handleStopClick }: Props) => {
+const EndBtn = ({ x = 0, y = 0, scale = 1, handleStopClick }: Props) => {
   const [alpha, setAlpha] = useState(1)
   const mouseover = () => setAlpha(0.8)
   const mouseout = () => setAlpha(1)
@@ -16,9 +19,9 @@ const EndBtn = ({ handleStopClick }: Props) => {
   return (
     <Sprite
       image="/img/end-btn.png"
-      x={1800}
-      y={1000}
-      scale={1}
+      x={x}
+      y={y}
+      scale={scale}
       interactive={true}
       alpha={alpha}
       click={handleStopClick}

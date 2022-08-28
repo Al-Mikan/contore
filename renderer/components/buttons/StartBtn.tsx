@@ -3,10 +3,13 @@ import { InteractionEvent } from 'pixi.js'
 import { useState } from 'react'
 
 interface Props {
+  x?: number
+  y?: number
+  scale?: number
   handleStartClick: (event: InteractionEvent) => void
 }
 
-const StartBtn = ({ handleStartClick }: Props) => {
+const StartBtn = ({ x = 0, y = 0, scale = 1, handleStartClick }: Props) => {
   const [alpha, setAlpha] = useState(1)
   const mouseover = () => setAlpha(0.8)
   const mouseout = () => setAlpha(1)
@@ -14,9 +17,9 @@ const StartBtn = ({ handleStartClick }: Props) => {
   return (
     <Sprite
       image="/img/start-btn.png"
-      x={1600}
-      y={900}
-      scale={2}
+      x={x}
+      y={y}
+      scale={scale}
       interactive={true}
       alpha={alpha}
       click={handleStartClick}

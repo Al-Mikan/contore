@@ -1,11 +1,14 @@
 import { Sprite, Container } from '@inlet/react-pixi'
 
 interface Props {
+  x?: number
+  y?: number
+  scale?: number
   level: number // 1 ~ 100までの数値
 }
 
 // levelの数値が不正か判定する責務はLevel.tsxが負う
-const Level = ({ level }: Props) => {
+const Level = ({ x = 0, y = 0, scale = 1, level }: Props) => {
   if (level <= 0 || 100 < level) {
     throw new Error(`範囲外の数値が入力されました => ${level}`)
   }
@@ -15,7 +18,7 @@ const Level = ({ level }: Props) => {
   const fi = Math.floor(level / 100) % 10 // 3桁目
 
   return (
-    <Container x={1300} y={80}>
+    <Container x={x} y={y} scale={scale}>
       <Sprite image={`img/number/${fi}.png`} x={0} />
       <Sprite image={`img/number/${se}.png`} x={47} />
       <Sprite image={`img/number/${th}.png`} x={100} />
