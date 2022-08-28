@@ -1,10 +1,12 @@
 import { useState } from 'react'
-import { Sprite } from '@inlet/react-pixi'
-import { InteractionEvent } from 'pixi.js'
+import { Container, Sprite, Text } from '@inlet/react-pixi'
+import { InteractionEvent, TextStyle } from 'pixi.js'
 
 import { Position } from '../../types/character'
 import { containsPoint } from '../../utils/pixi_api'
 import EndBtn from '../buttons/EndBtn'
+import Num from '../items/Num'
+import { shouldStrToNum } from '../../utils/api'
 
 interface Props {
   x?: number
@@ -70,6 +72,36 @@ const ResultModal = ({
       mouseupoutside={mouseUp}
     >
       <Sprite anchor={0.5} image="/img/result-text.png" y={-130} scale={0.9} />
+      <Container x={-100} y={-30} scale={0.7}>
+        <Num n={shouldStrToNum(time[0])} x={0} />
+        <Num n={shouldStrToNum(time[1])} x={50} />
+        <Text
+          text="h"
+          anchor={0.5}
+          x={120}
+          y={40}
+          style={
+            new TextStyle({
+              fontSize: 40,
+              fontWeight: '700',
+            })
+          }
+        />
+        <Num n={shouldStrToNum(time[3])} x={150} />
+        <Num n={shouldStrToNum(time[4])} x={200} />
+        <Text
+          text="m"
+          anchor={0.5}
+          x={270}
+          y={40}
+          style={
+            new TextStyle({
+              fontSize: 40,
+              fontWeight: '700',
+            })
+          }
+        />
+      </Container>
       <EndBtn handleClick={handleClickToHome} x={80} y={120}></EndBtn>
     </Sprite>
   )

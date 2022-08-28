@@ -2,12 +2,7 @@ import { useEffect } from 'react'
 import { Container, Sprite } from '@inlet/react-pixi'
 
 import Num from './Num'
-
-const shouldStrToNum = (nStr: string) => {
-  const n = Number(nStr)
-  if (isNaN(n)) throw new Error('非数値の文字は数値に変換できません')
-  return n
-}
+import { shouldStrToNum } from '../../utils/api'
 
 interface Props {
   x?: number
