@@ -7,6 +7,7 @@ import { containsPoint } from '../../utils/pixi_api'
 import Num from '../items/Num'
 import { shouldStrToNum } from '../../utils/api'
 import CloseBtn from '../buttons/CloseBtn'
+import Coin from '../items/Coin'
 
 interface Props {
   x?: number
@@ -102,6 +103,13 @@ const ResultModal = ({
           }
         />
       </Container>
+      <Container x={30} y={140} scale={0.4}>
+        <Coin />
+        <Num n={1} x={100} y={-40} scale={1.5} />
+        <Num n={8} x={180} y={-40} scale={1.5} />
+        <Num n={0} x={260} y={-40} scale={1.5} />
+      </Container>
+
       <CloseBtn
         handleClick={handleClickToHome}
         x={150}
