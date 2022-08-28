@@ -2,14 +2,14 @@ import styled from 'styled-components'
 import { useRouter } from 'next/router'
 import { InteractionEvent } from 'pixi.js'
 
-import Canvas from '../components/Canvas'
-import Layout from '../components/Layout'
+import Canvas from '../components/containers/Canvas'
+import Layout from '../components/containers/Layout'
 import StartBtn from '../components/buttons/StartBtn'
-import Background from '../components/Background'
-import LevelBar from '../components/LevelBar'
+import Background from '../components/containers/Background'
+import LevelBar from '../components/items/LevelBar'
 import MiniCat from '../components/characters/MiniCat'
-import Level from '../components/Level'
-import Heart from '../components/hearts'
+import Level from '../components/items/Level'
+import Heart from '../components/items/hearts'
 
 const IndexPage = () => {
   const router = useRouter()

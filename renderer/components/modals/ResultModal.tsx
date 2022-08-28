@@ -2,9 +2,9 @@ import { useState } from 'react'
 import { Sprite } from '@inlet/react-pixi'
 import { InteractionEvent } from 'pixi.js'
 
-import { Position } from '../types/character'
-import { containsPoint } from '../utils/pixi_api'
-import EndBtn from './buttons/EndBtn'
+import { Position } from '../../types/character'
+import { containsPoint } from '../../utils/pixi_api'
+import EndBtn from '../buttons/EndBtn'
 
 interface Props {
   x?: number

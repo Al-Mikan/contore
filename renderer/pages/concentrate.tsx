@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react'
 import { InteractionEvent } from 'pixi.js'
 
-import Layout from '../components/Layout'
-import Timer from '../components/Timer'
-import ResultModal from '../components/ResultModal'
+import Layout from '../components/containers/Layout'
+import Timer from '../components/items/Timer'
+import ResultModal from '../components/modals/ResultModal'
 import MiniCat from '../components/characters/MiniCat'
 import EndBtn from '../components/buttons/EndBtn'
-import Canvas from '../components/Canvas'
+import Canvas from '../components/containers/Canvas'
 import { useRouter } from 'next/router'
 
 const ConcentratePage = () => {
