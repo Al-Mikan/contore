@@ -4,9 +4,9 @@ import { InteractionEvent, TextStyle } from 'pixi.js'
 
 import { Position } from '../../types/character'
 import { containsPoint } from '../../utils/pixi_api'
-import EndBtn from '../buttons/EndBtn'
 import Num from '../items/Num'
 import { shouldStrToNum } from '../../utils/api'
+import CloseBtn from '../buttons/CloseBtn'
 
 interface Props {
   x?: number
@@ -102,7 +102,12 @@ const ResultModal = ({
           }
         />
       </Container>
-      <EndBtn handleClick={handleClickToHome} x={80} y={120}></EndBtn>
+      <CloseBtn
+        handleClick={handleClickToHome}
+        x={150}
+        y={-175}
+        scale={0.4}
+      ></CloseBtn>
     </Sprite>
   )
 }
