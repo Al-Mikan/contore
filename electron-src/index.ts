@@ -8,17 +8,20 @@ import isDev from 'electron-is-dev'
 import prepareNext from 'electron-next'
 
 // electron-storeの初期化
-// import Store from 'electron-store'
-const Store = require('electron-store');
+import Store, { Schema } from 'electron-store'
 
-const schema = {
+interface Dummy {
+  experience_point : number
+}
+
+const schema: Schema<Dummy> = {
   experience_point: {
     type: 'number',
     default: 0
   }
 };
-const store = new Store({schema})
-// const path = require('path')
+
+const store = new Store<Dummy> ({schema})
 
 
 // Prepare the renderer once the app is ready
@@ -59,7 +62,11 @@ app.on('ready', async () => {
     store.set(key, value)
   })
   ipcMain.handle('delete', (_: Electron.IpcMainInvokeEvent, key: string) => {
-    store.delete(key)
+    if (!store.has(key)) {
+      return
+    } else {
+      store.delete(key as any)
+    }
   })
 })
 
