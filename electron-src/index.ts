@@ -52,13 +52,13 @@ app.on('ready', async () => {
   mainWindow.loadURL(url)
 
   // データベースの処理関数
-  ipcMain.handle('read', (event: Electron.IpcMainInvokeEvent, str: string) => {
+  ipcMain.handle('read', (_: Electron.IpcMainInvokeEvent, str: string) => {
     return store.get(str)
   })
-  ipcMain.handle('update', (event: Electron.IpcMainInvokeEvent, key: string, value: string) => {
+  ipcMain.handle('update', (_: Electron.IpcMainInvokeEvent, key: string, value: string) => {
     store.set(key, value)
   })
-  ipcMain.handle('delete', (event: Electron.IpcMainInvokeEvent, key: string) => {
+  ipcMain.handle('delete', (_: Electron.IpcMainInvokeEvent, key: string) => {
     store.delete(key)
   })
 })
