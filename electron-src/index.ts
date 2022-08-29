@@ -11,18 +11,17 @@ import prepareNext from 'electron-next'
 import Store, { Schema } from 'electron-store'
 
 interface Dummy {
-  experience_point : number
+  experience_point: number
 }
 
 const schema: Schema<Dummy> = {
   experience_point: {
     type: 'number',
-    default: 0
-  }
-};
+    default: 0,
+  },
+}
 
-const store = new Store<Dummy> ({schema})
-
+const store = new Store<Dummy>({ schema })
 
 // Prepare the renderer once the app is ready
 app.on('ready', async () => {
@@ -30,8 +29,7 @@ app.on('ready', async () => {
 
   const mainWindow = new BrowserWindow({
     webPreferences: {
-      nodeIntegration: false,
-      contextIsolation: false,
+      contextIsolation: true,
       preload: join(__dirname, 'preload.js'),
     },
   })
@@ -58,9 +56,12 @@ app.on('ready', async () => {
   ipcMain.handle('read', (_: Electron.IpcMainInvokeEvent, str: string) => {
     return store.get(str)
   })
-  ipcMain.handle('update', (_: Electron.IpcMainInvokeEvent, key: string, value: string) => {
-    store.set(key, value)
-  })
+  ipcMain.handle(
+    'update',
+    (_: Electron.IpcMainInvokeEvent, key: string, value: string) => {
+      store.set(key, value)
+    }
+  )
   ipcMain.handle('delete', (_: Electron.IpcMainInvokeEvent, key: string) => {
     if (!store.has(key)) {
       return

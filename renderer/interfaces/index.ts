@@ -13,4 +13,10 @@ declare global {
       ipcRenderer: IpcRenderer
     }
   }
+
+  var database: {
+    read: (str: string) => Promise<void>
+    update: (key: string, value: string) => Promise<void>
+    delete: (key: string) => Promise<void>
+  }
 }
