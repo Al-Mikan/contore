@@ -10,8 +10,8 @@ declare global {
   }
 }
 
-// データベースの処理
-contextBridge.exposeInMainWorld('db', {
+// データベースの処理用関数
+contextBridge.exposeInMainWorld('database', {
   read: (str: string) => ipcRenderer.invoke('read', str),
   update: (key: string, value: string) => ipcRenderer.invoke('update', key, value),
   delete: (key: string) => ipcRenderer.invoke('delete', key)

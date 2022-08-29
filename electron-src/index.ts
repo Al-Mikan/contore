@@ -12,7 +12,7 @@ import prepareNext from 'electron-next'
 const Store = require('electron-store');
 
 const schema = {
-  exp_point: {
+  experience_point: {
     type: 'number',
     default: 0
   }
@@ -51,7 +51,7 @@ app.on('ready', async () => {
 
   mainWindow.loadURL(url)
 
-  // データベースの処理
+  // データベースの処理関数
   ipcMain.handle('read', (event: Electron.IpcMainInvokeEvent, str: string) => {
     return store.get(str)
   })
