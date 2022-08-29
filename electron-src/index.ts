@@ -18,7 +18,7 @@ app.on('ready', async () => {
   const mainWindow = new BrowserWindow({
     webPreferences: {
       nodeIntegration: false,
-      contextIsolation: false,
+      contextIsolation: true,
       preload: join(__dirname, 'preload.js'),
     },
   })
@@ -43,6 +43,14 @@ app.on('ready', async () => {
 })
 
 app.on('window-all-closed', app.quit)
+
+app.whenReady().then(
+  ()=>{
+    ipcMain.on("send-camera",(_,content:String)=>{
+      console.log(`from main:${content}`)
+    })
+  }
+)
 
 // レンダラープロセスはメインプロセスにプロセス間通信でデータ取得を要求する
 ipcMain.handle('getStoreValue', (_, key) => {
