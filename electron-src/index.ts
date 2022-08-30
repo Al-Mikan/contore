@@ -16,9 +16,10 @@ app.on('ready', async () => {
   await prepareNext('./renderer')
 
   const mainWindow = new BrowserWindow({
+    frame: false,
+    transparent: true,
     webPreferences: {
-      nodeIntegration: false,
-      contextIsolation: false,
+      contextIsolation: true,
       preload: join(__dirname, 'preload.js'),
     },
   })
@@ -47,4 +48,59 @@ app.on('window-all-closed', app.quit)
 // レンダラープロセスはメインプロセスにプロセス間通信でデータ取得を要求する
 ipcMain.handle('getStoreValue', (_, key) => {
   return store.get(key)
+})
+
+ipcMain.handle('getDisplaySize', (_) => {
+  const display = screen.getPrimaryDisplay()
+  return display.size
+})
+
+ipcMain.handle(
+  'set-ignore-mouse-events',
+  (event, flag: boolean, options?: { forward: boolean }) => {
+    BrowserWindow.fromWebContents(event.sender)?.setIgnoreMouseEvents(
+      flag,
+      options
+    )
+  }
+)
+
+ipcMain.handle('set-always-on-top', (event, flag: boolean) => {
+  BrowserWindow.fromWebContents(event.sender)?.setAlwaysOnTop(flag)
+})
+
+ipcMain.handle('set-window-right-bottom', (event) => {
+  const mainWindow = BrowserWindow.fromWebContents(event.sender)
+  if (mainWindow === null) return
+  const display = screen.getPrimaryDisplay()
+  const apr = 16 / 9
+  const w = Math.floor(display.size.width / 3)
+  const h = Math.floor(w / apr)
+  mainWindow.setAspectRatio(apr)
+  mainWindow.setSize(w, h)
+  /* タスクバーのサイズを考慮するためにworkAreaSizeを使用 */
+  mainWindow.setPosition(
+    display.workAreaSize.width - w,
+    display.workAreaSize.height - h
+  )
+})
+
+ipcMain.handle('set-window-center', (event) => {
+  const mainWindow = BrowserWindow.fromWebContents(event.sender)
+  if (mainWindow === null) return
+  const display = screen.getPrimaryDisplay()
+  const apr = 16 / 9
+  const w = Math.floor(display.size.width / 2)
+  const h = Math.floor(w / apr)
+  mainWindow.setAspectRatio(apr)
+  mainWindow.setSize(w, h)
+  mainWindow.center()
+})
+
+ipcMain.handle('set-window-fullscreen', (event) => {
+  const mainWindow = BrowserWindow.fromWebContents(event.sender)
+  if (mainWindow === null) return
+  const display = screen.getPrimaryDisplay()
+  mainWindow.setSize(display.workAreaSize.width, display.workAreaSize.height)
+  mainWindow.center()
 })

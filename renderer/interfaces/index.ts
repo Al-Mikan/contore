@@ -13,4 +13,16 @@ declare global {
       ipcRenderer: IpcRenderer
     }
   }
+
+  var electronAPI: {
+    getDisplaySize: () => Promise<any>
+    setIgnoreMouseEvents: (
+      flag: boolean,
+      options?: { forward: boolean }
+    ) => Promise<void>
+    setAlwaysOnTop: (flag: boolean) => Promise<void>
+    setWindowRightBottom: () => Promise<void>
+    setWindowCenter: () => Promise<void>
+    setWindowFullscreen: () => Promise<void>
+  }
 }
