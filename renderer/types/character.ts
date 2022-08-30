@@ -13,5 +13,4 @@ export interface State {
   angle: number
   currentAnimation: MiniCatAnimation
   moveTick: number
-  dragMode: boolean
 }

@@ -172,7 +172,6 @@ const MiniCat = ({ isClickThrough = false }: Props) => {
     targetPos: { x: defaultX, y: defaultY },
     currentAnimation: BASIC_ANIMATION,
     moveTick: 0,
-    dragMode: false,
     vx: 0,
     vy: 0,
     angle: 0,
@@ -182,6 +181,7 @@ const MiniCat = ({ isClickThrough = false }: Props) => {
     y: 0,
   })
   const [prevTimestamp, setPrevTimestamp] = useState(Date.now()) // dragに使用
+  const [dragMode, setDragMode] = useState(false) // NOTE: characterStateに含めると、なぜかmousedownで更新されない
 
   /* 基本アニメーション以外で使用 */
   const handleComplete = () => {
@@ -197,45 +197,91 @@ const MiniCat = ({ isClickThrough = false }: Props) => {
     const ny = event.data.global.y
     setBeforeMousePos({ x: nx, y: ny })
     setPrevTimestamp(Date.now())
-    setCharacterState((prev) => ({ ...prev, dragMode: true, angle: 0 }))
+    // ドラッグ中は速度は0から加算する
+    setCharacterState((prev) => ({
+      ...prev,
+      angle: 0,
+      vx: 0,
+      vy: 0,
+    }))
+    setDragMode(true)
   }
 
   const mouseMove = (event: InteractionEvent) => {
-    if (!characterState.dragMode) return
+    if (!dragMode) return
     /* キャラの中心を掴んでいるように見せるため位置を調整 */
     const interval = 1000
     const nx = event.data.global.x
     const ny = event.data.global.y
+    /* 速度は動く度に加算する */
+    const dt = (Date.now() - prevTimestamp) / 5
 
     /* 速度を求める為に一定時間ごとにマウスの位置と時刻を記録する */
-    if (characterState.moveTick % 20 == 0) {
+    if (characterState.moveTick % 50 == 0) {
       setBeforeMousePos({ x: nx, y: ny })
       setPrevTimestamp(Date.now())
-    }
 
-    setCharacterState((prev) => ({
-      ...prev,
-      currentPos: { x: nx, y: ny },
-      moveTick: (prev.moveTick + 1) % interval,
-    }))
+      setCharacterState((prev) => {
+        const nvx = prev.vx + (nx - beforeMousePos.x) / dt
+        const nvy = prev.vy + (ny - beforeMousePos.y) / dt
+
+        return {
+          ...prev,
+          currentPos: { x: nx, y: ny },
+          moveTick: (prev.moveTick + 1) % interval,
+          vx: nvx,
+          vy: nvy,
+        }
+      })
+    } else {
+      setCharacterState((prev) => {
+        return {
+          ...prev,
+          currentPos: { x: nx, y: ny },
+          moveTick: (prev.moveTick + 1) % interval,
+        }
+      })
+    }
   }
 
   const mouseUp = (event: InteractionEvent) => {
     /* クリックを離したタイミングで速度を加える */
     const nx = event.data.global.x
     const ny = event.data.global.y
-    const dt = (Date.now() - prevTimestamp) / 100 // 50は手動で調整した値
-    setCharacterState((prev) => ({
-      ...prev,
-      dragMode: false,
-      vx: (nx - beforeMousePos.x) / dt,
-      vy: (ny - beforeMousePos.y) / dt,
-    }))
+    const dt = (Date.now() - prevTimestamp) / 50 // 即離しに対応するため通常時よりも速度の定数倍を大きくする
+    setCharacterState((prev) => {
+      const nvx = prev.vx + (nx - beforeMousePos.x) / dt
+      const nvy = prev.vy + (ny - beforeMousePos.y) / dt
+      return {
+        ...prev,
+        vx: nvx,
+        vy: nvy,
+      }
+    })
+    setDragMode(false)
   }
 
   /* animation */
   useTick((_) => {
-    if (characterState.dragMode) return
+    if (dragMode) {
+      /* ドラッグ中は速度を少しずつ減速させる */
+      const decelerationRate = 0.99
+      const threadhold = 15
+
+      setCharacterState((prev) => {
+        let nvx = prev.vx * decelerationRate
+        let nvy = prev.vy * decelerationRate
+        // 一定の速さ以下では0にする
+        if (Math.abs(nvx) < threadhold) nvx = 0
+        if (Math.abs(nvy) < threadhold) nvy = 0
+        return {
+          ...prev,
+          vx: nvx,
+          vy: nvy,
+        }
+      })
+      return
+    }
     /* durationごとにターゲットを変更 */
     const interval = 1000
     const nextState: State = {
