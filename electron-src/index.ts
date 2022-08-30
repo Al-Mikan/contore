@@ -19,11 +19,17 @@ app.on('ready', async () => {
     frame: false,
     transparent: true,
     resizable: false,
+    show: false,
     webPreferences: {
       contextIsolation: true,
       preload: join(__dirname, 'preload.js'),
     },
   })
+  // レンダリングが終了してから表示する
+  mainWindow.once('ready-to-show', () => {
+    mainWindow.show()
+  })
+
   const display = screen.getPrimaryDisplay()
   mainWindow.setSize(display.workAreaSize.width, display.workAreaSize.height)
   mainWindow.center()
