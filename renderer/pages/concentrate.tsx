@@ -24,11 +24,9 @@ const ConcentratePage = () => {
   }
 
   useEffect(() => {
-    window.electronAPI.setWindowFullscreen()
     window.electronAPI.setAlwaysOnTop(true)
 
     return () => {
-      window.electronAPI.setWindowCenter()
       window.electronAPI.setAlwaysOnTop(false)
     }
   }, [])
