@@ -10,7 +10,7 @@ import StartBtn from '../components/buttons/StartBtn'
 import LevelBar from '../components/items/LevelBar'
 import MiniCat from '../components/characters/MiniCat'
 import Level from '../components/items/Level'
-import Heart from '../components/items/hearts'
+import LifeGauge from '../components/items/LifeGauge'
 import Coin from '../components/items/Coin'
 import CoinText from '../components/items/CoinText'
 import { Position } from '../types/character'
@@ -76,6 +76,7 @@ const IndexPage = () => {
             <Level level={20} x={580} y={23} scale={0.3} />
             <Coin x={320} y={30} scale={0.3} />
             <CoinText n={180} x={350} y={23} scale={0.3} />
+            <LifeGauge n={3} x={500} y={60} scale={1} />
             <StartBtn
               handleStartClick={handleStartClick}
               x={500}
