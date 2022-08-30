@@ -40,12 +40,15 @@ const ResultModal = ({
 
   const mouseMove = (event: InteractionEvent) => {
     if (!dragMode) return
+    /* currentTargetがnullのバグが発生したので条件分岐する */
+    if (event.currentTarget === null || event.currentTarget === undefined)
+      return
     /* クリックした場所から移動した差だけ移動する */
     /* nx,nyにセットすると、端っこをクリックすると始め瞬間移動するので必要 */
     const nx = event.data.global.x
     const ny = event.data.global.y
-    const currentCharacterPosX = event.target.x
-    const currentCharacterPosY = event.target.y
+    const currentCharacterPosX = event.currentTarget.x
+    const currentCharacterPosY = event.currentTarget.y
     setPos({
       x: currentCharacterPosX + (nx - beforeMousePos.x),
       y: currentCharacterPosY + (ny - beforeMousePos.y),
