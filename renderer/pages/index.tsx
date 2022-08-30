@@ -69,6 +69,7 @@ const IndexPage = () => {
             mouseup={mouseUp}
             mouseupoutside={mouseUp}
           >
+            <Sprite image="/img/board.png" x={50} scale={0.5} />
             <LevelBar n={4} x={480} y={20} scale={0.8} />
             <StartBtn
               handleStartClick={handleStartClick}
