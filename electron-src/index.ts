@@ -65,3 +65,7 @@ ipcMain.handle(
 ipcMain.handle('set-always-on-top', (event, flag: boolean) => {
   BrowserWindow.fromWebContents(event.sender)?.setAlwaysOnTop(flag)
 })
+
+ipcMain.handle('close-window', (event) => {
+  BrowserWindow.fromWebContents(event.sender)?.close()
+})

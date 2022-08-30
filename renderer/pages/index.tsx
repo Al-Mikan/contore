@@ -15,11 +15,15 @@ import Coin from '../components/items/Coin'
 import CoinText from '../components/items/CoinText'
 import { Position } from '../types/character'
 import { containsPoint } from '../utils/pixi_api'
+import EndBtn from '../components/buttons/EndBtn'
 
 const IndexPage = () => {
   const router = useRouter()
-  const handleStartClick: (event: InteractionEvent) => void = (event) => {
+  const handleStartClick = (event: InteractionEvent) => {
     router.push('/concentrate')
+  }
+  const handleEndClick = (event: InteractionEvent) => {
+    electronAPI.closeWindow()
   }
   const [dragMode, setDragMode] = useState(false)
   const [pos, setPos] = useState<Position>({ x: 400, y: 250 })
@@ -79,9 +83,16 @@ const IndexPage = () => {
             <LifeGauge n={3} x={500} y={60} scale={1} />
             <StartBtn
               handleStartClick={handleStartClick}
-              x={500}
+              x={400}
               y={290}
               scale={0.8}
+            />
+            <EndBtn
+              handleClick={handleEndClick}
+              x={520}
+              y={290}
+              scale={0.8}
+              isClickThrouth={false}
             />
             <MiniCat isClickThrough={false} />
           </Sprite>

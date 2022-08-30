@@ -20,5 +20,6 @@ declare global {
       options?: { forward: boolean }
     ) => Promise<void>
     setAlwaysOnTop: (flag: boolean) => Promise<void>
+    closeWindow: () => Promise<void>
   }
 }
