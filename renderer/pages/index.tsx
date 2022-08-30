@@ -11,6 +11,8 @@ import LevelBar from '../components/items/LevelBar'
 import MiniCat from '../components/characters/MiniCat'
 import Level from '../components/items/Level'
 import Heart from '../components/items/hearts'
+import Coin from '../components/items/Coin'
+import CoinText from '../components/items/CoinText'
 import { Position } from '../types/character'
 import { containsPoint } from '../utils/pixi_api'
 
@@ -70,14 +72,16 @@ const IndexPage = () => {
             mouseupoutside={mouseUp}
           >
             <Sprite image="/img/board.png" x={50} scale={0.5} />
-            <LevelBar n={4} x={480} y={20} scale={0.8} />
+            <LevelBar n={4} x={440} y={20} scale={0.8} />
+            <Level level={20} x={580} y={23} scale={0.3} />
+            <Coin x={320} y={30} scale={0.3} />
+            <CoinText n={180} x={350} y={23} scale={0.3} />
             <StartBtn
               handleStartClick={handleStartClick}
               x={500}
               y={290}
               scale={0.8}
             />
-            <Level level={20} x={390} y={20} scale={0.5} />
             <MiniCat isClickThrough={false} />
           </Sprite>
         </Canvas>
