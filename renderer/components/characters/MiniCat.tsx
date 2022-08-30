@@ -2,12 +2,25 @@ import { AnimatedSprite, Container, useTick } from '@inlet/react-pixi'
 import { useState } from 'react'
 import { InteractionEvent } from 'pixi.js'
 
-import { containsPoint } from '../../utils/pixi_api'
+import { containsPoint, containsPointClickThrouth } from '../../utils/pixi_api'
 import { getRandomInt } from '../../utils/api'
 import { State, Position, MiniCatAnimation } from '../../types/character'
 
+interface Border {
+  minX: number
+  maxX: number
+  minY: number
+  maxY: number
+  randomTargetMinX: number // ランダム移動の幅
+  randomTargetMaxX: number
+}
+
 interface Props {
-  isClickThrough: boolean
+  isClickThrough?: boolean
+  defaultX: number
+  defaultY: number
+  scale: number
+  border: Border
 }
 
 const BASIC_ANIMATION: MiniCatAnimation = 0
@@ -25,40 +38,36 @@ const blinkAnimationImages = [
 const leftAnimationImages = ['/img/mini-cat/left.png']
 const rightAnimationImages = ['/img/mini-cat/right.png']
 
-const defaultX = 900
-const defaultY = 1050
-const minX = 0
-const maxX = 1850 /* 画面右 */
-const minY = 30
-const maxY = defaultY /* 画面下 */
-
-const setNextTargetAndPosition = (state: State) => {
+const setNextTargetAndPosition = (state: State, border: Border) => {
   /* 次のターゲットポジションを決定する */
   const setNextTargetPos = (characterState: State) => {
     /* X座標の決定 */
     if (characterState.moveTick == 0) {
-      characterState.targetPos.x = getRandomInt(1400, 1620)
+      characterState.targetPos.x = getRandomInt(
+        border.randomTargetMinX,
+        border.randomTargetMaxX
+      )
     }
   }
 
   /* 速度がある時に壁に当たると止まるようにする */
   const judgeWall = (characterState: State) => {
-    if (characterState.currentPos.x <= minX) {
+    if (characterState.currentPos.x <= border.minX) {
       characterState.vx = 0
       characterState.vy = 0
-      characterState.currentPos.x = minX
-    } else if (characterState.currentPos.x >= maxX) {
+      characterState.currentPos.x = border.minX
+    } else if (characterState.currentPos.x >= border.maxX) {
       characterState.vx = 0
       characterState.vy = 0
-      characterState.currentPos.x = maxX
-    } else if (characterState.currentPos.y <= minY) {
+      characterState.currentPos.x = border.maxX
+    } else if (characterState.currentPos.y <= border.minY) {
       characterState.vx = 0
       characterState.vy = 0
-      characterState.currentPos.y = minY
-    } else if (characterState.currentPos.y >= maxY) {
+      characterState.currentPos.y = border.minY
+    } else if (characterState.currentPos.y >= border.maxY) {
       characterState.vx = 0
       characterState.vy = 0
-      characterState.currentPos.y = maxY
+      characterState.currentPos.y = border.maxY
     }
   }
 
@@ -107,8 +116,8 @@ const setNextTargetAndPosition = (state: State) => {
     characterState.vy += gravity * dt
   }
 
-  const setNextAngle = (characterState: State) => {
-    if (characterState.currentPos.y <= minY) {
+  const setNextAngle = (characterState: State, border: Border) => {
+    if (characterState.currentPos.y <= border.minY) {
       characterState.angle = 180
     } else {
       characterState.angle = 0
@@ -117,7 +126,7 @@ const setNextTargetAndPosition = (state: State) => {
 
   setNextTargetPos(state)
   judgeWall(state)
-  setNextAngle(state)
+  setNextAngle(state, border)
   setNextPosX(state)
   setNextPosY(state)
 }
@@ -158,15 +167,22 @@ const playBlinkAnimation = (characterState: State) => {
   characterState.currentAnimation = BLINK_ANIMATION
 }
 
-const startJump = (characterState: State) => {
+const startJump = (characterState: State, border: Border) => {
   /* 初期位置にいる時のみジャンプ可能 */
-  if (characterState.currentPos.y !== defaultY) return
+  if (characterState.currentPos.y !== border.maxY) return
 
-  characterState.currentPos.y = defaultY - 1 // defaultYは速度が常に0になるので1上げる
+  characterState.currentPos.y = border.maxY - 1 // defaultYは速度が常に0になるので1上げる
   characterState.vy = -50
 }
 
-const MiniCat = ({ isClickThrough = false }: Props) => {
+// デフォルト引数は全画面表示
+const MiniCat = ({
+  isClickThrough = false,
+  defaultX,
+  defaultY,
+  scale,
+  border,
+}: Props) => {
   const [characterState, setCharacterState] = useState<State>({
     currentPos: { x: defaultX, y: defaultY },
     targetPos: { x: defaultX, y: defaultY },
@@ -193,8 +209,8 @@ const MiniCat = ({ isClickThrough = false }: Props) => {
 
   // ドラッグ操作
   const mouseDown = (event: InteractionEvent) => {
-    const nx = event.data.global.x
-    const ny = event.data.global.y
+    const nx = event.data.getLocalPosition(event.currentTarget.parent).x
+    const ny = event.data.getLocalPosition(event.currentTarget.parent).y
     setBeforeMousePos({ x: nx, y: ny })
     setPrevTimestamp(Date.now())
     // ドラッグ中は速度は0から加算する
@@ -209,10 +225,12 @@ const MiniCat = ({ isClickThrough = false }: Props) => {
 
   const mouseMove = (event: InteractionEvent) => {
     if (!dragMode) return
+    event.stopPropagation() // 背景のドラッグをしないように
     /* キャラの中心を掴んでいるように見せるため位置を調整 */
     const interval = 1000
-    const nx = event.data.global.x
-    const ny = event.data.global.y
+    // NOTE: スケールに対応するために親様相の座標を取る。
+    const nx = event.data.getLocalPosition(event.currentTarget.parent).x
+    const ny = event.data.getLocalPosition(event.currentTarget.parent).y
     /* 速度は動く度に加算する */
     const dt = (Date.now() - prevTimestamp) / 5
 
@@ -246,8 +264,8 @@ const MiniCat = ({ isClickThrough = false }: Props) => {
 
   const mouseUp = (event: InteractionEvent) => {
     /* クリックを離したタイミングで速度を加える */
-    const nx = event.data.global.x
-    const ny = event.data.global.y
+    const nx = event.data.getLocalPosition(event.currentTarget.parent).x
+    const ny = event.data.getLocalPosition(event.currentTarget.parent).y
     const dt = (Date.now() - prevTimestamp) / 50 // 即離しに対応するため通常時よりも速度の定数倍を大きくする
     setCharacterState((prev) => {
       const nvx = prev.vx + (nx - beforeMousePos.x) / dt
@@ -289,7 +307,7 @@ const MiniCat = ({ isClickThrough = false }: Props) => {
       currentPos: { ...characterState.currentPos },
       targetPos: { ...characterState.targetPos },
     }
-    setNextTargetAndPosition(nextState) // currentPos, targetPosの決定
+    setNextTargetAndPosition(nextState, border) // currentPos, targetPosの決定
     playMoveAnimation(characterState, nextState)
 
     if (characterState.currentAnimation == BASIC_ANIMATION) {
@@ -301,7 +319,7 @@ const MiniCat = ({ isClickThrough = false }: Props) => {
 
     /* たまにジャンプする */
     if (Math.random() <= 0.001) {
-      startJump(nextState)
+      startJump(nextState, border)
     }
 
     nextState.moveTick = (nextState.moveTick + 1) % interval
@@ -319,11 +337,13 @@ const MiniCat = ({ isClickThrough = false }: Props) => {
         animationSpeed={0.05}
         x={characterState.currentPos.x}
         y={characterState.currentPos.y}
-        scale={0.8}
+        scale={scale}
         angle={characterState.angle}
         interactive={true}
         visible={characterState.currentAnimation == BASIC_ANIMATION}
-        containsPoint={isClickThrough && containsPoint}
+        containsPoint={
+          isClickThrough ? containsPointClickThrouth : containsPoint
+        }
         mousedown={mouseDown}
         mousemove={mouseMove}
         mouseup={mouseUp}
@@ -338,11 +358,13 @@ const MiniCat = ({ isClickThrough = false }: Props) => {
         animationSpeed={0.05}
         x={characterState.currentPos.x}
         y={characterState.currentPos.y}
-        scale={0.8}
+        scale={scale}
         angle={characterState.angle}
         interactive={true}
         visible={characterState.currentAnimation == RIGHT_ANIMATION}
-        containsPoint={isClickThrough && containsPoint}
+        containsPoint={
+          isClickThrough ? containsPointClickThrouth : containsPoint
+        }
         mousedown={mouseDown}
         mousemove={mouseMove}
         mouseup={mouseUp}
@@ -357,11 +379,13 @@ const MiniCat = ({ isClickThrough = false }: Props) => {
         animationSpeed={0.05}
         x={characterState.currentPos.x}
         y={characterState.currentPos.y}
-        scale={0.8}
+        scale={scale}
         angle={characterState.angle}
         interactive={true}
         visible={characterState.currentAnimation == LEFT_ANIMATION}
-        containsPoint={isClickThrough && containsPoint}
+        containsPoint={
+          isClickThrough ? containsPointClickThrouth : containsPoint
+        }
         mousedown={mouseDown}
         mousemove={mouseMove}
         mouseup={mouseUp}
@@ -376,13 +400,15 @@ const MiniCat = ({ isClickThrough = false }: Props) => {
         animationSpeed={0.1}
         x={characterState.currentPos.x}
         y={characterState.currentPos.y}
-        scale={0.8}
+        scale={scale}
         angle={characterState.angle}
         visible={characterState.currentAnimation == BLINK_ANIMATION}
         loop={false}
         interactive={true}
         onComplete={handleComplete}
-        containsPoint={isClickThrough && containsPoint}
+        containsPoint={
+          isClickThrough ? containsPointClickThrouth : containsPoint
+        }
         mousedown={mouseDown}
         mousemove={mouseMove}
         mouseup={mouseUp}

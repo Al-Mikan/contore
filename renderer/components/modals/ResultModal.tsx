@@ -3,7 +3,7 @@ import { Container, Sprite, Text } from '@inlet/react-pixi'
 import { InteractionEvent, TextStyle } from 'pixi.js'
 
 import { Position } from '../../types/character'
-import { containsPoint } from '../../utils/pixi_api'
+import { containsPointClickThrouth } from '../../utils/pixi_api'
 import Num from '../items/Num'
 import { shouldStrToNum } from '../../utils/api'
 import CloseBtn from '../buttons/CloseBtn'
@@ -69,7 +69,7 @@ const ResultModal = ({
       y={pos.y}
       scale={scale}
       interactive={true}
-      containsPoint={containsPoint}
+      containsPoint={containsPointClickThrouth}
       mousedown={mouseDown}
       mousemove={mouseMove}
       mouseup={mouseUp}

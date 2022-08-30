@@ -2,7 +2,7 @@ import { Sprite } from '@inlet/react-pixi'
 import { InteractionEvent } from 'pixi.js'
 import { useState } from 'react'
 
-import { containsPoint } from '../../utils/pixi_api'
+import { containsPoint, containsPointClickThrouth } from '../../utils/pixi_api'
 
 interface Props {
   x?: number
@@ -16,7 +16,7 @@ const EndBtn = ({
   x = 0,
   y = 0,
   scale = 1,
-  isClickThrouth = true,
+  isClickThrouth = false,
   handleClick,
 }: Props) => {
   const [alpha, setAlpha] = useState(1)
@@ -25,34 +25,19 @@ const EndBtn = ({
 
   // 属性のみの切り替え方法が不明なので要素ごとわける
   return (
-    <>
-      {isClickThrouth ? (
-        <Sprite
-          image="/img/end-btn.png"
-          x={x}
-          y={y}
-          scale={scale}
-          interactive={true}
-          alpha={alpha}
-          click={handleClick}
-          mouseover={mouseover}
-          mouseout={mouseout}
-          containsPoint={containsPoint}
-        />
-      ) : (
-        <Sprite
-          image="/img/end-btn.png"
-          x={x}
-          y={y}
-          scale={scale}
-          interactive={true}
-          alpha={alpha}
-          click={handleClick}
-          mouseover={mouseover}
-          mouseout={mouseout}
-        />
-      )}
-    </>
+    <Sprite
+      image="/img/end-btn.png"
+      x={x}
+      y={y}
+      scale={scale}
+      interactive={true}
+      alpha={alpha}
+      click={handleClick}
+      mouseover={mouseover}
+      mouseout={mouseout}
+      containsPoint={isClickThrouth ? containsPointClickThrouth : containsPoint}
+      buttonMode={true}
+    />
   )
 }
 

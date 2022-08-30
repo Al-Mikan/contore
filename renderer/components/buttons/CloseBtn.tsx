@@ -2,7 +2,7 @@ import { Sprite } from '@inlet/react-pixi'
 import { InteractionEvent } from 'pixi.js'
 import { useState } from 'react'
 
-import { containsPoint } from '../../utils/pixi_api'
+import { containsPointClickThrouth } from '../../utils/pixi_api'
 
 interface Props {
   x?: number
@@ -27,7 +27,8 @@ const CloseBtn = ({ x = 0, y = 0, scale = 1, handleClick }: Props) => {
       click={handleClick}
       mouseover={mouseover}
       mouseout={mouseout}
-      containsPoint={containsPoint}
+      containsPoint={containsPointClickThrouth}
+      buttonMode={true}
     />
   )
 }

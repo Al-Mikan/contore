@@ -8,12 +8,21 @@ import MiniCat from '../components/characters/MiniCat'
 import EndBtn from '../components/buttons/EndBtn'
 import Canvas from '../components/containers/Canvas'
 import { useRouter } from 'next/router'
+import { border } from '@chakra-ui/react'
 
 const ConcentratePage = () => {
   const router = useRouter()
   let [time, setTime] = useState('00:00:00')
   let [resultTime, setResultTime] = useState('00:00:00')
   let [isOpen, setIsOpen] = useState(false)
+  const miniCatBorder = {
+    minX: 0,
+    maxX: 1850,
+    minY: 30,
+    maxY: 1050,
+    randomTargetMinX: 1400,
+    randomTargetMaxX: 1620,
+  }
   const handleClickOpenModal = (event: InteractionEvent) => {
     setResultTime(time)
     setIsOpen(true)
@@ -56,8 +65,15 @@ const ConcentratePage = () => {
                 setTime(v)
               }}
             />
-            <MiniCat isClickThrough={true} />
+            <MiniCat
+              isClickThrough={true}
+              scale={0.8}
+              border={miniCatBorder}
+              defaultX={950}
+              defaultY={1050}
+            />
             <EndBtn
+              isClickThrouth={true}
               handleClick={handleClickOpenModal}
               x={1800}
               y={1000}
