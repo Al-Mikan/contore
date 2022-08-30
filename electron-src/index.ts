@@ -18,6 +18,7 @@ app.on('ready', async () => {
   const mainWindow = new BrowserWindow({
     frame: false,
     transparent: true,
+    resizable: false,
     webPreferences: {
       contextIsolation: true,
       preload: join(__dirname, 'preload.js'),
