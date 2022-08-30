@@ -6,6 +6,7 @@ import { format } from 'url'
 import { BrowserWindow, app, ipcMain, screen } from 'electron'
 import isDev from 'electron-is-dev'
 import prepareNext from 'electron-next'
+import Score from '../renderer/utils/Score'
 
 // electron-storeの初期化
 import Store from 'electron-store'
@@ -47,7 +48,8 @@ app.on('window-all-closed', app.quit)
 app.whenReady().then(
   ()=>{
     ipcMain.on("send-camera",(_,content:String)=>{
-      console.log(`from main:${content}`)
+    Score(content)
+    // console.log(`from main:${ans}`)
     })
   }
 )

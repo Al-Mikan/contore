@@ -15,6 +15,9 @@ mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
 mp_pose = mp.solutions.pose
 import cv2
+import base64
+import numpy as np
+import sys 
 
 
 def main():
@@ -45,9 +48,18 @@ def main():
 
     cap.release()
     
+def decode_from_bin(bin_data):
+    bin_data = base64.b64decode(bin_data)
+    image = np.asarray(bytearray(bin_data), dtype=np.uint8)
+    img = cv2.imdecode(image, cv2.IMREAD_COLOR)
 
+    return img
 
-def detect(image):
+def detect():
+    s = input()
+    print("input done!")
+    # s = sys.stdin.read()
+    image = decode_from_bin((s))
     image_y,image_x,_ = image.shape
     # For webcam input:
     with mp_pose.Pose(
@@ -101,5 +113,4 @@ def test():
     print("test")
 
 
-
-main()
+print(detect())
