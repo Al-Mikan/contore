@@ -21,4 +21,5 @@ contextBridge.exposeInMainWorld('electronAPI', {
     ipcRenderer.invoke('set-ignore-mouse-events', flag, options),
   setAlwaysOnTop: (flag: boolean) =>
     ipcRenderer.invoke('set-always-on-top', flag),
+  closeWindow: () => ipcRenderer.invoke('close-window'),
 })

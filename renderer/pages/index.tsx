@@ -10,18 +10,33 @@ import StartBtn from '../components/buttons/StartBtn'
 import LevelBar from '../components/items/LevelBar'
 import MiniCat from '../components/characters/MiniCat'
 import Level from '../components/items/Level'
-import Heart from '../components/items/hearts'
+import LifeGauge from '../components/items/LifeGauge'
+import Coin from '../components/items/Coin'
+import CoinText from '../components/items/CoinText'
 import { Position } from '../types/character'
-import { containsPoint } from '../utils/pixi_api'
+import { containsPointClickThrouth } from '../utils/pixi_api'
+import EndBtn from '../components/buttons/EndBtn'
 
 const IndexPage = () => {
   const router = useRouter()
-  const handleStartClick: (event: InteractionEvent) => void = (event) => {
+  const handleStartClick = (event: InteractionEvent) => {
     router.push('/concentrate')
   }
+  const handleEndClick = (event: InteractionEvent) => {
+    electronAPI.closeWindow()
+  }
   const [dragMode, setDragMode] = useState(false)
-  const [pos, setPos] = useState<Position>({ x: 400, y: 250 })
+  const [pos, setPos] = useState<Position>({ x: 350, y: 200 })
   const [beforeMousePos, setBeforeMousePos] = useState<Position>({ x: 0, y: 0 })
+  // 背景画像のサイズを元に調整する
+  const miniCatBorder = {
+    minX: 0 - 50,
+    maxX: 640 + 50,
+    minY: 0,
+    maxY: 293,
+    randomTargetMinX: 0 - 10,
+    randomTargetMaxX: 640 + 10,
+  }
 
   // ドラッグ操作
   const mouseDown = (event: InteractionEvent) => {
@@ -58,26 +73,37 @@ const IndexPage = () => {
       <Container>
         <Canvas>
           <Sprite
-            image={'/img/background.png'}
-            scale={1.7}
+            image={'/img/background.png'} // 640 * 360
             x={pos.x}
             y={pos.y}
+            width={1280}
+            height={720}
             interactive={true}
-            containsPoint={containsPoint}
+            containsPoint={containsPointClickThrouth}
             mousedown={mouseDown}
             mousemove={mouseMove}
             mouseup={mouseUp}
             mouseupoutside={mouseUp}
           >
-            <LevelBar n={4} x={480} y={20} scale={0.8} />
+            <MiniCat
+              defaultX={200}
+              defaultY={293}
+              scale={0.5}
+              border={miniCatBorder}
+            />
+            <Sprite image="/img/board.png" x={50} scale={0.5} />
+            <LevelBar n={4} x={440} y={20} scale={0.8} />
+            <Level level={20} x={580} y={23} scale={0.3} />
+            <Coin x={320} y={30} scale={0.3} />
+            <CoinText n={180} x={350} y={23} scale={0.3} />
+            <LifeGauge n={3} x={500} y={60} scale={1} />
             <StartBtn
               handleStartClick={handleStartClick}
-              x={500}
-              y={290}
+              x={400}
+              y={315}
               scale={0.8}
             />
-            <Level level={20} x={390} y={20} scale={0.5} />
-            <MiniCat isClickThrough={false} />
+            <EndBtn handleClick={handleEndClick} x={520} y={315} scale={0.8} />
           </Sprite>
         </Canvas>
       </Container>
