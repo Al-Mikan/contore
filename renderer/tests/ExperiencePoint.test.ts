@@ -1,5 +1,5 @@
 // cannot be compiled under '--isolatedModules を回避するためimportする
-import ExperiencePoint from '../utils/experience_point'
+import ExperiencePoint from '../utils/ExperiencePoint'
 
 test('ExperiencePoint case:minus', () => {
   let ex = new ExperiencePoint(-1000)

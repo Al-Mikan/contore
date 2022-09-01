@@ -6,7 +6,7 @@ export default class ExperiencePoint {
   public accumulate = Array(ExperiencePoint.MAX_LEVEL + 2)
 
   /*
-    accumulate[i]: レベルi時点での経験値
+    accumulate[i]: レベルi時点での経験値 
     accumulate[MAX_LEBEL]: 100時間 <- sum(i = 0 ~ MAX_LEBEL) START_POINT + DIFFERENCE * i
   */
 
