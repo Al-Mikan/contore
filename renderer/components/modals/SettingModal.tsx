@@ -57,12 +57,12 @@ const SettingModal = ({
   let [isToggle, setIsToggle] = useState(true)
 
   const handleToggleChange = useCallback(() => {
-    if(isToggle) {
-        setIsToggle(false)
-    }else{
-        setIsToggle(true)
+    if (isToggle) {
+      setIsToggle(false)
+    } else {
+      setIsToggle(true)
     }
-}, [isToggle])
+  }, [isToggle])
 
   return (
     <Sprite

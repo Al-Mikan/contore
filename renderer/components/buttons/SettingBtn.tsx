@@ -12,12 +12,7 @@ interface Props {
   handleSettingClick: (event: InteractionEvent) => void
 }
 
-const SettingBtn = ({
-  x = 0,
-  y = 0,
-  scale = 2,
-  handleSettingClick,
-}: Props) => {
+const SettingBtn = ({ x = 0, y = 0, scale = 2, handleSettingClick }: Props) => {
   return (
     <Sprite
       image="/img/hamburger.png"

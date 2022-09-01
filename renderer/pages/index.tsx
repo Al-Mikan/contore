@@ -114,7 +114,6 @@ const IndexPage = () => {
               scale={0.8}
             />
             <EndBtn handleClick={handleEndClick} x={520} y={315} scale={0.8} />
-            
           </Sprite>
         </Canvas>
       </Container>
