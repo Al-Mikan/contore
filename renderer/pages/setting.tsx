@@ -15,14 +15,6 @@ const SettingPage = () => {
     event.stopPropagation() // modalにクリック判定を与えない
   }
 
-  useEffect(() => {
-    window.electronAPI.setAlwaysOnTop(true)
-
-    return () => {
-      window.electronAPI.setAlwaysOnTop(false)
-    }
-  }, [])
-
   return (
     <Layout title="設定画面 | こんとれ！！">
       <Canvas>
