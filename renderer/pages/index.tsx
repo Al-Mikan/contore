@@ -6,7 +6,6 @@ import { useState } from 'react'
 
 import Canvas from '../components/containers/Canvas'
 import Layout from '../components/containers/Layout'
-import StartBtn from '../components/buttons/StartBtn'
 import LevelBar from '../components/items/LevelBar'
 import MiniCat from '../components/characters/MiniCat'
 import Level from '../components/items/Level'
@@ -15,12 +14,17 @@ import Coin from '../components/items/Coin'
 import CoinText from '../components/items/CoinText'
 import { Position } from '../types/character'
 import { containsPointClickThrouth } from '../utils/pixi_api'
+import StartBtn from '../components/buttons/StartBtn'
+import SettingBtn from '../components/buttons/SettingBtn'
 import EndBtn from '../components/buttons/EndBtn'
 
 const IndexPage = () => {
   const router = useRouter()
   const handleStartClick = (event: InteractionEvent) => {
     router.push('/concentrate')
+  }
+  const handleSettingClick = (event: InteractionEvent) => {
+    router.push('/setting')
   }
   const handleEndClick = (event: InteractionEvent) => {
     electronAPI.closeWindow()
@@ -92,11 +96,17 @@ const IndexPage = () => {
               border={miniCatBorder}
             />
             <Sprite image="/img/board.png" x={50} scale={0.5} />
-            <LevelBar n={4} x={440} y={20} scale={0.8} />
-            <Level level={20} x={580} y={23} scale={0.3} />
+            <LevelBar n={4} x={440} y={20} scale={0.7} />
+            <Level level={20} x={560} y={23} scale={0.2} />
             <Coin x={320} y={30} scale={0.3} />
             <CoinText n={180} x={350} y={23} scale={0.3} />
-            <LifeGauge n={3} x={500} y={60} scale={1} />
+            <LifeGauge n={3} x={450} y={60} scale={0.8} />
+            <SettingBtn
+              handleSettingClick={handleSettingClick}
+              x={595}
+              y={13}
+              scale={0.4}
+            />
             <StartBtn
               handleStartClick={handleStartClick}
               x={400}
@@ -104,6 +114,7 @@ const IndexPage = () => {
               scale={0.8}
             />
             <EndBtn handleClick={handleEndClick} x={520} y={315} scale={0.8} />
+            
           </Sprite>
         </Canvas>
       </Container>
