@@ -10,14 +10,20 @@ import prepareNext from 'electron-next'
 // electron-storeの初期化
 import Store, { Schema } from 'electron-store'
 
+/* トップレベルでJsonSchamaを置くことは仕様上無理 */
 interface Dummy {
-  experience_point: number
+  core: {
+    experience_point: number
+  }
 }
 
 const schema: Schema<Dummy> = {
-  experience_point: {
-    type: 'number',
-    default: 0,
+  core: {
+    type: 'object',
+    properties: {
+      experience_point: { type: 'integer', default: 0, minimum: 0 },
+    },
+    additionalProperties: false,
   },
 }
 
@@ -51,24 +57,27 @@ app.on('ready', async () => {
       })
 
   mainWindow.loadURL(url)
+})
 
-  // データベースの処理関数
-  ipcMain.handle('read', (_: Electron.IpcMainInvokeEvent, str: string) => {
-    return store.get(str)
-  })
-  ipcMain.handle(
-    'update',
-    (_: Electron.IpcMainInvokeEvent, key: string, value: string) => {
-      store.set(key, value)
-    }
-  )
-  ipcMain.handle('delete', (_: Electron.IpcMainInvokeEvent, key: string) => {
-    if (!store.has(key)) {
-      return
-    } else {
-      store.delete(key as any)
-    }
-  })
+// データベースの処理関数
+// TODO: 例外処理
+ipcMain.handle('read', (_: Electron.IpcMainInvokeEvent, str: string) => {
+  return store.get(str)
+})
+
+ipcMain.handle(
+  'update',
+  (_: Electron.IpcMainInvokeEvent, key: string, value: string) => {
+    store.set(key, value)
+  }
+)
+
+ipcMain.handle('delete', (_: Electron.IpcMainInvokeEvent, key: string) => {
+  if (!store.has(key)) {
+    return
+  } else {
+    store.delete(key as any)
+  }
 })
 
 app.on('window-all-closed', app.quit)
