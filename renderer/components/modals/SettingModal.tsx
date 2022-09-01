@@ -54,7 +54,7 @@ const SettingModal = ({
     setDragMode(false)
   }
   //toggleの処理
-  let [isToggle, setIsToggle] = useState(true)
+  const [isToggle, setIsToggle] = useState(true)
 
   const handleToggleChange = useCallback(() => {
     if (isToggle) {
