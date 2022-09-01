@@ -23,6 +23,8 @@ const SettingModal = ({
   const [dragMode, setDragMode] = useState(false)
   const [pos, setPos] = useState<Position>({ x: x, y: y })
   const [beforeMousePos, setBeforeMousePos] = useState<Position>({ x: 0, y: 0 })
+  //toggleの処理
+  const [isToggle, setIsToggle] = useState(true)
 
   // ドラッグ操作
   const mouseDown = (event: InteractionEvent) => {
@@ -53,8 +55,6 @@ const SettingModal = ({
   const mouseUp = (event: InteractionEvent) => {
     setDragMode(false)
   }
-  //toggleの処理
-  const [isToggle, setIsToggle] = useState(true)
 
   const handleToggleChange = useCallback(() => {
     if (isToggle) {
