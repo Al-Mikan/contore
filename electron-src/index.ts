@@ -34,19 +34,23 @@ app.on('ready', async () => {
   await prepareNext('./renderer')
 
   const mainWindow = new BrowserWindow({
+    frame: false,
+    transparent: true,
+    resizable: false,
+    show: false,
     webPreferences: {
       contextIsolation: true,
       preload: join(__dirname, 'preload.js'),
     },
   })
-  const display = screen.getPrimaryDisplay()
-  const w = display.size.width
+  // レンダリングが終了してから表示する
+  mainWindow.once('ready-to-show', () => {
+    mainWindow.show()
+  })
 
-  const apr = 16 / 9
-  mainWindow.setAspectRatio(apr)
-  mainWindow.setSize(w / 2, w / 2 / apr)
+  const display = screen.getPrimaryDisplay()
+  mainWindow.setSize(display.workAreaSize.width, display.workAreaSize.height)
   mainWindow.center()
-  mainWindow.setMinimumSize(w / 4, w / 4 / apr)
 
   const url = isDev
     ? 'http://localhost:8000/'
@@ -58,6 +62,8 @@ app.on('ready', async () => {
 
   mainWindow.loadURL(url)
 })
+
+app.on('window-all-closed', app.quit)
 
 // データベースの処理関数
 // TODO: 例外処理
@@ -80,4 +86,20 @@ ipcMain.handle('delete', (_: Electron.IpcMainInvokeEvent, key: string) => {
   }
 })
 
-app.on('window-all-closed', app.quit)
+ipcMain.handle(
+  'set-ignore-mouse-events',
+  (event, flag: boolean, options?: { forward: boolean }) => {
+    BrowserWindow.fromWebContents(event.sender)?.setIgnoreMouseEvents(
+      flag,
+      options
+    )
+  }
+)
+
+ipcMain.handle('set-always-on-top', (event, flag: boolean) => {
+  BrowserWindow.fromWebContents(event.sender)?.setAlwaysOnTop(flag)
+})
+
+ipcMain.handle('close-window', (event) => {
+  BrowserWindow.fromWebContents(event.sender)?.close()
+})

@@ -19,4 +19,13 @@ declare global {
     update: (key: string, value: string) => Promise<void>
     delete: (key: string) => Promise<void>
   }
+
+  var electronAPI: {
+    setIgnoreMouseEvents: (
+      flag: boolean,
+      options?: { forward: boolean }
+    ) => Promise<void>
+    setAlwaysOnTop: (flag: boolean) => Promise<void>
+    closeWindow: () => Promise<void>
+  }
 }
