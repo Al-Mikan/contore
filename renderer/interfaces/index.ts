@@ -14,6 +14,12 @@ declare global {
     }
   }
 
+  var database: {
+    read: (str: string) => Promise<number>
+    update: (key: string, value: string) => Promise<void>
+    delete: (key: string) => Promise<void>
+  }
+
   var electronAPI: {
     setIgnoreMouseEvents: (
       flag: boolean,

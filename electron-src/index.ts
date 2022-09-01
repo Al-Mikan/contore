@@ -8,8 +8,26 @@ import isDev from 'electron-is-dev'
 import prepareNext from 'electron-next'
 
 // electron-storeの初期化
-import Store from 'electron-store'
-const store = new Store()
+import Store, { Schema } from 'electron-store'
+
+/* トップレベルでJsonSchamaを置くことは仕様上無理 */
+interface Dummy {
+  core: {
+    experience_point: number
+  }
+}
+
+const schema: Schema<Dummy> = {
+  core: {
+    type: 'object',
+    properties: {
+      experience_point: { type: 'integer', default: 0, minimum: 0 },
+    },
+    additionalProperties: false,
+  },
+}
+
+const store = new Store<Dummy>({ schema })
 
 // Prepare the renderer once the app is ready
 app.on('ready', async () => {
@@ -47,9 +65,25 @@ app.on('ready', async () => {
 
 app.on('window-all-closed', app.quit)
 
-// レンダラープロセスはメインプロセスにプロセス間通信でデータ取得を要求する
-ipcMain.handle('getStoreValue', (_, key) => {
-  return store.get(key)
+// データベースの処理関数
+// TODO: 例外処理
+ipcMain.handle('read', (_: Electron.IpcMainInvokeEvent, str: string) => {
+  return store.get(str)
+})
+
+ipcMain.handle(
+  'update',
+  (_: Electron.IpcMainInvokeEvent, key: string, value: string) => {
+    store.set(key, value)
+  }
+)
+
+ipcMain.handle('delete', (_: Electron.IpcMainInvokeEvent, key: string) => {
+  if (!store.has(key)) {
+    return
+  } else {
+    store.delete(key as any)
+  }
 })
 
 ipcMain.handle(
