@@ -121,7 +121,7 @@ function genHitmap(baseTex, threshold) {
   }
   const imgSource = baseTex.resource.source
   let canvas = null
-  if (!imgSource) {
+  if (!imgSource || imgSource.width === 0 || imgSource.height === 0) {
     return false
   }
   let context = null

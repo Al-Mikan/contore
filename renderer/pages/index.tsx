@@ -1,26 +1,30 @@
 import { useRouter } from 'next/router'
 import { InteractionEvent } from 'pixi.js'
 import { Sprite } from '@inlet/react-pixi'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import Layout from '../components/containers/Layout'
 import LevelBar from '../components/items/LevelBar'
 import MiniCat from '../components/characters/MiniCat'
-import Level from '../components/items/Level'
 import LifeGauge from '../components/items/LifeGauge'
 import Coin from '../components/items/Coin'
-import CoinText from '../components/items/CoinText'
 import { Position } from '../types/character'
 import { containsPointClickThrouth } from '../utils/PixiAPI'
 import StartBtn from '../components/buttons/StartBtn'
 import SettingBtn from '../components/buttons/SettingBtn'
 import EndBtn from '../components/buttons/EndBtn'
+import ExperiencePoint from '../utils/ExperiencePoint'
+import NumText from '../components/items/NumText'
 
 const IndexPage = () => {
   const router = useRouter()
   const [dragMode, setDragMode] = useState(false)
   const [pos, setPos] = useState<Position>({ x: 350, y: 200 })
   const [beforeMousePos, setBeforeMousePos] = useState<Position>({ x: 0, y: 0 })
+  const [experience, setExperience] = useState(0)
+  const [coins, setCoins] = useState(0)
+
+  const ex = new ExperiencePoint(experience)
   // 背景画像のサイズを元に調整する
   const miniCatBorder = {
     minX: 0 - 50,
@@ -71,6 +75,29 @@ const IndexPage = () => {
     setDragMode(false)
   }
 
+  useEffect(() => {
+    const fetchExperience = async () => {
+      // 経験値の設定
+      const nowEx = await window.database.read('core.experience_point')
+      if (nowEx === undefined) {
+        throw new Error('electron-store: core.experience_pointが存在しません')
+      }
+      setExperience(nowEx)
+    }
+    const fetchCoins = async () => {
+      // コイン枚数の設定
+      const nowCoins = await window.database.read('core.coin')
+      if (nowCoins === undefined) {
+        throw new Error('electron-store: core.coinが存在しません')
+      }
+      setCoins(nowCoins)
+    }
+
+    // 非同期処理を並行に実行
+    fetchExperience()
+    fetchCoins()
+  }, [])
+
   return (
     <Layout title="Home | こんとれ！！">
       <Sprite
@@ -93,10 +120,17 @@ const IndexPage = () => {
           border={miniCatBorder}
         />
         <Sprite image="/img/board.png" x={50} scale={0.5} />
-        <LevelBar n={4} x={440} y={20} scale={0.7} />
-        <Level level={20} x={560} y={23} scale={0.2} />
+        <LevelBar n={ex.progress(10)} x={440} y={20} scale={0.7} />
+        <NumText
+          n={ex.get_level()}
+          view_digits={3}
+          x={560}
+          y={23}
+          scale={0.2}
+          is_headzero_displayed={true}
+        />
         <Coin x={320} y={30} scale={0.3} />
-        <CoinText n={180} x={350} y={23} scale={0.3} />
+        <NumText n={coins} view_digits={4} x={350} y={23} scale={0.3} />
         <LifeGauge n={3} x={450} y={60} scale={0.8} />
         <SettingBtn
           handleSettingClick={handleSettingClick}
