@@ -6,16 +6,15 @@ import { useEffect, useState } from 'react'
 import Layout from '../components/containers/Layout'
 import LevelBar from '../components/items/LevelBar'
 import MiniCat from '../components/characters/MiniCat'
-import Level from '../components/items/Level'
 import LifeGauge from '../components/items/LifeGauge'
 import Coin from '../components/items/Coin'
-import CoinText from '../components/items/CoinText'
 import { Position } from '../types/character'
 import { containsPointClickThrouth } from '../utils/PixiAPI'
 import StartBtn from '../components/buttons/StartBtn'
 import SettingBtn from '../components/buttons/SettingBtn'
 import EndBtn from '../components/buttons/EndBtn'
 import ExperiencePoint from '../utils/ExperiencePoint'
+import NumText from '../components/items/NumText'
 
 const IndexPage = () => {
   const router = useRouter()
@@ -109,9 +108,15 @@ const IndexPage = () => {
         />
         <Sprite image="/img/board.png" x={50} scale={0.5} />
         <LevelBar n={ex.progress(10)} x={440} y={20} scale={0.7} />
-        <Level level={ex.get_level()} x={560} y={23} scale={0.2} />
+        <NumText
+          n={ex.get_level()}
+          view_digits={3}
+          x={560}
+          y={23}
+          scale={0.2}
+        />
         <Coin x={320} y={30} scale={0.3} />
-        <CoinText n={180} x={350} y={23} scale={0.3} />
+        <NumText n={180} view_digits={4} x={350} y={23} scale={0.3} />
         <LifeGauge n={3} x={450} y={60} scale={0.8} />
         <SettingBtn
           handleSettingClick={handleSettingClick}

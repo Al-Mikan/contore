@@ -9,6 +9,7 @@ import { shouldStrToNum } from '../../utils/api'
 import CloseBtn from '../buttons/CloseBtn'
 import Coin from '../items/Coin'
 import { BasicSpriteProps } from '../../types/sprite'
+import NumText from '../items/NumText'
 
 interface Props extends BasicSpriteProps {
   time: string
@@ -106,9 +107,7 @@ const ResultModal = ({
       </Container>
       <Container x={30} y={140} scale={0.4}>
         <Coin />
-        <Num n={1} x={100} y={-40} scale={1.5} />
-        <Num n={8} x={180} y={-40} scale={1.5} />
-        <Num n={0} x={260} y={-40} scale={1.5} />
+        <NumText n={180} view_digits={3} x={100} y={-40} scale={1.5} />
       </Container>
 
       <CloseBtn
