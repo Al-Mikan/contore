@@ -6,9 +6,7 @@ import Timer from '../components/items/Timer'
 import ResultModal from '../components/modals/ResultModal'
 import MiniCat from '../components/characters/MiniCat'
 import EndBtn from '../components/buttons/EndBtn'
-import Canvas from '../components/containers/Canvas'
 import { useRouter } from 'next/router'
-import { border } from '@chakra-ui/react'
 
 const ConcentratePage = () => {
   const router = useRouter()
@@ -42,46 +40,44 @@ const ConcentratePage = () => {
 
   return (
     <Layout title="集中画面 | こんとれ！！">
-      <Canvas>
-        {isOpen ? (
-          // endボタンを推すとモーダル表示
-          <ResultModal
-            x={910}
-            y={520}
-            scale={1.5}
-            time={resultTime}
-            isOpen={isOpen}
-            handleClickToHome={handleClickToHome}
-          ></ResultModal>
-        ) : (
-          // 集中画面はモーダル表示時には出さない
-          <>
-            <Timer
-              x={1790}
-              y={970}
-              scale={0.3}
-              time={time}
-              setTime={(v) => {
-                setTime(v)
-              }}
-            />
-            <MiniCat
-              isClickThrough={true}
-              scale={0.8}
-              border={miniCatBorder}
-              defaultX={950}
-              defaultY={1050}
-            />
-            <EndBtn
-              isClickThrouth={true}
-              handleClick={handleClickOpenModal}
-              x={1800}
-              y={1000}
-              scale={1}
-            />
-          </>
-        )}
-      </Canvas>
+      {isOpen ? (
+        // endボタンを推すとモーダル表示
+        <ResultModal
+          x={910}
+          y={520}
+          scale={1.5}
+          time={resultTime}
+          isOpen={isOpen}
+          handleClickToHome={handleClickToHome}
+        ></ResultModal>
+      ) : (
+        // 集中画面はモーダル表示時には出さない
+        <>
+          <Timer
+            x={1790}
+            y={970}
+            scale={0.3}
+            time={time}
+            setTime={(v) => {
+              setTime(v)
+            }}
+          />
+          <MiniCat
+            isClickThrough={true}
+            scale={0.8}
+            border={miniCatBorder}
+            defaultX={950}
+            defaultY={1050}
+          />
+          <EndBtn
+            isClickThrouth={true}
+            handleClick={handleClickOpenModal}
+            x={1800}
+            y={1000}
+            scale={1}
+          />
+        </>
+      )}
     </Layout>
   )
 }

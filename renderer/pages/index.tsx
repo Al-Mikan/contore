@@ -1,10 +1,8 @@
-import styled from 'styled-components'
 import { useRouter } from 'next/router'
 import { InteractionEvent } from 'pixi.js'
 import { Sprite } from '@inlet/react-pixi'
 import { useState } from 'react'
 
-import Canvas from '../components/containers/Canvas'
 import Layout from '../components/containers/Layout'
 import LevelBar from '../components/items/LevelBar'
 import MiniCat from '../components/characters/MiniCat'
@@ -75,47 +73,45 @@ const IndexPage = () => {
 
   return (
     <Layout title="Home | こんとれ！！">
-      <Canvas>
-        <Sprite
-          image={'/img/background.png'} // 640 * 360
-          x={pos.x}
-          y={pos.y}
-          width={1280}
-          height={720}
-          interactive={true}
-          containsPoint={containsPointClickThrouth}
-          mousedown={mouseDown}
-          mousemove={mouseMove}
-          mouseup={mouseUp}
-          mouseupoutside={mouseUp}
-        >
-          <MiniCat
-            defaultX={200}
-            defaultY={293}
-            scale={0.5}
-            border={miniCatBorder}
-          />
-          <Sprite image="/img/board.png" x={50} scale={0.5} />
-          <LevelBar n={4} x={440} y={20} scale={0.7} />
-          <Level level={20} x={560} y={23} scale={0.2} />
-          <Coin x={320} y={30} scale={0.3} />
-          <CoinText n={180} x={350} y={23} scale={0.3} />
-          <LifeGauge n={3} x={450} y={60} scale={0.8} />
-          <SettingBtn
-            handleSettingClick={handleSettingClick}
-            x={595}
-            y={13}
-            scale={0.4}
-          />
-          <StartBtn
-            handleStartClick={handleStartClick}
-            x={400}
-            y={315}
-            scale={0.8}
-          />
-          <EndBtn handleClick={handleEndClick} x={520} y={315} scale={0.8} />
-        </Sprite>
-      </Canvas>
+      <Sprite
+        image={'/img/background.png'} // 640 * 360
+        x={pos.x}
+        y={pos.y}
+        width={1280}
+        height={720}
+        interactive={true}
+        containsPoint={containsPointClickThrouth}
+        mousedown={mouseDown}
+        mousemove={mouseMove}
+        mouseup={mouseUp}
+        mouseupoutside={mouseUp}
+      >
+        <MiniCat
+          defaultX={200}
+          defaultY={293}
+          scale={0.5}
+          border={miniCatBorder}
+        />
+        <Sprite image="/img/board.png" x={50} scale={0.5} />
+        <LevelBar n={4} x={440} y={20} scale={0.7} />
+        <Level level={20} x={560} y={23} scale={0.2} />
+        <Coin x={320} y={30} scale={0.3} />
+        <CoinText n={180} x={350} y={23} scale={0.3} />
+        <LifeGauge n={3} x={450} y={60} scale={0.8} />
+        <SettingBtn
+          handleSettingClick={handleSettingClick}
+          x={595}
+          y={13}
+          scale={0.4}
+        />
+        <StartBtn
+          handleStartClick={handleStartClick}
+          x={400}
+          y={315}
+          scale={0.8}
+        />
+        <EndBtn handleClick={handleEndClick} x={520} y={315} scale={0.8} />
+      </Sprite>
     </Layout>
   )
 }
