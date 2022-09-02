@@ -35,17 +35,6 @@ const IndexPage = () => {
     randomTargetMaxX: 640 + 10,
   }
 
-  useEffect(() => {
-    const func = async () => {
-      const nowEx = await window.database.read('core.experience_point')
-      if (nowEx === undefined) {
-        throw new Error('electron-store: core.experience_pointが存在しません')
-      }
-      setExperience(nowEx)
-    }
-    func()
-  }, [])
-
   const handleStartClick = (event: InteractionEvent) => {
     router.push('/concentrate')
   }
@@ -85,6 +74,17 @@ const IndexPage = () => {
   const mouseUp = (event: InteractionEvent) => {
     setDragMode(false)
   }
+
+  useEffect(() => {
+    const func = async () => {
+      const nowEx = await window.database.read('core.experience_point')
+      if (nowEx === undefined) {
+        throw new Error('electron-store: core.experience_pointが存在しません')
+      }
+      setExperience(nowEx)
+    }
+    func()
+  }, [])
 
   return (
     <Layout title="Home | こんとれ！！">
