@@ -8,11 +8,9 @@ import Num from '../items/Num'
 import { shouldStrToNum } from '../../utils/api'
 import CloseBtn from '../buttons/CloseBtn'
 import Coin from '../items/Coin'
+import { BasicSpriteProps } from '../../types/sprite'
 
-interface Props {
-  x?: number
-  y?: number
-  scale?: number
+interface Props extends BasicSpriteProps {
   time: string
   isOpen: boolean
   handleClickToHome: (event: InteractionEvent) => void // Note: useRouterをResultModalから呼ぶとnullが返るのでpropsとして受け取る

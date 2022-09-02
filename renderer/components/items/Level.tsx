@@ -1,9 +1,8 @@
 import { Sprite, Container } from '@inlet/react-pixi'
 
-interface Props {
-  x?: number
-  y?: number
-  scale?: number
+import { BasicSpriteProps } from '../../types/sprite'
+
+interface Props extends BasicSpriteProps {
   level: number // 1 ~ 100までの数値
 }
 

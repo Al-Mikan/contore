@@ -4,11 +4,9 @@ import { HeartProps } from '../../types/heart'
 import FullHeart from './hearts/FullHeart'
 import HalfHeart from './hearts/HalfHeart'
 import EmptyHeart from './hearts/EmptyHeart'
+import { BasicSpriteProps } from '../../types/sprite'
 
-interface Props {
-  x?: number
-  y?: number
-  scale?: number
+interface Props extends BasicSpriteProps {
   n: 0 | 1 | 2 | 3 | 4 | 5 | 6 // 1 -> ハート半個
 }
 

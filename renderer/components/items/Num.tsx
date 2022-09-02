@@ -1,9 +1,8 @@
 import { Sprite } from '@inlet/react-pixi'
 
-interface Props {
-  x?: number
-  y?: number
-  scale?: number
+import { BasicSpriteProps } from '../../types/sprite'
+
+interface Props extends BasicSpriteProps {
   n: number
 }
 

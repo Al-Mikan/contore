@@ -3,11 +3,9 @@ import { InteractionEvent } from 'pixi.js'
 import { useState } from 'react'
 
 import { containsPointClickThrouth } from '../../utils/pixi_api'
+import { BasicSpriteProps } from '../../types/sprite'
 
-interface Props {
-  x?: number
-  y?: number
-  scale?: number
+interface Props extends BasicSpriteProps {
   handleClick: (event: InteractionEvent) => void
 }
 

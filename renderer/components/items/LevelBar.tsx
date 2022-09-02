@@ -1,9 +1,8 @@
 import { Sprite } from '@inlet/react-pixi'
 
-interface Props {
-  x?: number
-  y?: number
-  scale?: number
+import { BasicSpriteProps } from '../../types/sprite'
+
+interface Props extends BasicSpriteProps {
   n: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 // 10段階で経験値バーを変える
 }
 

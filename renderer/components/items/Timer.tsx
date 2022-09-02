@@ -3,11 +3,9 @@ import { Container, Sprite } from '@inlet/react-pixi'
 
 import Num from './Num'
 import { shouldStrToNum } from '../../utils/api'
+import { BasicSpriteProps } from '../../types/sprite'
 
-interface Props {
-  x?: number
-  y?: number
-  scale?: number
+interface Props extends BasicSpriteProps {
   time: String
   setTime: (v: string) => void
 }
