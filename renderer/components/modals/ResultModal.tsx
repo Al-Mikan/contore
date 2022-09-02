@@ -13,6 +13,7 @@ import NumText from '../items/NumText'
 
 interface Props extends BasicSpriteProps {
   time: string
+  coins: number
   isOpen: boolean
   handleClickToHome: (event: InteractionEvent) => void // Note: useRouterをResultModalから呼ぶとnullが返るのでpropsとして受け取る
 }
@@ -22,6 +23,7 @@ const ResultModal = ({
   y = 0,
   scale = 1,
   time,
+  coins,
   isOpen,
   handleClickToHome,
 }: Props) => {
@@ -145,7 +147,7 @@ const ResultModal = ({
       {/* COIN */}
       <Container x={-90} y={75} scale={0.5}>
         <Coin x={0} scale={0.7} />
-        <NumText n={180} view_digits={3} x={350} y={-40} />
+        <NumText n={coins} view_digits={3} x={350} y={-40} />
       </Container>
 
       {/* CLOSE BUTTON */}

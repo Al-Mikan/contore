@@ -51,7 +51,14 @@ const NumText = ({
             />
           )
         } else {
-          return <Sprite image={`/img/number/${v}.png`} x={50 * i} key={i} />
+          return (
+            <Sprite
+              image={`/img/number/${v}.png`}
+              x={50 * i}
+              key={i}
+              visible={true} // 何故かないと一部の桁が非表示になる
+            />
+          )
         }
       })}
     </Container>

@@ -10,6 +10,11 @@ import { useRouter } from 'next/router'
 import { shouldStrTimeToSecondNum } from '../utils/api'
 import ExperiencePoint from '../utils/ExperiencePoint'
 
+const timeToCoins = (time: string) => {
+  // ここは時間に応じて取得枚数を変える
+  return 10
+}
+
 const ConcentratePage = () => {
   const router = useRouter()
   let [time, setTime] = useState('00:00:00')
@@ -23,8 +28,9 @@ const ConcentratePage = () => {
     randomTargetMinX: 1400,
     randomTargetMaxX: 1620,
   }
+
   const handleClickOpenModal = (event: InteractionEvent) => {
-    const func = async () => {
+    const updateExperience = async () => {
       const nowEx = await window.database.read('core.experience_point')
       if (nowEx === undefined) {
         throw new Error('electron-store: core.experience_pointが存在しません')
@@ -33,7 +39,17 @@ const ConcentratePage = () => {
       ex.add_point(shouldStrTimeToSecondNum(time))
       await window.database.update('core.experience_point', ex.experience_point)
     }
-    func()
+    const updateCoins = async () => {
+      const nowCoins = await window.database.read('core.coin')
+      if (nowCoins === undefined) {
+        throw new Error('electron-store: core.coinが存在しません')
+      }
+      await window.database.update('core.coin', nowCoins + timeToCoins(time))
+    }
+
+    updateExperience()
+    updateCoins()
+
     setResultTime(time)
     setIsOpen(true)
   }
@@ -59,6 +75,7 @@ const ConcentratePage = () => {
           y={520}
           scale={1.5}
           time={resultTime}
+          coins={timeToCoins(time)}
           isOpen={isOpen}
           handleClickToHome={handleClickToHome}
         ></ResultModal>
