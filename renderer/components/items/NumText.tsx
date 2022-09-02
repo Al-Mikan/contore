@@ -46,7 +46,7 @@ const NumText = ({
             <Sprite
               image={`/img/number/0.png`}
               x={50 * i}
-              visible={is_headzero_displayed}
+              visible={is_headzero_displayed || i + 1 === digit_array.length} // [0] は表示する
               key={i}
             />
           )
