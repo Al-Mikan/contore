@@ -5,10 +5,18 @@ import { BasicSpriteProps } from '../../types/sprite'
 interface Props extends BasicSpriteProps {
   n: number
   view_digits: number
+  is_headzero_displayed?: boolean
 }
 
 // 好きな桁数で表示可能
-const NumText = ({ x = 0, y = 0, scale = 1, n, view_digits }: Props) => {
+const NumText = ({
+  x = 0,
+  y = 0,
+  scale = 1,
+  n,
+  view_digits,
+  is_headzero_displayed = false,
+}: Props) => {
   if (n < 0 || 10 ** view_digits <= n) {
     throw new Error(`範囲外の数値が入力されました => ${n}`)
   }
@@ -19,10 +27,32 @@ const NumText = ({ x = 0, y = 0, scale = 1, n, view_digits }: Props) => {
     digit_array.push(Math.floor(n / 10 ** i) % 10)
   }
 
+  digit_array = digit_array.reverse()
+  // 先頭の0は表示しない
+  for (let i = 0; i < digit_array.length; i++) {
+    if (digit_array[i] === 0) {
+      digit_array[i] = -1
+    } else {
+      break
+    }
+  }
+
   return (
     <Container x={x} y={y} scale={scale}>
-      {digit_array.reverse().map((v, i) => {
-        return <Sprite image={`img/number/${v}.png`} x={50 * i} />
+      {digit_array.map((v, i) => {
+        if (v === -1) {
+          // 空白の役割
+          return (
+            <Sprite
+              image={`/img/number/0.png`}
+              x={50 * i}
+              visible={is_headzero_displayed}
+              key={i}
+            />
+          )
+        } else {
+          return <Sprite image={`/img/number/${v}.png`} x={50 * i} key={i} />
+        }
       })}
     </Container>
   )

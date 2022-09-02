@@ -5,7 +5,7 @@ import { InteractionEvent, TextStyle } from 'pixi.js'
 import { Position } from '../../types/character'
 import { containsPointClickThrouth } from '../../utils/PixiAPI'
 import Num from '../items/Num'
-import { shouldStrToNum } from '../../utils/api'
+import { shouldStrTimeToSecondNum, shouldStrToNum } from '../../utils/api'
 import CloseBtn from '../buttons/CloseBtn'
 import Coin from '../items/Coin'
 import { BasicSpriteProps } from '../../types/sprite'
@@ -74,42 +74,81 @@ const ResultModal = ({
       mouseup={mouseUp}
       mouseupoutside={mouseUp}
     >
+      {/* RESULT TEXT */}
       <Sprite anchor={0.5} image="/img/result-text.png" y={-130} scale={0.9} />
-      <Container x={-100} y={-30} scale={0.7}>
-        <Num n={shouldStrToNum(time[0])} x={0} />
-        <Num n={shouldStrToNum(time[1])} x={50} />
+
+      {/* TIME */}
+      <Container x={-140} y={-50} scale={0.5}>
         <Text
-          text="h"
-          anchor={0.5}
-          x={120}
-          y={40}
+          text="TIME"
+          x={0}
+          y={0}
           style={
             new TextStyle({
-              fontSize: 40,
-              fontWeight: '700',
+              fontSize: 60,
+              fontWeight: '100',
             })
           }
         />
-        <Num n={shouldStrToNum(time[3])} x={150} />
-        <Num n={shouldStrToNum(time[4])} x={200} />
+        <Container x={300}>
+          <Num n={shouldStrToNum(time[0])} x={50 * 0} />
+          <Num n={shouldStrToNum(time[1])} x={50 * 1} />
+          <Text
+            text="h"
+            anchor={0.5}
+            x={50 * 2 + 20}
+            y={40}
+            style={
+              new TextStyle({
+                fontSize: 50,
+                fontWeight: '700',
+              })
+            }
+          />
+          <Num n={shouldStrToNum(time[3])} x={50 * 3} />
+          <Num n={shouldStrToNum(time[4])} x={50 * 4} />
+          <Text
+            text="m"
+            anchor={0.5}
+            x={50 * 5 + 20}
+            y={40}
+            style={
+              new TextStyle({
+                fontSize: 50,
+                fontWeight: '700',
+              })
+            }
+          />
+        </Container>
+      </Container>
+      {/* EXP */}
+      <Container x={-100} y={20} scale={0.5}>
         <Text
-          text="m"
+          text="EXP"
           anchor={0.5}
-          x={270}
-          y={40}
+          x={0}
+          y={0}
           style={
             new TextStyle({
-              fontSize: 40,
-              fontWeight: '700',
+              fontSize: 60,
+              fontWeight: '100',
             })
           }
+        />
+        <NumText
+          n={shouldStrTimeToSecondNum(time)}
+          view_digits={5}
+          x={270}
+          y={-40}
         />
       </Container>
-      <Container x={30} y={140} scale={0.4}>
-        <Coin />
-        <NumText n={180} view_digits={3} x={100} y={-40} scale={1.5} />
+      {/* COIN */}
+      <Container x={-90} y={75} scale={0.5}>
+        <Coin x={0} scale={0.7} />
+        <NumText n={180} view_digits={3} x={350} y={-40} />
       </Container>
 
+      {/* CLOSE BUTTON */}
       <CloseBtn
         handleClick={handleClickToHome}
         x={150}

@@ -114,6 +114,7 @@ const IndexPage = () => {
           x={560}
           y={23}
           scale={0.2}
+          is_headzero_displayed={true}
         />
         <Coin x={320} y={30} scale={0.3} />
         <NumText n={180} view_digits={4} x={350} y={23} scale={0.3} />
