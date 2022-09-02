@@ -1,10 +1,8 @@
 import { AnimatedSprite } from '@inlet/react-pixi'
 
-interface Props {
-  x?: number
-  y?: number
-  scale?: number
-}
+import { BasicSpriteProps } from '../../types/sprite'
+
+interface Props extends BasicSpriteProps {}
 
 /* 1.pngは停止中のコイン */
 const coinImages = [

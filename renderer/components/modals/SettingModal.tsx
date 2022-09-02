@@ -3,14 +3,12 @@ import { Container, Sprite, Text } from '@inlet/react-pixi'
 import { InteractionEvent, TextStyle } from 'pixi.js'
 
 import { Position } from '../../types/character'
-import { containsPointClickThrouth } from '../../utils/pixi_api'
+import { containsPointClickThrouth } from '../../utils/PixiAPI'
 import CloseBtn from '../buttons/CloseBtn'
 import Toggle from '../items/Toggle'
+import { BasicSpriteProps } from '../../types/sprite'
 
-interface Props {
-  x?: number
-  y?: number
-  scale?: number
+interface Props extends BasicSpriteProps {
   handleClickToHome: (event: InteractionEvent) => void // Note: useRouterをResultModalから呼ぶとnullが返るのでpropsとして受け取る
 }
 

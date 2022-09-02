@@ -1,9 +1,4 @@
-// You can include shared interfaces/types in a separate file
-// and then use them in any component by importing them. For
-// example, to import the interface below do:
-//
-// import User from 'path/to/interfaces';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+// preload.tsでロードされるオブジェクトの型定義
 import { IpcRenderer } from 'electron'
 
 declare global {

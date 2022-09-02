@@ -1,12 +1,11 @@
 import { Sprite } from '@inlet/react-pixi'
 import { InteractionEvent } from 'pixi.js'
-import { containsPointClickThrouth } from '../../utils/pixi_api'
 import { useState } from 'react'
 
-interface Props {
-  x?: number
-  y?: number
-  scale?: number
+import { containsPointClickThrouth } from '../../utils/PixiAPI'
+import { BasicSpriteProps } from '../../types/sprite'
+
+interface Props extends BasicSpriteProps {
   isToggle?: boolean
   handleClick: (event: InteractionEvent) => void
 }
