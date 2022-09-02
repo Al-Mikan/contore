@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react'
-import { Container, Sprite, Text } from '@inlet/react-pixi'
-import { InteractionEvent, TextStyle } from 'pixi.js'
+import { Sprite } from '@inlet/react-pixi'
+import { InteractionEvent } from 'pixi.js'
 
 import { Position } from '../../types/character'
 import { containsPointClickThrouth } from '../../utils/PixiAPI'
@@ -54,13 +54,16 @@ const SettingModal = ({
     setDragMode(false)
   }
 
-  const handleToggleChange = useCallback(() => {
-    if (isToggle) {
-      setIsToggle(false)
-    } else {
-      setIsToggle(true)
-    }
-  }, [isToggle])
+  const handleToggleChange = useCallback(
+    (event: InteractionEvent) => {
+      if (isToggle) {
+        setIsToggle(false)
+      } else {
+        setIsToggle(true)
+      }
+    },
+    [isToggle]
+  )
 
   return (
     <Sprite

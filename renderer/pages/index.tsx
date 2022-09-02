@@ -118,6 +118,7 @@ const IndexPage = () => {
           defaultY={293}
           scale={0.5}
           border={miniCatBorder}
+          isClickThrough={true} // 画面外でも正常にクリック可能に
         />
         <Sprite image="/img/board.png" x={50} scale={0.5} />
         <LevelBar n={ex.progress(10)} x={440} y={20} scale={0.7} />

@@ -5,7 +5,6 @@ import { containsPoint } from '../../utils/PixiAPI'
 import { BasicSpriteProps } from '../../types/sprite'
 
 interface Props extends BasicSpriteProps {
-  isClickThrouth?: boolean
   handleSettingClick: (event: InteractionEvent) => void
 }
 

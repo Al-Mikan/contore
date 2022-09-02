@@ -2,7 +2,7 @@ import { Sprite } from '@inlet/react-pixi'
 import { InteractionEvent } from 'pixi.js'
 import { useState } from 'react'
 
-import { containsPointClickThrouth } from '../../utils/PixiAPI'
+import { containsPoint } from '../../utils/PixiAPI'
 import { BasicSpriteProps } from '../../types/sprite'
 
 interface Props extends BasicSpriteProps {
@@ -20,6 +20,8 @@ const Toggle = ({
   const [alpha, setAlpha] = useState(1)
   const mouseover = () => setAlpha(0.8)
   const mouseout = () => setAlpha(1)
+
+  /* トグルの下にマウスの動きが伝搬しないようにする */
   return (
     <Sprite
       image={isToggle ? '/img/toggle/on.png' : '/img/toggle/off.png'}
@@ -28,11 +30,11 @@ const Toggle = ({
       scale={scale}
       click={handleClick}
       interactive={true}
+      buttonMode={true}
       alpha={alpha}
       mouseover={mouseover}
       mouseout={mouseout}
-      buttonMode={true}
-      containsPoint={containsPointClickThrouth}
+      containsPoint={containsPoint}
     />
   )
 }
