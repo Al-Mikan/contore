@@ -74,7 +74,7 @@ ipcMain.handle('read', (_: Electron.IpcMainInvokeEvent, str: string) => {
 
 ipcMain.handle(
   'update',
-  (_: Electron.IpcMainInvokeEvent, key: string, value: string) => {
+  (_: Electron.IpcMainInvokeEvent, key: string, value: any) => {
     store.set(key, value)
   }
 )

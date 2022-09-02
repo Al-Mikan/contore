@@ -7,6 +7,8 @@ import ResultModal from '../components/modals/ResultModal'
 import MiniCat from '../components/characters/MiniCat'
 import EndBtn from '../components/buttons/EndBtn'
 import { useRouter } from 'next/router'
+import { shouldStrTimeToSecondNum } from '../utils/api'
+import ExperiencePoint from '../utils/ExperiencePoint'
 
 const ConcentratePage = () => {
   const router = useRouter()
@@ -22,6 +24,16 @@ const ConcentratePage = () => {
     randomTargetMaxX: 1620,
   }
   const handleClickOpenModal = (event: InteractionEvent) => {
+    const func = async () => {
+      const nowEx = await window.database.read('core.experience_point')
+      if (nowEx === undefined) {
+        throw new Error('electron-store: core.experience_pointが存在しません')
+      }
+      const ex = new ExperiencePoint(nowEx)
+      ex.add_point(shouldStrTimeToSecondNum(time))
+      await window.database.update('core.experience_point', ex.experience_point)
+    }
+    func()
     setResultTime(time)
     setIsOpen(true)
   }
