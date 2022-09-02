@@ -2,7 +2,7 @@ import { AnimatedSprite, Container, useTick } from '@inlet/react-pixi'
 import { useState } from 'react'
 import { InteractionEvent } from 'pixi.js'
 
-import { containsPoint, containsPointClickThrouth } from '../../utils/pixi_api'
+import { containsPoint, containsPointClickThrouth } from '../../utils/PixiAPI'
 import { getRandomInt } from '../../utils/api'
 import { State, Position, MiniCatAnimation } from '../../types/character'
 
