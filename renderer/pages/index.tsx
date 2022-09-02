@@ -22,6 +22,7 @@ const IndexPage = () => {
   const [pos, setPos] = useState<Position>({ x: 350, y: 200 })
   const [beforeMousePos, setBeforeMousePos] = useState<Position>({ x: 0, y: 0 })
   const [experience, setExperience] = useState(0)
+  const [coins, setCoins] = useState(0)
 
   const ex = new ExperiencePoint(experience)
   // 背景画像のサイズを元に調整する
@@ -75,14 +76,26 @@ const IndexPage = () => {
   }
 
   useEffect(() => {
-    const func = async () => {
+    const fetchExperience = async () => {
+      // 経験値の設定
       const nowEx = await window.database.read('core.experience_point')
       if (nowEx === undefined) {
         throw new Error('electron-store: core.experience_pointが存在しません')
       }
       setExperience(nowEx)
     }
-    func()
+    const fetchCoins = async () => {
+      // コイン枚数の設定
+      const nowCoins = await window.database.read('core.coin')
+      if (nowCoins === undefined) {
+        throw new Error('electron-store: core.coinが存在しません')
+      }
+      setCoins(nowCoins)
+    }
+
+    // 非同期処理を並行に実行
+    fetchExperience()
+    fetchCoins()
   }, [])
 
   return (
@@ -117,7 +130,7 @@ const IndexPage = () => {
           is_headzero_displayed={true}
         />
         <Coin x={320} y={30} scale={0.3} />
-        <NumText n={180} view_digits={4} x={350} y={23} scale={0.3} />
+        <NumText n={coins} view_digits={4} x={350} y={23} scale={0.3} />
         <LifeGauge n={3} x={450} y={60} scale={0.8} />
         <SettingBtn
           handleSettingClick={handleSettingClick}

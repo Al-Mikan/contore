@@ -14,6 +14,7 @@ import Store, { Schema } from 'electron-store'
 interface Dummy {
   core: {
     experience_point: number
+    coin: number
   }
 }
 
@@ -23,6 +24,7 @@ const schema: Schema<Dummy> = {
     default: {}, // 明示的に与えないと子要素が取り出せないバグが起きる
     properties: {
       experience_point: { type: 'integer', default: 0, minimum: 0 },
+      coin: { type: 'integer', default: 0, minimum: 0, maximum: 9999 },
     },
     additionalProperties: false,
   },
