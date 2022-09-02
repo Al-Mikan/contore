@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router'
 import { InteractionEvent } from 'pixi.js'
 import { Sprite } from '@inlet/react-pixi'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import Layout from '../components/containers/Layout'
 import LevelBar from '../components/items/LevelBar'
@@ -15,12 +15,16 @@ import { containsPointClickThrouth } from '../utils/PixiAPI'
 import StartBtn from '../components/buttons/StartBtn'
 import SettingBtn from '../components/buttons/SettingBtn'
 import EndBtn from '../components/buttons/EndBtn'
+import ExperiencePoint from '../utils/ExperiencePoint'
 
 const IndexPage = () => {
   const router = useRouter()
   const [dragMode, setDragMode] = useState(false)
   const [pos, setPos] = useState<Position>({ x: 350, y: 200 })
   const [beforeMousePos, setBeforeMousePos] = useState<Position>({ x: 0, y: 0 })
+  const [experience, setExperience] = useState(0)
+
+  const ex = new ExperiencePoint(experience)
   // 背景画像のサイズを元に調整する
   const miniCatBorder = {
     minX: 0 - 50,
@@ -30,6 +34,17 @@ const IndexPage = () => {
     randomTargetMinX: 0 - 10,
     randomTargetMaxX: 640 + 10,
   }
+
+  useEffect(() => {
+    const func = async () => {
+      const nowEx = await window.database.read('core.experience_point')
+      if (nowEx === undefined) {
+        throw new Error('electron-store: core.experience_pointが存在しません')
+      }
+      setExperience(nowEx)
+    }
+    func()
+  }, [])
 
   const handleStartClick = (event: InteractionEvent) => {
     router.push('/concentrate')
@@ -93,8 +108,8 @@ const IndexPage = () => {
           border={miniCatBorder}
         />
         <Sprite image="/img/board.png" x={50} scale={0.5} />
-        <LevelBar n={4} x={440} y={20} scale={0.7} />
-        <Level level={20} x={560} y={23} scale={0.2} />
+        <LevelBar n={ex.progress(10)} x={440} y={20} scale={0.7} />
+        <Level level={ex.get_level()} x={560} y={23} scale={0.2} />
         <Coin x={320} y={30} scale={0.3} />
         <CoinText n={180} x={350} y={23} scale={0.3} />
         <LifeGauge n={3} x={450} y={60} scale={0.8} />

@@ -20,6 +20,7 @@ interface Dummy {
 const schema: Schema<Dummy> = {
   core: {
     type: 'object',
+    default: {}, // 明示的に与えないと子要素が取り出せないバグが起きる
     properties: {
       experience_point: { type: 'integer', default: 0, minimum: 0 },
     },

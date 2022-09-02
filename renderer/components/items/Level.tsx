@@ -3,12 +3,12 @@ import { Sprite, Container } from '@inlet/react-pixi'
 import { BasicSpriteProps } from '../../types/sprite'
 
 interface Props extends BasicSpriteProps {
-  level: number // 1 ~ 100までの数値
+  level: number // 0 ~ 100までの数値 (Lv0 を許容)
 }
 
 // levelの数値が不正か判定する責務はLevel.tsxが負う
 const Level = ({ x = 0, y = 0, scale = 1, level }: Props) => {
-  if (level <= 0 || 100 < level) {
+  if (level < 0 || 100 < level) {
     throw new Error(`範囲外の数値が入力されました => ${level}`)
   }
 
