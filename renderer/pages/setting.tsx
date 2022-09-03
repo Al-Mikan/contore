@@ -9,7 +9,6 @@ const SettingPage = () => {
 
   const handleClickToHome = (event: InteractionEvent) => {
     router.push('/')
-    event.stopPropagation() // modalにクリック判定を与えない
   }
 
   return (

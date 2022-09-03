@@ -1,15 +1,20 @@
-import { useState, useCallback } from 'react'
-import { Container, Sprite, Text } from '@inlet/react-pixi'
-import { InteractionEvent, TextStyle } from 'pixi.js'
+import { useState, useCallback, useEffect } from 'react'
+import { Container, Sprite } from '@inlet/react-pixi'
+import { InteractionEvent } from 'pixi.js'
 
 import { Position } from '../../types/character'
 import { containsPointClickThrouth } from '../../utils/PixiAPI'
 import CloseBtn from '../buttons/CloseBtn'
-import Toggle from '../items/Toggle'
 import { BasicSpriteProps } from '../../types/sprite'
+import SettingItem from '../items/SettingItem'
 
 interface Props extends BasicSpriteProps {
   handleClickToHome: (event: InteractionEvent) => void // Note: useRouterをResultModalから呼ぶとnullが返るのでpropsとして受け取る
+}
+
+interface Setting {
+  camera: boolean
+  drag: boolean
 }
 
 const SettingModal = ({
@@ -22,7 +27,10 @@ const SettingModal = ({
   const [pos, setPos] = useState<Position>({ x: x, y: y })
   const [beforeMousePos, setBeforeMousePos] = useState<Position>({ x: 0, y: 0 })
   //toggleの処理
-  const [isToggle, setIsToggle] = useState(true)
+  const [setting, setSetting] = useState<Setting>({
+    camera: true,
+    drag: true,
+  })
 
   // ドラッグ操作
   const mouseDown = (event: InteractionEvent) => {
@@ -54,13 +62,47 @@ const SettingModal = ({
     setDragMode(false)
   }
 
-  const handleToggleChange = useCallback(() => {
-    if (isToggle) {
-      setIsToggle(false)
-    } else {
-      setIsToggle(true)
+  const handleToggleChange = useCallback(
+    (event: InteractionEvent) => {
+      if (!event.target.name) throw new Error('setting: 未対応のイベントです')
+
+      // イベント移譲
+      if (event.target.name.trim() === 'camera') {
+        const updateSettingCamera = async () => {
+          await window.database.update('setting.camera', !setting.camera)
+          setSetting((prev) => ({
+            ...prev,
+            camera: !prev.camera,
+          }))
+        }
+        updateSettingCamera()
+      } else if (event.target.name.trim() === 'drag') {
+        const updateSettingDrag = async () => {
+          await window.database.update('setting.drag', !setting.drag)
+          setSetting((prev) => ({
+            ...prev,
+            drag: !prev.drag,
+          }))
+        }
+        updateSettingDrag()
+      } else {
+        throw new Error('setting: 未対応のイベントです')
+      }
+    },
+    [setting]
+  )
+
+  useEffect(() => {
+    const fetchSetting = async () => {
+      const nowSetting: Setting = await window.database.read('setting')
+      if (nowSetting === undefined) {
+        throw new Error('electron-store: settingが存在しません')
+      }
+      setSetting(nowSetting)
     }
-  }, [isToggle])
+
+    fetchSetting()
+  }, [])
 
   return (
     <Sprite
@@ -77,13 +119,22 @@ const SettingModal = ({
       mouseup={mouseUp}
       mouseupoutside={mouseUp}
     >
-      <Toggle
-        handleClick={handleToggleChange}
-        x={0}
-        y={0}
-        scale={0.4}
-        isToggle={isToggle}
-      ></Toggle>
+      <Container x={-70} y={-70}>
+        <SettingItem
+          x={0}
+          y={0}
+          text="camera"
+          isToggle={setting.camera}
+          handleClick={handleToggleChange}
+        />
+        <SettingItem
+          x={0}
+          y={50}
+          text="drag"
+          isToggle={setting.drag}
+          handleClick={handleToggleChange}
+        />
+      </Container>
       <CloseBtn
         handleClick={handleClickToHome}
         x={150}
