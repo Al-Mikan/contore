@@ -10,7 +10,7 @@ declare global {
   }
 
   var database: {
-    read: (str: string) => Promise<number | undefined>
+    read: (str: string) => Promise<any | undefined>
     update: (key: string, value: any) => Promise<void>
     delete: (key: string) => Promise<void>
   }

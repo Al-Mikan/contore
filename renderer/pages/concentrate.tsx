@@ -31,7 +31,7 @@ const ConcentratePage = () => {
 
   const handleClickOpenModal = (event: InteractionEvent) => {
     const updateExperience = async () => {
-      const nowEx = await window.database.read('core.experience_point')
+      const nowEx: number = await window.database.read('core.experience_point')
       if (nowEx === undefined) {
         throw new Error('electron-store: core.experience_pointが存在しません')
       }
@@ -40,7 +40,7 @@ const ConcentratePage = () => {
       await window.database.update('core.experience_point', ex.experience_point)
     }
     const updateCoins = async () => {
-      const nowCoins = await window.database.read('core.coin')
+      const nowCoins: number = await window.database.read('core.coin')
       if (nowCoins === undefined) {
         throw new Error('electron-store: core.coinが存在しません')
       }

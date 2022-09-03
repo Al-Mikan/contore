@@ -78,7 +78,7 @@ const IndexPage = () => {
   useEffect(() => {
     const fetchExperience = async () => {
       // 経験値の設定
-      const nowEx = await window.database.read('core.experience_point')
+      const nowEx: number = await window.database.read('core.experience_point')
       if (nowEx === undefined) {
         throw new Error('electron-store: core.experience_pointが存在しません')
       }
@@ -86,7 +86,7 @@ const IndexPage = () => {
     }
     const fetchCoins = async () => {
       // コイン枚数の設定
-      const nowCoins = await window.database.read('core.coin')
+      const nowCoins: number = await window.database.read('core.coin')
       if (nowCoins === undefined) {
         throw new Error('electron-store: core.coinが存在しません')
       }
