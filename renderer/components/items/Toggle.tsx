@@ -7,6 +7,7 @@ import { BasicSpriteProps } from '../../types/sprite'
 
 interface Props extends BasicSpriteProps {
   isToggle?: boolean
+  name: string
   handleClick: (event: InteractionEvent) => void
 }
 
@@ -16,6 +17,7 @@ const Toggle = ({
   scale = 1,
   isToggle = false,
   handleClick,
+  name,
 }: Props) => {
   const [alpha, setAlpha] = useState(1)
   const mouseover = () => setAlpha(0.8)
@@ -24,10 +26,12 @@ const Toggle = ({
   /* トグルの下にマウスの動きが伝搬しないようにする */
   return (
     <Sprite
+      name={name} // イベント移譲用
       image={isToggle ? '/img/toggle/on.png' : '/img/toggle/off.png'}
       x={x}
       y={y}
       scale={scale}
+      anchor={0.5}
       click={handleClick}
       interactive={true}
       buttonMode={true}
