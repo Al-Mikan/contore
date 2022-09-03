@@ -6,7 +6,7 @@ import { format } from 'url'
 import { BrowserWindow, app, ipcMain, screen } from 'electron'
 import isDev from 'electron-is-dev'
 import prepareNext from 'electron-next'
-import Score from '../renderer/utils/Score'
+import Score from './Score'
 
 // electron-storeの初期化
 import Store from 'electron-store'
@@ -47,7 +47,10 @@ app.on('window-all-closed', app.quit)
 
 app.whenReady().then(
   ()=>{
+    console.log('now recieved call of sendcamera')
     ipcMain.on("send-camera",(_,content:String)=>{
+    // console.log(content.length)
+    console.log("index.ts:now calling Score.ts....")
     Score(content)
     // console.log(`from main:${ans}`)
     })
