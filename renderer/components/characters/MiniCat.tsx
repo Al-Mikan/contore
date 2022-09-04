@@ -23,17 +23,18 @@ const BASIC_ANIMATION = 0
 const BLINK_ANIMATION = 1
 const LEFT_ANIMATION = 2
 const RIGHT_ANIMATION = 3
+const SQUAT_ANIMATION = 4
 
 const animationMap = new Map<number, Array<string>>()
 animationMap.set(BASIC_ANIMATION, ['/img/mini-cat/1.png'])
 animationMap.set(BLINK_ANIMATION, [
-  '/img/mini-cat/1.png',
   '/img/mini-cat/2.png',
   '/img/mini-cat/3.png',
   '/img/mini-cat/2.png',
 ])
 animationMap.set(LEFT_ANIMATION, ['/img/mini-cat/left.png'])
 animationMap.set(RIGHT_ANIMATION, ['/img/mini-cat/right.png'])
+animationMap.set(SQUAT_ANIMATION, ['/img/mini-cat/squat.png'])
 
 class MiniCatCondition extends CharacterCondition {
   protected _updateNextTargetPos() {
@@ -84,6 +85,14 @@ class MiniCatCondition extends CharacterCondition {
     }
 
     /* 地面にいる場合 */
+    /* 移動モーション時だけ移動する */
+    if (
+      this.state.currentAnimation !== RIGHT_ANIMATION &&
+      this.state.currentAnimation !== LEFT_ANIMATION &&
+      this.state.currentAnimation !== BASIC_ANIMATION
+    ) {
+      return
+    }
     if (this.state.currentPos.x == this.state.targetPos.x) return
     const speed = 3
 
@@ -158,19 +167,35 @@ class MiniCatCondition extends CharacterCondition {
     this.state.vy = -50
   }
 
+  private _playSquatAnimation() {
+    /* 基本型からのみ変更を許可 */
+    if (this.state.currentAnimation !== BASIC_ANIMATION) return
+    // 天井または地面のみしゃがむ
+    if (
+      this.state.currentPos.y !== this.border.minY &&
+      this.state.currentPos.y !== this.border.maxY
+    ) {
+      return
+    }
+    this.state.currentAnimation = SQUAT_ANIMATION
+  }
+
   protected updateNextAnimation() {
     this._playMoveAnimation()
 
-    if (this.state.currentAnimation === BASIC_ANIMATION) {
-      /* たまに瞬きをする */
-      if (Math.random() <= 0.005) {
-        this._playBlinkAnimation()
-      }
+    /* たまにジャンプする */
+    if (Math.random() <= 0.0005) {
+      this._playStartJump()
     }
 
-    /* たまにジャンプする */
+    /* たまに瞬きをする */
     if (Math.random() <= 0.001) {
-      this._playStartJump()
+      this._playBlinkAnimation()
+    }
+
+    /* たまにしゃがむ */
+    if (Math.random() <= 0.001) {
+      this._playSquatAnimation()
     }
   }
 
@@ -386,8 +411,31 @@ const MiniCat = ({
         loop={false}
         onComplete={handleComplete}
         anchor={0.5}
-        initialFrame={1}
+        initialFrame={0}
         animationSpeed={0.1}
+        x={characterState.currentPos.x}
+        y={characterState.currentPos.y}
+        scale={scale}
+        angle={characterState.angle}
+        interactive={true}
+        containsPoint={
+          isClickThrough ? containsPointClickThrouth : containsPoint
+        }
+        mousedown={mouseDown}
+        mousemove={mouseMove}
+        mouseup={mouseUp}
+        mouseupoutside={mouseUp}
+      />
+      {/* しゃがむ */}
+      <AnimatedSprite
+        images={animationMap.get(SQUAT_ANIMATION)}
+        isPlaying={characterState.currentAnimation == SQUAT_ANIMATION} // ループしないのでtrueにしてはいけない
+        visible={characterState.currentAnimation == SQUAT_ANIMATION}
+        loop={false}
+        onComplete={handleComplete}
+        anchor={0.5}
+        initialFrame={0}
+        animationSpeed={0.005}
         x={characterState.currentPos.x}
         y={characterState.currentPos.y}
         scale={scale}
