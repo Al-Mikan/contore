@@ -12,9 +12,9 @@ import { Position } from '../types/character'
 import { containsPointClickThrouth } from '../utils/PixiAPI'
 import StartBtn from '../components/buttons/StartBtn'
 import SettingBtn from '../components/buttons/SettingBtn'
-import EndBtn from '../components/buttons/EndBtn'
 import ExperiencePoint from '../utils/ExperiencePoint'
 import NumText from '../components/items/NumText'
+import QuitBtn from '../components/buttons/QuitBtn'
 
 const IndexPage = () => {
   const router = useRouter()
@@ -149,7 +149,7 @@ const IndexPage = () => {
           y={305}
           scale={0.8}
         />
-        <EndBtn handleClick={handleEndClick} x={20} y={305} scale={0.8} />
+        <QuitBtn handleClick={handleEndClick} x={20} y={305} scale={0.4} />
       </Sprite>
     </Layout>
   )
