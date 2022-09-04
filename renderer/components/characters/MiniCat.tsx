@@ -184,7 +184,7 @@ class MiniCatCondition extends CharacterCondition {
     this._playMoveAnimation()
 
     /* たまにジャンプする */
-    if (Math.random() <= 0.0005) {
+    if (Math.random() <= 0.0008) {
       this._playStartJump()
     }
 
@@ -194,7 +194,7 @@ class MiniCatCondition extends CharacterCondition {
     }
 
     /* たまにしゃがむ */
-    if (Math.random() <= 0.001) {
+    if (Math.random() <= 0.0008) {
       this._playSquatAnimation()
     }
   }

@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 import { InteractionEvent } from 'pixi.js'
-import { Sprite } from '@inlet/react-pixi'
+import { Sprite, Container } from '@inlet/react-pixi'
 import { useEffect, useState } from 'react'
 
 import Layout from '../components/containers/Layout'
@@ -27,12 +27,12 @@ const IndexPage = () => {
   const ex = new ExperiencePoint(experience)
   // 背景画像のサイズを元に調整する
   const miniCatBorder = {
-    minX: 0 - 50,
-    maxX: 640 + 50,
-    minY: 0,
-    maxY: 293,
-    randomTargetMinX: 0 - 10,
-    randomTargetMaxX: 640 + 10,
+    minX: 0 + 20,
+    maxX: 640 - 20,
+    minY: 15,
+    maxY: 320,
+    randomTargetMinX: 0 + 20,
+    randomTargetMaxX: 640 - 20,
   }
 
   const handleStartClick = (event: InteractionEvent) => {
@@ -115,24 +115,28 @@ const IndexPage = () => {
       >
         <MiniCat
           defaultX={200}
-          defaultY={293}
+          defaultY={320}
           scale={0.5}
           border={miniCatBorder}
           isClickThrough={true} // 画面外でも正常にクリック可能に
         />
         <Sprite image="/img/board.png" x={50} scale={0.5} />
-        <LevelBar n={ex.progress(10)} x={440} y={20} scale={0.7} />
-        <NumText
-          n={ex.get_level()}
-          view_digits={3}
-          x={560}
-          y={23}
-          scale={0.2}
-          is_headzero_displayed={true}
-        />
-        <Coin x={320} y={30} scale={0.3} />
-        <NumText n={coins} view_digits={4} x={350} y={23} scale={0.3} />
-        <LifeGauge n={3} x={450} y={60} scale={0.8} />
+        <Container x={500} y={50} scale={0.6}>
+          <LevelBar n={ex.progress(10)} scale={0.7} />
+          <NumText
+            n={ex.get_level()}
+            view_digits={3}
+            x={120}
+            y={3}
+            scale={0.2}
+            is_headzero_displayed={true}
+          />
+        </Container>
+        <Container x={540} y={80} scale={0.6}>
+          <Coin scale={0.3} />
+          <NumText n={coins} view_digits={4} x={30} y={-7} scale={0.3} />
+        </Container>
+        <LifeGauge n={3} x={530} y={100} scale={0.6} />
         <SettingBtn
           handleSettingClick={handleSettingClick}
           x={595}
@@ -141,11 +145,11 @@ const IndexPage = () => {
         />
         <StartBtn
           handleStartClick={handleStartClick}
-          x={400}
-          y={315}
+          x={530}
+          y={305}
           scale={0.8}
         />
-        <EndBtn handleClick={handleEndClick} x={520} y={315} scale={0.8} />
+        <EndBtn handleClick={handleEndClick} x={20} y={305} scale={0.8} />
       </Sprite>
     </Layout>
   )
