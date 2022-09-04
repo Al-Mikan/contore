@@ -4,16 +4,12 @@ import { InteractionEvent } from 'pixi.js'
 
 import { containsPoint, containsPointClickThrouth } from '../../utils/PixiAPI'
 import { getRandomInt } from '../../utils/api'
-import { State, Position, MiniCatAnimation } from '../../types/character'
-
-interface Border {
-  minX: number
-  maxX: number
-  minY: number
-  maxY: number
-  randomTargetMinX: number // ランダム移動の幅
-  randomTargetMaxX: number
-}
+import {
+  State,
+  Position,
+  Border,
+  CharacterCondition,
+} from '../../types/character'
 
 interface Props {
   isClickThrough?: boolean
@@ -23,156 +19,166 @@ interface Props {
   border: Border
 }
 
-const BASIC_ANIMATION: MiniCatAnimation = 0
-const BLINK_ANIMATION: MiniCatAnimation = 1
-const LEFT_ANIMATION: MiniCatAnimation = 2
-const RIGHT_ANIMATION: MiniCatAnimation = 3
+const BASIC_ANIMATION = 0
+const BLINK_ANIMATION = 1
+const LEFT_ANIMATION = 2
+const RIGHT_ANIMATION = 3
 
-const basicAnimationImages = ['/img/mini-cat/1.png']
-const blinkAnimationImages = [
+const animationMap = new Map<number, Array<string>>()
+animationMap.set(BASIC_ANIMATION, ['/img/mini-cat/1.png'])
+animationMap.set(BLINK_ANIMATION, [
   '/img/mini-cat/1.png',
   '/img/mini-cat/2.png',
   '/img/mini-cat/3.png',
   '/img/mini-cat/2.png',
-]
-const leftAnimationImages = ['/img/mini-cat/left.png']
-const rightAnimationImages = ['/img/mini-cat/right.png']
+])
+animationMap.set(LEFT_ANIMATION, ['/img/mini-cat/left.png'])
+animationMap.set(RIGHT_ANIMATION, ['/img/mini-cat/right.png'])
 
-const setNextTargetAndPosition = (state: State, border: Border) => {
-  /* 次のターゲットポジションを決定する */
-  const setNextTargetPos = (characterState: State) => {
-    /* X座標の決定 */
-    if (characterState.moveTick == 0) {
-      characterState.targetPos.x = getRandomInt(
-        border.randomTargetMinX,
-        border.randomTargetMaxX
+class MiniCatCondition extends CharacterCondition {
+  protected _updateNextTargetPos() {
+    if (this.state.moveTick == 0) {
+      this.state.targetPos.x = getRandomInt(
+        this.border.randomTargetMinX,
+        this.border.randomTargetMaxX
       )
     }
   }
 
   /* 速度がある時に壁に当たると止まるようにする */
-  const judgeWall = (characterState: State) => {
-    if (characterState.currentPos.x <= border.minX) {
-      characterState.vx = 0
-      characterState.vy = 0
-      characterState.currentPos.x = border.minX
-    } else if (characterState.currentPos.x >= border.maxX) {
-      characterState.vx = 0
-      characterState.vy = 0
-      characterState.currentPos.x = border.maxX
-    } else if (characterState.currentPos.y <= border.minY) {
-      characterState.vx = 0
-      characterState.vy = 0
-      characterState.currentPos.y = border.minY
-    } else if (characterState.currentPos.y >= border.maxY) {
-      characterState.vx = 0
-      characterState.vy = 0
-      characterState.currentPos.y = border.maxY
+  protected _judgeWall() {
+    if (this.state.currentPos.x <= this.border.minX) {
+      // 左
+      this.state.currentPos.x = this.border.minX
+    } else if (this.state.currentPos.x >= this.border.maxX) {
+      // 右
+      this.state.currentPos.x = this.border.maxX
+    } else if (this.state.currentPos.y <= this.border.minY) {
+      // 上
+      this.state.currentPos.y = this.border.minY
+    } else if (this.state.currentPos.y >= this.border.maxY) {
+      // 下
+      this.state.currentPos.y = this.border.maxY
+    } else {
+      return
+    }
+    this.state.vx = 0
+    this.state.vy = 0
+  }
+
+  protected _setNextAngle() {
+    if (this.state.currentPos.y <= this.border.minY) {
+      this.state.angle = 180
+    } else {
+      this.state.angle = 0
     }
   }
 
-  /* 次の位置に移動する */
-  const setNextPosX = (characterState: State) => {
-    if (characterState.vx != 0) {
+  protected _setNextPosX() {
+    if (this.state.vx != 0) {
       /* ドラッグを離した後、水平運動 */
       const dt = 0.2
-      const nextX = Math.floor(
-        characterState.currentPos.x + characterState.vx * dt
-      )
-      characterState.currentPos.x = nextX
+      const nextX = Math.floor(this.state.currentPos.x + this.state.vx * dt)
+      this.state.currentPos.x = nextX
       return
     }
 
     /* 地面にいる場合 */
-    if (characterState.currentPos.x == characterState.targetPos.x) return
+    if (this.state.currentPos.x == this.state.targetPos.x) return
     const speed = 3
 
     const directionX =
-      (characterState.targetPos.x - characterState.currentPos.x) /
-      Math.abs(characterState.targetPos.x - characterState.currentPos.x)
+      (this.state.targetPos.x - this.state.currentPos.x) /
+      Math.abs(this.state.targetPos.x - this.state.currentPos.x)
     if (directionX > 0) {
       /* -> */
-      characterState.currentPos.x = Math.min(
-        characterState.currentPos.x + directionX * speed,
-        characterState.targetPos.x
+      this.state.currentPos.x = Math.min(
+        this.state.currentPos.x + directionX * speed,
+        this.state.targetPos.x
       )
     } else {
       /* <- */
-      characterState.currentPos.x = Math.max(
-        characterState.currentPos.x + directionX * speed,
-        characterState.targetPos.x
+      this.state.currentPos.x = Math.max(
+        this.state.currentPos.x + directionX * speed,
+        this.state.targetPos.x
       )
     }
   }
 
-  /* 重力落下のみ */
-  const setNextPosY = (characterState: State) => {
+  protected _setNextPosY() {
+    // 重力落下のみ
     const gravity = 9.8
     const dt = 0.2
-    const nextY = Math.floor(
-      characterState.currentPos.y + characterState.vy * dt
-    )
-    characterState.currentPos.y = Math.min(nextY, characterState.targetPos.y)
-    characterState.vy += gravity * dt
+    const nextY = Math.floor(this.state.currentPos.y + this.state.vy * dt)
+    this.state.currentPos.y = Math.min(nextY, this.state.targetPos.y)
+    this.state.vy += gravity * dt
   }
 
-  const setNextAngle = (characterState: State, border: Border) => {
-    if (characterState.currentPos.y <= border.minY) {
-      characterState.angle = 180
-    } else {
-      characterState.angle = 0
+  private _playMoveAnimation() {
+    /* 瞬き中に横向きになるなどはない */
+    if (
+      this.state.currentAnimation !== RIGHT_ANIMATION &&
+      this.state.currentAnimation !== LEFT_ANIMATION &&
+      this.state.currentAnimation !== BASIC_ANIMATION
+    ) {
+      return
+    }
+
+    const dx = this.state.currentPos.x - this.beforeState.currentPos.x
+    if (this.state.angle === 0) {
+      if (dx > 0) {
+        this.state.currentAnimation = RIGHT_ANIMATION
+      } else if (dx < 0) {
+        this.state.currentAnimation = LEFT_ANIMATION
+      } else {
+        this.state.currentAnimation = BASIC_ANIMATION
+      }
+    } else if (this.state.angle == 180) {
+      if (dx > 0) {
+        this.state.currentAnimation = LEFT_ANIMATION
+      } else if (dx < 0) {
+        this.state.currentAnimation = RIGHT_ANIMATION
+      } else {
+        this.state.currentAnimation = BASIC_ANIMATION
+      }
     }
   }
 
-  setNextTargetPos(state)
-  judgeWall(state)
-  setNextAngle(state, border)
-  setNextPosX(state)
-  setNextPosY(state)
-}
-
-const playMoveAnimation = (beforeState: State, characterState: State) => {
-  /* 瞬き中に横向きになるなどはない */
-  if (
-    characterState.currentAnimation !== RIGHT_ANIMATION &&
-    characterState.currentAnimation !== LEFT_ANIMATION &&
-    characterState.currentAnimation !== BASIC_ANIMATION
-  ) {
-    return
+  private _playBlinkAnimation() {
+    /* 基本型からのみ変更を許可 */
+    if (this.state.currentAnimation !== BASIC_ANIMATION) return
+    this.state.currentAnimation = BLINK_ANIMATION
   }
 
-  const dx = characterState.currentPos.x - beforeState.currentPos.x
-  if (characterState.angle === 0) {
-    if (dx > 0) {
-      characterState.currentAnimation = RIGHT_ANIMATION
-    } else if (dx < 0) {
-      characterState.currentAnimation = LEFT_ANIMATION
-    } else {
-      characterState.currentAnimation = BASIC_ANIMATION
+  private _playStartJump() {
+    /* 地面にいる時のみジャンプ可能 */
+    if (this.state.currentPos.y !== this.border.maxY) return
+
+    this.state.currentPos.y = this.border.maxY - 1 // defaultYは速度が常に0になるので1上げる
+    this.state.vy = -50
+  }
+
+  protected updateNextAnimation() {
+    this._playMoveAnimation()
+
+    if (this.state.currentAnimation === BASIC_ANIMATION) {
+      /* たまに瞬きをする */
+      if (Math.random() <= 0.005) {
+        this._playBlinkAnimation()
+      }
     }
-  } else if (characterState.angle == 180) {
-    if (dx > 0) {
-      characterState.currentAnimation = LEFT_ANIMATION
-    } else if (dx < 0) {
-      characterState.currentAnimation = RIGHT_ANIMATION
-    } else {
-      characterState.currentAnimation = BASIC_ANIMATION
+
+    /* たまにジャンプする */
+    if (Math.random() <= 0.001) {
+      this._playStartJump()
     }
   }
-}
 
-const playBlinkAnimation = (characterState: State) => {
-  /* 基本型からのみ変更を許可 */
-  if (characterState.currentAnimation !== BASIC_ANIMATION) return
-  characterState.currentAnimation = BLINK_ANIMATION
-}
-
-const startJump = (characterState: State, border: Border) => {
-  /* 初期位置にいる時のみジャンプ可能 */
-  if (characterState.currentPos.y !== border.maxY) return
-
-  characterState.currentPos.y = border.maxY - 1 // defaultYは速度が常に0になるので1上げる
-  characterState.vy = -50
+  public updateNextState() {
+    this.computeAndUpdateNextPos()
+    this.updateNextAnimation()
+    this.updateNextTick()
+  }
 }
 
 // デフォルト引数は全画面表示
@@ -300,38 +306,20 @@ const MiniCat = ({
       })
       return
     }
-    /* durationごとにターゲットを変更 */
-    const interval = 1000
-    const nextState: State = {
-      ...characterState,
-      currentPos: { ...characterState.currentPos },
-      targetPos: { ...characterState.targetPos },
-    }
-    setNextTargetAndPosition(nextState, border) // currentPos, targetPosの決定
-    playMoveAnimation(characterState, nextState)
 
-    if (characterState.currentAnimation == BASIC_ANIMATION) {
-      /* たまに瞬きをする */
-      if (Math.random() <= 0.005) {
-        playBlinkAnimation(nextState)
-      }
-    }
-
-    /* たまにジャンプする */
-    if (Math.random() <= 0.001) {
-      startJump(nextState, border)
-    }
-
-    nextState.moveTick = (nextState.moveTick + 1) % interval
-    setCharacterState(nextState)
+    const mc = new MiniCatCondition(characterState, border)
+    mc.updateNextState()
+    // mc.stateは内部でディープコピーされている
+    setCharacterState(mc.state)
   })
 
   return (
     <Container>
       {/* 基礎モーション */}
       <AnimatedSprite
+        images={animationMap.get(BASIC_ANIMATION)}
+        visible={characterState.currentAnimation == BASIC_ANIMATION}
         anchor={0.5}
-        images={basicAnimationImages}
         isPlaying={true}
         initialFrame={0}
         animationSpeed={0.05}
@@ -340,7 +328,6 @@ const MiniCat = ({
         scale={scale}
         angle={characterState.angle}
         interactive={true}
-        visible={characterState.currentAnimation == BASIC_ANIMATION}
         containsPoint={
           isClickThrough ? containsPointClickThrouth : containsPoint
         }
@@ -351,8 +338,9 @@ const MiniCat = ({
       />
       {/* 右歩行 */}
       <AnimatedSprite
+        images={animationMap.get(RIGHT_ANIMATION)}
+        visible={characterState.currentAnimation == RIGHT_ANIMATION}
         anchor={0.5}
-        images={rightAnimationImages}
         isPlaying={true}
         initialFrame={0}
         animationSpeed={0.05}
@@ -361,7 +349,6 @@ const MiniCat = ({
         scale={scale}
         angle={characterState.angle}
         interactive={true}
-        visible={characterState.currentAnimation == RIGHT_ANIMATION}
         containsPoint={
           isClickThrough ? containsPointClickThrouth : containsPoint
         }
@@ -372,8 +359,9 @@ const MiniCat = ({
       />
       {/* 左歩行 */}
       <AnimatedSprite
+        images={animationMap.get(LEFT_ANIMATION)}
+        visible={characterState.currentAnimation == LEFT_ANIMATION}
         anchor={0.5}
-        images={leftAnimationImages}
         isPlaying={true}
         initialFrame={0}
         animationSpeed={0.05}
@@ -382,7 +370,6 @@ const MiniCat = ({
         scale={scale}
         angle={characterState.angle}
         interactive={true}
-        visible={characterState.currentAnimation == LEFT_ANIMATION}
         containsPoint={
           isClickThrough ? containsPointClickThrouth : containsPoint
         }
@@ -393,19 +380,19 @@ const MiniCat = ({
       />
       {/* 瞬き */}
       <AnimatedSprite
-        anchor={0.5}
-        images={blinkAnimationImages}
+        images={animationMap.get(BLINK_ANIMATION)}
         isPlaying={characterState.currentAnimation == BLINK_ANIMATION} // ループしないのでtrueにしてはいけない
+        visible={characterState.currentAnimation == BLINK_ANIMATION}
+        loop={false}
+        onComplete={handleComplete}
+        anchor={0.5}
         initialFrame={1}
         animationSpeed={0.1}
         x={characterState.currentPos.x}
         y={characterState.currentPos.y}
         scale={scale}
         angle={characterState.angle}
-        visible={characterState.currentAnimation == BLINK_ANIMATION}
-        loop={false}
         interactive={true}
-        onComplete={handleComplete}
         containsPoint={
           isClickThrough ? containsPointClickThrouth : containsPoint
         }
