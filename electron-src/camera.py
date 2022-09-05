@@ -1,12 +1,7 @@
-"""
-カメラの起動から、集中力などへの変換。返すところまで
-全てこのpythonファイルにまとめちゃいました。
-関数切り分けはしてるので許して
-"""
-
 #オプション-----------------------------------------------------------------------------
 #wait = 100 #画像一枚処理するごとに何秒間まつか（ms）。ゼロ以外を指定。
-gap = 3 #どれだけの猫背を許容するか。大きいほうが緩い。(鼻ー胸距離の[gap]倍が肩幅以下なら猫背と判定)
+gap = 2.6 #どれだけの猫背を許容するか。大きいほうが緩い。(鼻ー胸距離の[gap]倍が肩幅以下なら猫背と判定)
+output = False #検出の結果を画像として保存するか。（デバック用）
 #-------------------------------------------------------------------------------------
 
 
@@ -21,54 +16,64 @@ import sys
 
 
 
-# def main(s):
-#     ans = {}
-#     is_cat = False 
+def main():
+    s = Input()
+    image = make_image((s))
+    ans = {}
+    is_cat = False 
 
-#     poses = detect(s)
-#     chest_y = (poses["L_SHOULDER"][1] + poses["R_SHOULDER"][1])/2 
-#     nose_y = poses["NOSE"][1]
-#     chest_width = abs(poses["L_SHOULDER"][0] - poses["R_SHOULDER"][0])
-
-
-#     if abs(chest_y - nose_y)*gap < chest_width:
-#         is_cat = True 
-
-#     ans["is_cat"] = is_cat
-#     print(ans)
+    poses = detect(image)
+    chest_y = (poses["L_SHOULDER"][1] + poses["R_SHOULDER"][1])/2 
+    nose_y = poses["NOSE"][1]
+    chest_width = abs(poses["L_SHOULDER"][0] - poses["R_SHOULDER"][0])
 
 
+    if abs(chest_y - nose_y)*gap < chest_width:
+        is_cat = True 
+
+    ans["is_cat"] = is_cat
+    print(ans)
 
 
-    
-def from_base64(s):
-    base64_data = base64(s)
-    nparr = np.fromstring(base64_data.decode('base64'), np.uint8)
-    return cv2.imdecode(nparr, cv2.IMREAD_ANYCOLOR)
-
-    return img
-
-def detect(output=False):
-    print("detect",file=sys.stderr )
-    # print("detect" ,file=sys.stderr)
+def Input():
     s = ""
     while True:
         t = sys.stdin.readline(1024)
         s += t
         if len(t) < 1024:
             break
+    return s
 
-    # print(s)
-    # s = s.split(';')[1]
-    print("input done!" ,file=sys.stderr)
-    print(f's:{s[:20]}', file=sys.stderr)
+def make_image(s:str):
     jpg_original = base64.b64decode(s[22:].encode())
-    with open ('out.txt',mode='w') as f:
-        f.write(s[22:])
-
     jpg_as_np = np.frombuffer(jpg_original, dtype=np.uint8)
     print(jpg_as_np.shape, file=sys.stderr )
     image = cv2.imdecode(jpg_as_np, flags=1)
+    return image 
+
+
+
+def detect(image):
+    print("detect",file=sys.stderr )
+    # print("detect" ,file=sys.stderr)
+    # s = ""
+    # while True:
+    #     t = sys.stdin.readline(1024)
+    #     s += t
+    #     if len(t) < 1024:
+    #         break
+
+    # print(s)
+    # s = s.split(';')[1]
+    # print("input done!" ,file=sys.stderr)
+    # print(f's:{s[:20]}', file=sys.stderr)
+    # with open ('out.txt',mode='w') as f:
+    #     f.write(s[22:])
+
+    # jpg_original = base64.b64decode(s[22:].encode())
+    # jpg_as_np = np.frombuffer(jpg_original, dtype=np.uint8)
+    # print(jpg_as_np.shape, file=sys.stderr )
+    # image = cv2.imdecode(jpg_as_np, flags=1)
 
     image_y,image_x,_ = image.shape
     # For webcam input:
@@ -92,7 +97,9 @@ def detect(output=False):
                     results.pose_landmarks,
                     mp_pose.POSE_CONNECTIONS,
                     landmark_drawing_spec=mp_drawing_styles.get_default_pose_landmarks_style())
-                cv2.imwrite('out.png',image) 
+                # cv2.imwrite('out.png',image) 
+                cv2.imshow('color',image)
+                cv2.waitKey(1000)
 
             #{体の部位：座標}として返す
             ans = {}
@@ -117,6 +124,7 @@ def detect(output=False):
 
             # print(ans)
             # Flip the image horizontally for a selfie-view display.
+            # print(ans)
             return ans
 
 
@@ -124,5 +132,4 @@ def test():
     print("test")
 
 
-print(detect(output=True))
-exit()
+main()

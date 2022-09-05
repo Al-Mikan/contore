@@ -15,7 +15,7 @@ declare global {
 process.once('loaded', () => {
   global.ipcRenderer = ipcRenderer;
   contextBridge.exposeInMainWorld('banana',{
-    sendcamera:(content:String)=>{ipcRenderer.send('send-camera',content)}
-  })
-})
-
+    sendcamera:async function(content:string){return await ipcRenderer.invoke('send-camera',content)},
+    cansend:()=>{return ipcRenderer.invoke('check')},
+    })}
+)

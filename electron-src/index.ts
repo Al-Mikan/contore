@@ -12,6 +12,8 @@ import Score from './Score'
 import Store from 'electron-store'
 const store = new Store()
 
+let flag:Boolean = true //rendererからカメラの情報を送信してよいかのフラグ。お願いだからいじらないで。
+
 // Prepare the renderer once the app is ready
 app.on('ready', async () => {
   await prepareNext('./renderer')
@@ -48,14 +50,30 @@ app.on('window-all-closed', app.quit)
 app.whenReady().then(
   ()=>{
     console.log('now recieved call of sendcamera')
-    ipcMain.on("send-camera",(_,content:String)=>{
-    // console.log(content.length)
-    console.log("index.ts:now calling Score.ts....")
-    Score(content)
-    // console.log(`from main:${ans}`)
+
+
+    //ipc2
+    ipcMain.handle('check',()=>{return flag})
+
+
+    //ipc1
+    ipcMain.handle("send-camera",(_,content:string)=>{
+      console.log("index.ts:now calling Score.ts....");
+      const res = Score(content);
+      console.log(`index.ts:${res}`)
+      return res;
     })
   }
 )
+
+process.on("SIGINT",()=>{
+  console.log("SIGINT！！")
+  for(var i = 1; i < 4000000; i++) {
+    clearTimeout(i);
+}
+  flag = false
+  app.quit()
+})
 
 // レンダラープロセスはメインプロセスにプロセス間通信でデータ取得を要求する
 ipcMain.handle('getStoreValue', (_, key) => {
