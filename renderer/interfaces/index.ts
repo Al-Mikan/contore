@@ -13,4 +13,9 @@ declare global {
       ipcRenderer: IpcRenderer
     }
   }
+
+  var cameraAPI: {
+    sendcamera: (content: string) => Promise<string>
+    cansend: () => Promise<boolean>
+  }
 }
