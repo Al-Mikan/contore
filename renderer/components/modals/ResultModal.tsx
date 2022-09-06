@@ -31,6 +31,10 @@ const ResultModal = ({
   const [pos, setPos] = useState<Position>({ x: x, y: y })
   const [beforeMousePos, setBeforeMousePos] = useState<Position>({ x: 0, y: 0 })
 
+  const handleClickCloseBtn = (event: InteractionEvent) => {
+    setDragMode(false) // ボタンクリック後にマウスにモーダルが張り付くバグを修正
+    handleClickToHome(event)
+  }
   // ドラッグ操作
   const mouseDown = (event: InteractionEvent) => {
     const nx = event.data.global.x
@@ -152,7 +156,7 @@ const ResultModal = ({
 
       {/* CLOSE BUTTON */}
       <CloseBtn
-        handleClick={handleClickToHome}
+        handleClick={handleClickCloseBtn}
         x={150}
         y={-175}
         scale={0.4}
