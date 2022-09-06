@@ -2,7 +2,7 @@ import path from 'path'
 import { spawnSync, SpawnSyncReturns } from 'child_process'
 
 const Score = (imageBase64: string) => {
-  const scriptPath = path.join(__dirname, 'camera.py')
+  const scriptPath = path.join(__dirname, 'dist/camera')
 
   let result: SpawnSyncReturns<string>
   // OSごとにコマンドが異なる
@@ -14,11 +14,16 @@ const Score = (imageBase64: string) => {
     })
   } else {
     // Mac or Linux
-    result = spawnSync('python', [scriptPath], {
-      input: imageBase64,
-      encoding: 'utf-8',
+    result = spawnSync(scriptPath,{
+     input:imageBase64,
+     encoding: 'utf-8',
     })
+    // result = spawnSync('python', [scriptPath], {
+    //   input: imageBase64,
+    //   encoding: 'utf-8',
+    // })
   }
+  console.log(result.stderr)
 
   // 子プロセスの実行が失敗
   if (result.error) {

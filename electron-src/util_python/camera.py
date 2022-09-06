@@ -104,13 +104,13 @@ def detect(image):
             #{体の部位：座標}として返す
             ans = {}
 
+            landmark_dic = {"NOSE":mp_pose.PoseLandmark.NOSE,
+                "L_SHOULDER":mp_pose.PoseLandmark.LEFT_SHOULDER,
+                "R_SHOULDER":mp_pose.PoseLandmark.RIGHT_SHOULDER,
+            }
             if results.pose_landmarks:
                 
             #mediapipeで座標を取り出すのが少し大変なので、取り出す時に必要なキーをまとめて書いとく
-                landmark_dic = {"NOSE":mp_pose.PoseLandmark.NOSE,
-                    "L_SHOULDER":mp_pose.PoseLandmark.LEFT_SHOULDER,
-                    "R_SHOULDER":mp_pose.PoseLandmark.RIGHT_SHOULDER,
-                }
 
                 for name,point in landmark_dic.items():
                     try:

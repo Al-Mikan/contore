@@ -37,7 +37,6 @@ next-env.d.ts
 
 #python
 /electron-src/util_python/build 
-/electron-src/util_python/camera.spec
 
 /main
 /dist

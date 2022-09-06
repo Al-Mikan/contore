@@ -21,7 +21,7 @@
     "format:check": "prettier --check \"./**/*.{js,jsx,ts,tsx,json}\"",
     "format": "prettier --write \"./**/*.{js,jsx,ts,tsx,json}\"",
     "test": "jest",
-    "build-py":"pyinstaller  --onefile --distpath ./main/dist  --specpath ./electron-src/util_python --workpath ./electron-src/util_python/build ./electron-src/util_python/camera.py "
+    "build-py":"pyinstaller  --distpath ./main/dist --workpath ./electron-src/util_python/build ./electron-src/util_python/camera.spec "
   },
   "dependencies": {
     "@chakra-ui/react": "^1.8.8",
