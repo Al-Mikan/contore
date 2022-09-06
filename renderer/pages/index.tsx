@@ -53,14 +53,14 @@ async function get_and_send():Promise<void>{
   ctx.drawImage(video,0,0,canvas.width,canvas.height);
   let base64 = canvas.toDataURL('image/string');
   console.log(base64.slice(30000,30010))
-
-
+  const res = await sendcamera(base64);
+  result.textContent = res;
+  
+  
   const flag = await (window as any).banana.cansend();
   if (flag) {
     get_and_send();
-    const res = await sendcamera(base64);
     // console.log(`index.tsx:${flag}`);
-    result.textContent = res;
   }else{
     // console.log(`index.tsx:${flag}`)
   }
