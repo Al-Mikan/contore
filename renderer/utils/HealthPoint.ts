@@ -1,4 +1,4 @@
-export default class Satity {
+export default class HealthPoint {
   static MAX_TIME = 259200 // 72h
   private _division: number = 0
   private _blank: number = 0
@@ -7,7 +7,7 @@ export default class Satity {
   constructor(_division: number, _blank: number) {
     this.division = _division
     this.blank = _blank
-    this.unit = Math.floor(Satity.MAX_TIME / this.division)
+    this.unit = Math.floor(HealthPoint.MAX_TIME / this.division)
   }
 
   get division(): number {
@@ -34,8 +34,8 @@ export default class Satity {
     this._unit = value
   }
 
-  get_satiety(): number {
+  get_health_point(): number {
     var decrease: number = Math.floor(this.blank / this.unit)
-    return this.division - decrease
+    return Math.max(this.division - decrease, 0)
   }
 }
