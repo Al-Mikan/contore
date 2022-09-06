@@ -1,5 +1,11 @@
-import { AnimatedSprite, Container, useTick } from '@inlet/react-pixi'
-import { useState } from 'react'
+import {
+  AnimatedSprite,
+  Container,
+  useTick,
+  Sprite,
+  PixiRef,
+} from '@inlet/react-pixi'
+import { useState, MutableRefObject } from 'react'
 import { InteractionEvent } from 'pixi.js'
 
 import { containsPoint, containsPointClickThrouth } from '../../utils/PixiAPI'
@@ -11,12 +17,16 @@ import {
   CharacterCondition,
 } from '../../types/character'
 
+type ISprite = PixiRef<typeof Sprite>
+
 interface Props {
   isClickThrough?: boolean
   defaultX: number
   defaultY: number
   scale: number
   border: Border
+  targetSpriteRef?: MutableRefObject<ISprite>
+  handleTargetCollision?: () => void
 }
 
 const BASIC_ANIMATION = 0
@@ -37,7 +47,35 @@ animationMap.set(RIGHT_ANIMATION, ['/img/mini-cat/right.png'])
 animationMap.set(SQUAT_ANIMATION, ['/img/mini-cat/squat.png'])
 
 class MiniCatCondition extends CharacterCondition {
+  public targetRef: MutableRefObject<ISprite> | null | undefined
+  public handleTargetCollision: () => void
+
+  constructor(
+    beforState: State,
+    border: Border,
+    targetRef: MutableRefObject<ISprite>,
+    handleTargetCollision: () => void
+  ) {
+    super(beforState, border)
+    this.targetRef = targetRef
+    this.handleTargetCollision = handleTargetCollision
+  }
+
   protected _updateNextTargetPos() {
+    // ターゲットがあれば追う
+    if (this.targetRef && this.targetRef.current) {
+      if (
+        this.targetRef.current.x === this.state.currentPos.x &&
+        this.targetRef.current.y === this.state.currentPos.y
+      ) {
+        if (this.handleTargetCollision) this.handleTargetCollision()
+        return
+      }
+      this.state.targetPos.x = this.targetRef.current.x
+      this.state.targetPos.y = this.border.maxY
+      return
+    }
+
     if (this.state.moveTick == 0) {
       this.state.targetPos.x = getRandomInt(
         this.border.randomTargetMinX,
@@ -213,6 +251,8 @@ const MiniCat = ({
   defaultY,
   scale,
   border,
+  targetSpriteRef,
+  handleTargetCollision,
 }: Props) => {
   const [characterState, setCharacterState] = useState<State>({
     currentPos: { x: defaultX, y: defaultY },
@@ -332,7 +372,12 @@ const MiniCat = ({
       return
     }
 
-    const mc = new MiniCatCondition(characterState, border)
+    const mc = new MiniCatCondition(
+      characterState,
+      border,
+      targetSpriteRef,
+      handleTargetCollision
+    )
     mc.updateNextState()
     // mc.stateは内部でディープコピーされている
     setCharacterState(mc.state)
