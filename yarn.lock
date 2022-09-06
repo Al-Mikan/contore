@@ -5488,6 +5488,11 @@ pirates@^4.0.4:
   resolved "https://registry.yarnpkg.com/pirates/-/pirates-4.0.5.tgz#feec352ea5c3268fb23a37c702ab1699f35a5f3b"
   integrity sha512-8V9+HQPupnaXMA23c5hvl69zXvTwTzyAYasnkb0Tts4XvO4CliqONMOnvlq26rkhLC3nWDFBJf73LU1e1VZLaQ==
 
+pixi-webfont-loader@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/pixi-webfont-loader/-/pixi-webfont-loader-1.0.2.tgz#1b7d6fa2084e3885a3e2f505a10c0c997712d518"
+  integrity sha512-bCHb1pp/TMTN30gu1L2696UXF1ZMTww07iy/p7MPDGWfpsIZP1MMVY5MmdWPasDlePT85JYod98lbOHQonzyjg==
+
 pixi.js@^6.5.1:
   version "6.5.1"
   resolved "https://registry.yarnpkg.com/pixi.js/-/pixi.js-6.5.1.tgz#874844630fd57457b1cacd9cade4b16f897dfedf"
