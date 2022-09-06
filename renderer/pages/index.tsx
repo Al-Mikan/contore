@@ -88,6 +88,7 @@ const IndexPage = () => {
       }
       setExperience(nowEx)
     }
+
     const fetchCoins = async () => {
       // コイン枚数の設定
       const nowCoins: number = await window.database.read('core.coin')
@@ -97,18 +98,19 @@ const IndexPage = () => {
       setCoins(nowCoins)
     }
 
-    const fetchHelthPoint = async () => {
+    const fetchHealthPoint = async () => {
       // HPの設定
       const nowHP: number = await window.database.read('core.health_point')
       if (nowHP === undefined) {
         throw new Error('electron-store: core.health_pointが存在しません')
       }
-      const ll: string = await window.database.read('core.last_login')
-      let d1 = new Date(ll)
-      let d2 = new Date()
-      let blank = Math.floor((d2.getTime() - d1.getTime()) / 1000)
+      const last_login: string = await window.database.read('core.last_login')
+      let date_last_login = new Date(last_login)
+      let date_now = new Date()
+      let blank = Math.floor((date_last_login.getTime() - date_now.getTime()) / 1000)
       let _hp = new HealthPoint(nowHP)
       _hp.update_health_point(-blank)
+      hp.health_point = _hp.health_point
 
       setHealth(_hp.health_point)
     }
@@ -116,7 +118,7 @@ const IndexPage = () => {
     // 非同期処理を並行に実行
     fetchExperience()
     fetchCoins()
-    fetchHelthPoint()
+    fetchHealthPoint()
 
 
     setInterval(() => {
@@ -124,6 +126,7 @@ const IndexPage = () => {
         let _hp = new HealthPoint(prev)
         _hp.update_health_point(-1)
         window.database.update('core.health_point', _hp.health_point)
+        hp.health_point = _hp.health_point
         return _hp.health_point
       })
     }, 1000)

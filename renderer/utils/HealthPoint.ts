@@ -20,13 +20,15 @@ export default class HealthPoint {
     }
   }
 
+  // HPがdivision分のいくつかを返す
   get_health_point_formatted(division: number): number {
     if (this.health_point === 0) return 0
 
     var unit = Math.floor(HealthPoint.MAX_TIME / division)
-    return Math.floor(this.health_point / unit)
+    return Math.ceil(this.health_point / unit)
   }
 
+  // HPに対して加減算を行う
   update_health_point(value: number): number {
     this.health_point = this.health_point + value
     return this.health_point
