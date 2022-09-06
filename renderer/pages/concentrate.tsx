@@ -27,11 +27,12 @@ const ConcentratePage = () => {
   const [targetItemScale, setTargetItemScale] = useState(3)
   const [targetVisible, setTargetVisible] = useState(true)
   const spriteRef = useRef<ISprite>(null)
+  const [minicatScale, setMinicatScale] = useState(0.6)
   const miniCatBorder = {
     minX: 40,
     maxX: 1900,
-    minY: 30,
-    maxY: 1050,
+    minY: 30 + (minicatScale - 0.8) * 35, // スケール調整時に浮かないように
+    maxY: 1050 - (minicatScale - 0.8) * 35,
     randomTargetMinX: 1400,
     randomTargetMaxX: 1620,
   }
@@ -100,10 +101,10 @@ const ConcentratePage = () => {
           />
           <MiniCat
             isClickThrough={true}
-            scale={0.8}
+            scale={minicatScale}
             border={miniCatBorder}
             defaultX={950}
-            defaultY={1050}
+            defaultY={miniCatBorder.maxY}
             targetSpriteRef={spriteRef}
             handleTargetCollision={() => {
               if (spriteRef?.current?.width < 20) {

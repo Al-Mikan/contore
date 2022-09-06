@@ -23,14 +23,15 @@ const IndexPage = () => {
   const [beforeMousePos, setBeforeMousePos] = useState<Position>({ x: 0, y: 0 })
   const [experience, setExperience] = useState(0)
   const [coins, setCoins] = useState(0)
+  const [minicatScale, setMinicatScale] = useState(0.4)
 
   const ex = new ExperiencePoint(experience)
   // 背景画像のサイズを元に調整する
   const miniCatBorder = {
     minX: 0 + 20,
     maxX: 640 - 20,
-    minY: 15,
-    maxY: 320,
+    minY: 20 + (minicatScale - 0.5) * 45, // スケール調整時に浮かないように
+    maxY: 360 - 40 - (minicatScale - 0.5) * 45,
     randomTargetMinX: 0 + 20,
     randomTargetMaxX: 640 - 20,
   }
@@ -115,8 +116,8 @@ const IndexPage = () => {
       >
         <MiniCat
           defaultX={200}
-          defaultY={320}
-          scale={0.5}
+          defaultY={miniCatBorder.maxY}
+          scale={minicatScale}
           border={miniCatBorder}
           isClickThrough={true} // 画面外でも正常にクリック可能に
         />
