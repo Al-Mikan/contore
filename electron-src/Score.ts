@@ -1,20 +1,36 @@
-const path = require('path')
-const {spawnSync} = require('child_process')
+import path from 'path'
+import { spawnSync, SpawnSyncReturns } from 'child_process'
 
-const Score:(content:string)=>string = (content:string) => {
-    let content_with_EOL = content + '\n';
-    // console.log(content.slice(30000,30010))
+const Score = (imageBase64: string) => {
+  const scriptPath = path.join(__dirname, 'camera.py')
 
-    // console.log("Score.ts:now called Score.ts")
-    const PY_PATH = path.join(__dirname,'camera.py');
-    // console.log("score.ts:now calling camera.py")
-    let data  = spawnSync('python',[PY_PATH],{input:content_with_EOL,encoding:'utf-8'});
+  let result: SpawnSyncReturns<string>
+  // OSごとにコマンドが異なる
+  if (process.platform === 'win32') {
+    // Windows
+    result = spawnSync('cmd', ['/c', 'python', scriptPath], {
+      input: imageBase64,
+      encoding: 'utf-8', // NOTE: 文字化けする可能性大
+    })
+  } else {
+    // Mac or Linux
+    result = spawnSync('python', [scriptPath], {
+      input: imageBase64,
+      encoding: 'utf-8',
+    })
+  }
 
-    // console.log(data.stdout);
-    // console.log(data.stderr);
-    console.log(`Score.ts:${data.stdout}`)
-    return data.stdout
+  // 子プロセスの実行が失敗
+  if (result.error) {
+    throw result.error
+  }
+
+  // pythonが出力したエラー
+  if (result.status !== 0) {
+    throw new Error(result.stderr)
+  }
+
+  return result.stdout
 }
-
 
 export default Score
