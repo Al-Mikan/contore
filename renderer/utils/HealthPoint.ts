@@ -1,10 +1,8 @@
 export default class HealthPoint {
   static MAX_TIME = 24 * 3600 * 4 // 4days
   private _health_point = 0
-  private _blank: number = 0
 
-  constructor(_blank: number, _health_point: number) {
-    this.blank = _blank
+  constructor(_health_point: number) {
     this.health_point = _health_point
   }
 
@@ -22,23 +20,15 @@ export default class HealthPoint {
     }
   }
 
-  get blank(): number {
-    return this._blank
-  }
-
-  set blank(value: number) {
-    this._blank = value
-  }
-
-  recover(recover_point: number) {
-    this.health_point = this.health_point + recover_point
-  }
-
-  get_health_point_formatted(division: number) {
+  get_health_point_formatted(division: number): number {
     if (this.health_point === 0) return 0
 
     var unit = Math.floor(HealthPoint.MAX_TIME / division)
-    var decrease: number = Math.floor(this.blank / unit)
-    return Math.max(division - decrease, 0)
-  } 
+    return Math.floor(this.health_point / unit)
+  }
+
+  update_health_point(value: number): number {
+    this.health_point = this.health_point + value
+    return this.health_point
+  }
 }

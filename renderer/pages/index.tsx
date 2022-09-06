@@ -24,9 +24,10 @@ const IndexPage = () => {
   const [beforeMousePos, setBeforeMousePos] = useState<Position>({ x: 0, y: 0 })
   const [experience, setExperience] = useState(0)
   const [coins, setCoins] = useState(0)
-  const [health, setHeath] = useState(0)
+  const [health, setHealth] = useState(0)
 
   const ex = new ExperiencePoint(experience)
+  const hp = new HealthPoint(health)
 
   // 背景画像のサイズを元に調整する
   const miniCatBorder = {
@@ -106,14 +107,26 @@ const IndexPage = () => {
       let d1 = new Date(ll)
       let d2 = new Date()
       let blank = Math.floor((d2.getTime() - d1.getTime()) / 1000)
-      let hp = new HealthPoint(blank, nowHP)
-      setHeath(hp.get_health_point_formatted(10))
+      let _hp = new HealthPoint(nowHP)
+      _hp.update_health_point(-blank)
+
+      setHealth(_hp.health_point)
     }
 
     // 非同期処理を並行に実行
     fetchExperience()
     fetchCoins()
     fetchHelthPoint()
+
+
+    setInterval(() => {
+      setHealth((prev: number) => {
+        let _hp = new HealthPoint(prev)
+        _hp.update_health_point(-1)
+        window.database.update('core.health_point', _hp.health_point)
+        return _hp.health_point
+      })
+    }, 1000)
   }, [])
 
   return (
@@ -150,7 +163,7 @@ const IndexPage = () => {
         />
         <Coin x={320} y={30} scale={0.3} />
         <NumText n={coins} view_digits={4} x={350} y={23} scale={0.3} />
-        <LifeGauge n={health} x={450} y={60} scale={0.8} />
+        <LifeGauge n={hp.get_health_point_formatted(10)} x={450} y={60} scale={0.8} />
         <SettingBtn
           handleSettingClick={handleSettingClick}
           x={595}
