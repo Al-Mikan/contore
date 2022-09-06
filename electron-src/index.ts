@@ -15,6 +15,8 @@ interface Dummy {
   core: {
     experience_point: number
     coin: number
+    health_point: number
+    last_login: string
   }
   setting: {
     camera: boolean
@@ -29,6 +31,8 @@ const schema: Schema<Dummy> = {
     properties: {
       experience_point: { type: 'integer', default: 0, minimum: 0 },
       coin: { type: 'integer', default: 0, minimum: 0, maximum: 9999 },
+      health_point: { type: 'integer', default: 96 * 3600, maximum : 96 * 3600, minimum : 0},
+      last_login: { type: 'string', format: 'date-time' }
     },
     additionalProperties: false,
   },
@@ -79,7 +83,23 @@ app.on('ready', async () => {
   mainWindow.loadURL(url)
 })
 
-app.on('window-all-closed', app.quit)
+function getNowYMDhmsStr(){
+  const date = new Date()
+  const Y = date.getFullYear()
+  const M = ("00" + (date.getMonth()+1)).slice(-2)
+  const D = ("00" + date.getDate()).slice(-2)
+  const h = ("00" + date.getHours()).slice(-2)
+  const m = ("00" + date.getMinutes()).slice(-2)
+  const s = ("00" + date.getSeconds()).slice(-2)
+
+  return Y + '-' +  M + '-' + D + 'T' + h + ':' + m + ':' + s
+}
+
+app.on('window-all-closed', () => {
+  // 同期的にログイン日時の処理
+  store.set('core.last_login', getNowYMDhmsStr())
+  app.quit()
+})
 
 // データベースの処理関数
 // TODO: 例外処理

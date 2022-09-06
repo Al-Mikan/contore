@@ -14,6 +14,7 @@ import StartBtn from '../components/buttons/StartBtn'
 import SettingBtn from '../components/buttons/SettingBtn'
 import EndBtn from '../components/buttons/EndBtn'
 import ExperiencePoint from '../utils/ExperiencePoint'
+import HealthPoint from '../utils/HealthPoint'
 import NumText from '../components/items/NumText'
 
 const IndexPage = () => {
@@ -23,8 +24,10 @@ const IndexPage = () => {
   const [beforeMousePos, setBeforeMousePos] = useState<Position>({ x: 0, y: 0 })
   const [experience, setExperience] = useState(0)
   const [coins, setCoins] = useState(0)
+  const [health, setHeath] = useState(0)
 
   const ex = new ExperiencePoint(experience)
+
   // 背景画像のサイズを元に調整する
   const miniCatBorder = {
     minX: 0 - 50,
@@ -93,9 +96,24 @@ const IndexPage = () => {
       setCoins(nowCoins)
     }
 
+    const fetchHelthPoint = async () => {
+      // HPの設定
+      const nowHP: number = await window.database.read('core.health_point')
+      if (nowHP === undefined) {
+        throw new Error('electron-store: core.health_pointが存在しません')
+      }
+      const ll: string = await window.database.read('core.last_login')
+      let d1 = new Date(ll)
+      let d2 = new Date()
+      let blank = Math.floor((d2.getTime() - d1.getTime()) / 1000)
+      let hp = new HealthPoint(blank, nowHP)
+      setHeath(hp.get_health_point_formatted(10))
+    }
+
     // 非同期処理を並行に実行
     fetchExperience()
     fetchCoins()
+    fetchHelthPoint()
   }, [])
 
   return (
@@ -132,7 +150,7 @@ const IndexPage = () => {
         />
         <Coin x={320} y={30} scale={0.3} />
         <NumText n={coins} view_digits={4} x={350} y={23} scale={0.3} />
-        <LifeGauge n={3} x={450} y={60} scale={0.8} />
+        <LifeGauge n={health} x={450} y={60} scale={0.8} />
         <SettingBtn
           handleSettingClick={handleSettingClick}
           x={595}
