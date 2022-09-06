@@ -84,19 +84,20 @@ const ResultModal = ({
       <Sprite anchor={0.5} image="/img/result-text.png" y={-130} scale={0.9} />
 
       {/* TIME */}
-      <Container x={-140} y={-50} scale={0.5}>
+      <Container x={-130} y={-70} scale={0.5}>
         <Text
           text="TIME"
           x={0}
           y={0}
           style={
             new TextStyle({
-              fontSize: 60,
+              fontSize: 80,
               fontWeight: '100',
+              fontFamily: 'neue-pixel-sans',
             })
           }
         />
-        <Container x={300}>
+        <Container x={270} y={20}>
           <Num n={shouldStrToNum(time[0])} x={50 * 0} />
           <Num n={shouldStrToNum(time[1])} x={50 * 1} />
           <Text
@@ -108,6 +109,7 @@ const ResultModal = ({
               new TextStyle({
                 fontSize: 50,
                 fontWeight: '700',
+                fontFamily: 'neue-pixel-sans',
               })
             }
           />
@@ -122,13 +124,14 @@ const ResultModal = ({
               new TextStyle({
                 fontSize: 50,
                 fontWeight: '700',
+                fontFamily: 'neue-pixel-sans',
               })
             }
           />
         </Container>
       </Container>
       {/* EXP */}
-      <Container x={-100} y={20} scale={0.5}>
+      <Container x={-90} y={10} scale={0.5}>
         <Text
           text="EXP"
           anchor={0.5}
@@ -136,22 +139,23 @@ const ResultModal = ({
           y={0}
           style={
             new TextStyle({
-              fontSize: 60,
+              fontSize: 80,
               fontWeight: '100',
+              fontFamily: 'neue-pixel-sans',
             })
           }
         />
         <NumText
           n={shouldStrTimeToSecondNum(time)}
           view_digits={5}
-          x={270}
-          y={-40}
+          x={230}
+          y={-20}
         />
       </Container>
       {/* COIN */}
-      <Container x={-90} y={75} scale={0.5}>
+      <Container x={-80} y={75} scale={0.5}>
         <Coin x={0} scale={0.7} />
-        <NumText n={coins} view_digits={3} x={350} y={-40} />
+        <NumText n={coins} view_digits={3} x={315} y={-30} />
       </Container>
 
       {/* CLOSE BUTTON */}

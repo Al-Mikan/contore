@@ -29,6 +29,7 @@ const SettingItem = ({
           new TextStyle({
             fontSize: 40,
             fontWeight: '100',
+            fontFamily: 'neue-pixel-sans',
           })
         }
       />
