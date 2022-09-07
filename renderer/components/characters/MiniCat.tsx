@@ -34,6 +34,7 @@ const BLINK_ANIMATION = 1
 const LEFT_ANIMATION = 2
 const RIGHT_ANIMATION = 3
 const SQUAT_ANIMATION = 4
+const EAINTG_ANIMATION = 5
 
 const animationMap = new Map<number, Array<string>>()
 animationMap.set(BASIC_ANIMATION, ['/img/mini-cat/1.png'])
@@ -45,6 +46,10 @@ animationMap.set(BLINK_ANIMATION, [
 animationMap.set(LEFT_ANIMATION, ['/img/mini-cat/left.png'])
 animationMap.set(RIGHT_ANIMATION, ['/img/mini-cat/right.png'])
 animationMap.set(SQUAT_ANIMATION, ['/img/mini-cat/squat.png'])
+animationMap.set(EAINTG_ANIMATION, [
+  '/img/mini-cat/1.png',
+  '/img/mini-cat/tail2.png',
+])
 
 class MiniCatCondition extends CharacterCondition {
   public targetRef: MutableRefObject<ISprite> | null | undefined
@@ -64,10 +69,7 @@ class MiniCatCondition extends CharacterCondition {
   protected _updateNextTargetPos() {
     // ターゲットがあれば追う
     if (this.targetRef && this.targetRef.current) {
-      if (
-        this.targetRef.current.x === this.state.currentPos.x &&
-        this.targetRef.current.y === this.state.currentPos.y
-      ) {
+      if (this._isCollisionWithTargetRef()) {
         if (this.handleTargetCollision) this.handleTargetCollision()
         return
       }
@@ -76,7 +78,7 @@ class MiniCatCondition extends CharacterCondition {
       return
     }
 
-    if (this.state.moveTick == 0) {
+    if (this.state.moveTick === 0) {
       this.state.targetPos.x = getRandomInt(
         this.border.randomTargetMinX,
         this.border.randomTargetMaxX
@@ -162,11 +164,10 @@ class MiniCatCondition extends CharacterCondition {
   }
 
   private _playMoveAnimation() {
-    /* 瞬き中に横向きになるなどはない */
+    /* 非ループアニメーション時は移動しない */
     if (
-      this.state.currentAnimation !== RIGHT_ANIMATION &&
-      this.state.currentAnimation !== LEFT_ANIMATION &&
-      this.state.currentAnimation !== BASIC_ANIMATION
+      this.state.currentAnimation === BLINK_ANIMATION ||
+      this.state.currentAnimation === SQUAT_ANIMATION
     ) {
       return
     }
@@ -218,7 +219,26 @@ class MiniCatCondition extends CharacterCondition {
     this.state.currentAnimation = SQUAT_ANIMATION
   }
 
+  private _playEatingAnimation() {
+    if (this._isCollisionWithTargetRef()) {
+      this.state.currentAnimation = EAINTG_ANIMATION
+    }
+  }
+
+  private _isCollisionWithTargetRef() {
+    return (
+      this.targetRef &&
+      this.targetRef.current &&
+      this.targetRef.current.x === this.state.currentPos.x &&
+      this.targetRef.current.y === this.state.currentPos.y
+    )
+  }
+
   protected updateNextAnimation() {
+    if (this._isCollisionWithTargetRef()) {
+      this._playEatingAnimation()
+      return
+    }
     this._playMoveAnimation()
 
     /* たまにジャンプする */
@@ -431,6 +451,27 @@ const MiniCat = ({
       <AnimatedSprite
         images={animationMap.get(LEFT_ANIMATION)}
         visible={characterState.currentAnimation == LEFT_ANIMATION}
+        anchor={0.5}
+        isPlaying={true}
+        initialFrame={0}
+        animationSpeed={0.05}
+        x={characterState.currentPos.x}
+        y={characterState.currentPos.y}
+        scale={scale}
+        angle={characterState.angle}
+        interactive={true}
+        containsPoint={
+          isClickThrough ? containsPointClickThrouth : containsPoint
+        }
+        mousedown={mouseDown}
+        mousemove={mouseMove}
+        mouseup={mouseUp}
+        mouseupoutside={mouseUp}
+      />
+      {/* 食事 */}
+      <AnimatedSprite
+        images={animationMap.get(EAINTG_ANIMATION)}
+        visible={characterState.currentAnimation == EAINTG_ANIMATION}
         anchor={0.5}
         isPlaying={true}
         initialFrame={0}
