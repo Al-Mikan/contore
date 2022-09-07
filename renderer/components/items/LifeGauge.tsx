@@ -13,7 +13,11 @@ interface Props extends BasicSpriteProps {
 type HeartNode = ({ x, y, scale }: HeartProps) => JSX.Element
 
 const LifeGauge = ({ x = 0, y = 0, scale = 1, n }: Props) => {
-  let Heart1: HeartNode, Heart2: HeartNode, Heart3: HeartNode, Heart4: HeartNode, Heart5: HeartNode
+  let Heart1: HeartNode,
+    Heart2: HeartNode,
+    Heart3: HeartNode,
+    Heart4: HeartNode,
+    Heart5: HeartNode
   if (n === 0) {
     Heart1 = EmptyHeart
     Heart2 = EmptyHeart

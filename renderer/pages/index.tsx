@@ -107,7 +107,9 @@ const IndexPage = () => {
       const last_login: string = await window.database.read('core.last_login')
       let date_last_login = new Date(last_login)
       let date_now = new Date()
-      let blank = Math.floor((date_last_login.getTime() - date_now.getTime()) / 1000)
+      let blank = Math.floor(
+        (date_last_login.getTime() - date_now.getTime()) / 1000
+      )
       let _hp = new HealthPoint(nowHP)
       _hp.update_health_point(-blank)
       hp.health_point = _hp.health_point
@@ -119,7 +121,6 @@ const IndexPage = () => {
     fetchExperience()
     fetchCoins()
     fetchHealthPoint()
-
 
     setInterval(() => {
       setHealth((prev: number) => {
@@ -166,7 +167,12 @@ const IndexPage = () => {
         />
         <Coin x={320} y={30} scale={0.3} />
         <NumText n={coins} view_digits={4} x={350} y={23} scale={0.3} />
-        <LifeGauge n={hp.get_health_point_formatted(10)} x={450} y={60} scale={0.8} />
+        <LifeGauge
+          n={hp.get_health_point_formatted(10)}
+          x={450}
+          y={60}
+          scale={0.8}
+        />
         <SettingBtn
           handleSettingClick={handleSettingClick}
           x={595}
