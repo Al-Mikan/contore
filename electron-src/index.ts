@@ -37,7 +37,11 @@ const schema: Schema<Dummy> = {
         maximum: 96 * 3600,
         minimum: 0,
       },
-      last_login: { type: 'string', format: 'date-time' },
+      last_login: {
+        type: 'string',
+        format: 'date-time',
+        default: getNowYMDhmsStr(),
+      },
     },
     additionalProperties: false,
   },
