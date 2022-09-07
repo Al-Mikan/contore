@@ -44,6 +44,9 @@ const IndexPage = () => {
   const handlePlayClick = (event: InteractionEvent) => {
     router.push('/play')
   }
+  const handleShopClick = (event: InteractionEvent) => {
+    router.push('/shop')
+  }
 
   const handleCloseClick = (event: InteractionEvent) => {
     window.electronAPI.closeWindow()
@@ -130,6 +133,12 @@ const IndexPage = () => {
             handleStartClick={handlePlayClick}
             x={530}
             y={250}
+            scale={0.8}
+          />
+          <StartBtn
+            handleStartClick={handleShopClick}
+            x={430}
+            y={305}
             scale={0.8}
           />
         </Sprite>
