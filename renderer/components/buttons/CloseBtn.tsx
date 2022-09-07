@@ -2,14 +2,21 @@ import { Sprite } from '@inlet/react-pixi'
 import { InteractionEvent } from 'pixi.js'
 import { useState } from 'react'
 
-import { containsPoint } from '../../utils/PixiAPI'
+import { containsPoint, containsPointClickThrouth } from '../../utils/PixiAPI'
 import { BasicSpriteProps } from '../../types/sprite'
 
 interface Props extends BasicSpriteProps {
+  isClickThrouth?: boolean
   handleClick: (event: InteractionEvent) => void
 }
 
-const CloseBtn = ({ x = 0, y = 0, scale = 1, handleClick }: Props) => {
+const CloseBtn = ({
+  x = 0,
+  y = 0,
+  scale = 1,
+  isClickThrouth = false,
+  handleClick,
+}: Props) => {
   const [alpha, setAlpha] = useState(1)
   const mouseover = () => setAlpha(0.8)
   const mouseout = () => setAlpha(1)
@@ -26,7 +33,7 @@ const CloseBtn = ({ x = 0, y = 0, scale = 1, handleClick }: Props) => {
       mouseover={mouseover}
       mouseout={mouseout}
       buttonMode={true}
-      containsPoint={containsPoint}
+      containsPoint={isClickThrouth ? containsPointClickThrouth : containsPoint}
     />
   )
 }
