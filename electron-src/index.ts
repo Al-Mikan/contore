@@ -62,6 +62,8 @@ const store = new Store<Dummy>({ schema })
 app.on('ready', async () => {
   await prepareNext('./renderer')
 
+  updateHealthLastLogin()
+
   const mainWindow = new BrowserWindow({
     frame: false,
     transparent: true,
@@ -91,6 +93,24 @@ app.on('ready', async () => {
 
   mainWindow.loadURL(url)
 })
+
+const updateHealthLastLogin = () => {
+  const last_login: string = store.get('core.last_login')
+  if (last_login === undefined) {
+    throw new Error('electron-store: core.last_loginが存在しません')
+  }
+  const nowHP: number = store.get('core.health_point')
+  if (nowHP === undefined) {
+    throw new Error('electron-store: core.health_pointが存在しません')
+  }
+
+  const date_last_login = new Date(last_login)
+  const date_now = new Date()
+  const blank = Math.floor(
+    (date_now.getTime() - date_last_login.getTime()) / 1000
+  )
+  store.set('core.health_point', Math.max(nowHP - blank, 0))
+}
 
 function getNowYMDhmsStr() {
   const date = new Date()

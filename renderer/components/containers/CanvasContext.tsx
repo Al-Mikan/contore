@@ -32,14 +32,14 @@ const CanvasContext = ({ children }: Props) => {
     const timerID = setInterval(() => {
       setHealth((prev: number) => {
         let _hp = new HealthPoint(prev)
-        _hp.update_health_point(-10)
+        _hp.update_health_point(-1)
         if (_hp.health_point === 0) {
           console.log('gameover')
         }
         window.database.update('core.health_point', _hp.health_point)
         return _hp.health_point
       })
-    }, 10 * 1000)
+    }, 1 * 1000)
     return () => {
       clearInterval(timerID)
     }
