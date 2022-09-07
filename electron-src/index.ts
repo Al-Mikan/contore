@@ -20,6 +20,9 @@ interface Dummy {
     camera: boolean
     drag: boolean
   }
+  shop: {
+    fish: number
+  }
 }
 
 const schema: Schema<Dummy> = {
@@ -29,6 +32,14 @@ const schema: Schema<Dummy> = {
     properties: {
       experience_point: { type: 'integer', default: 0, minimum: 0 },
       coin: { type: 'integer', default: 0, minimum: 0, maximum: 9999 },
+    },
+    additionalProperties: false,
+  },
+  shop: {
+    type: 'object',
+    default: {}, // 明示的に与えないと子要素が取り出せないバグが起きる
+    properties: {
+      fish: { type: 'integer', default: 0 },
     },
     additionalProperties: false,
   },
