@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { Container, Sprite } from '@inlet/react-pixi'
 
 import Num from './Num'
-import { shouldStrToNum } from '../../utils/api'
+import { shouldStrToNum } from '../../utils/common'
 import { BasicSpriteProps } from '../../types/sprite'
 
 interface Props extends BasicSpriteProps {

@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { InteractionEvent } from 'pixi.js'
 
 import { containsPoint, containsPointClickThrouth } from '../../utils/PixiAPI'
-import { getRandomInt } from '../../utils/api'
+import { getRandomInt } from '../../utils/common'
 import { State, Position, MiniCatAnimation } from '../../types/character'
 
 interface Border {
