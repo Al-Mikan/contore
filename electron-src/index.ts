@@ -125,9 +125,12 @@ function getNowYMDhmsStr() {
 }
 
 app.on('window-all-closed', () => {
+  app.quit()
+})
+
+app.on('quit', () => {
   // 同期的にログイン日時の処理
   store.set('core.last_login', getNowYMDhmsStr())
-  app.quit()
 })
 
 // データベースの処理関数

@@ -1,6 +1,7 @@
 import React, { ReactNode, createContext, useEffect, useState } from 'react'
 
 import HealthPoint from '../../utils/HealthPoint'
+import { getNowYMDhmsStr } from '../../utils/api'
 
 type Props = {
   children: ReactNode
@@ -37,6 +38,7 @@ const CanvasContext = ({ children }: Props) => {
           console.log('gameover')
         }
         window.database.update('core.health_point', _hp.health_point)
+        window.database.update('core.last_login', getNowYMDhmsStr()) // shutdown対策で毎秒更新
         return _hp.health_point
       })
     }, 1 * 1000)
