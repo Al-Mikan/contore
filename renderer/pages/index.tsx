@@ -46,6 +46,10 @@ const IndexPage = () => {
     electronAPI.closeWindow()
   }
 
+  const handlePlayClick = (event: InteractionEvent) => {
+    router.push('/play')
+  }
+
   // ドラッグ操作
   const mouseDown = (event: InteractionEvent) => {
     const nx = event.data.global.x
@@ -148,6 +152,12 @@ const IndexPage = () => {
           handleStartClick={handleStartClick}
           x={530}
           y={305}
+          scale={0.8}
+        />
+        <StartBtn
+          handleStartClick={handlePlayClick}
+          x={530}
+          y={250}
           scale={0.8}
         />
         <QuitBtn handleClick={handleEndClick} x={20} y={305} scale={0.4} />

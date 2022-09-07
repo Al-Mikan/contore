@@ -1,18 +1,14 @@
-import { useEffect, useState, useRef } from 'react'
-import { Sprite, PixiRef } from '@inlet/react-pixi'
+import { useEffect, useState } from 'react'
 import { InteractionEvent } from 'pixi.js'
 
 import Layout from '../components/containers/Layout'
 import Timer from '../components/items/Timer'
 import ResultModal from '../components/modals/ResultModal'
 import MiniCat from '../components/characters/MiniCat'
-import TargetHeart from '../components/characters/TargetHeart'
 import EndBtn from '../components/buttons/EndBtn'
 import { useRouter } from 'next/router'
-import { getRandomInt, shouldStrTimeToSecondNum } from '../utils/api'
+import { shouldStrTimeToSecondNum } from '../utils/api'
 import ExperiencePoint from '../utils/ExperiencePoint'
-
-type ISprite = PixiRef<typeof Sprite>
 
 const timeToCoins = (time: string) => {
   // ここは時間に応じて取得枚数を変える
@@ -24,9 +20,6 @@ const ConcentratePage = () => {
   const [time, setTime] = useState('00:00:00')
   const [resultTime, setResultTime] = useState('00:00:00')
   const [isOpen, setIsOpen] = useState(false)
-  const [targetItemScale, setTargetItemScale] = useState(3)
-  const [targetVisible, setTargetVisible] = useState(true)
-  const spriteRef = useRef<ISprite>(null)
   const [minicatScale, setMinicatScale] = useState(0.6)
   const miniCatBorder = {
     minX: 40,
@@ -105,30 +98,7 @@ const ConcentratePage = () => {
             border={miniCatBorder}
             defaultX={950}
             defaultY={miniCatBorder.maxY}
-            targetSpriteRef={spriteRef}
-            handleTargetCollision={() => {
-              if (spriteRef?.current?.width < 20) {
-                setTargetVisible(false) // 一度,ターゲットがUnMountされる
-                // 一定時間後にハートをもう一度降らせる
-                setTimeout(() => {
-                  setTargetVisible(true)
-                  setTargetItemScale(3)
-                }, 60 * 1000)
-              } else {
-                setTargetItemScale(spriteRef?.current?.scale.x * 0.99)
-              }
-            }}
           />
-          {targetVisible && (
-            <TargetHeart
-              isClickThrough={true}
-              scale={targetItemScale}
-              border={miniCatBorder}
-              defaultX={getRandomInt(100, 1500)}
-              defaultY={-20}
-              ref={spriteRef}
-            />
-          )}
           <EndBtn
             isClickThrouth={true}
             handleClick={handleClickOpenModal}
