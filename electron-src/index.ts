@@ -17,6 +17,7 @@ interface Dummy {
     coin: number
     health_point: number
     last_login: string
+    start_date: string
   }
   setting: {
     camera: boolean
@@ -32,7 +33,8 @@ const schema: Schema<Dummy> = {
       experience_point: { type: 'integer', default: 0, minimum: 0 },
       coin: { type: 'integer', default: 0, minimum: 0, maximum: 9999 },
       health_point: { type: 'integer', default: 96 * 3600, maximum : 96 * 3600, minimum : 0},
-      last_login: { type: 'string', format: 'date-time' }
+      last_login: { type: 'string', format: 'date-time' },
+      start_date: { type: 'string', format: 'date-time', default: "default" }
     },
     additionalProperties: false,
   },
@@ -59,8 +61,8 @@ function getNowYMDhmsStr(){
 
   return Y + '-' +  M + '-' + D + 'T' + h + ':' + m + ':' + s
 }
-if (!store.has('start_date')) {
-  store.set('start_date', getNowYMDhmsStr())
+if (store.get('core.start_date') == "default") {
+  store.set('core.start_date', getNowYMDhmsStr())
 }
 
 // Prepare the renderer once the app is ready

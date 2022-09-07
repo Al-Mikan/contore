@@ -15,6 +15,7 @@ import SettingBtn from '../components/buttons/SettingBtn'
 import EndBtn from '../components/buttons/EndBtn'
 import ExperiencePoint from '../utils/ExperiencePoint'
 import NumText from '../components/items/NumText'
+import getPlayTime from '../utils/common'
 
 const IndexPage = () => {
   const router = useRouter()
@@ -23,6 +24,7 @@ const IndexPage = () => {
   const [beforeMousePos, setBeforeMousePos] = useState<Position>({ x: 0, y: 0 })
   const [experience, setExperience] = useState(0)
   const [coins, setCoins] = useState(0)
+  const [startDate, setStartDate] = useState("")
 
   const ex = new ExperiencePoint(experience)
   // 背景画像のサイズを元に調整する
@@ -93,9 +95,22 @@ const IndexPage = () => {
       setCoins(nowCoins)
     }
 
+    const fetchStartDate = async () => {
+      // コイン枚数の設定
+      const nowStartDate: string = await window.database.read('core.start_date')
+      if (nowStartDate === undefined) {
+        throw new Error('electron-store: core.start_dateが存在しません')
+      }
+      setStartDate(nowStartDate)
+    
+      let startDate_ = new Date(nowStartDate)
+      console.log(getPlayTime(startDate_))
+    }
+
     // 非同期処理を並行に実行
     fetchExperience()
     fetchCoins()
+    fetchStartDate()
   }, [])
 
   return (
