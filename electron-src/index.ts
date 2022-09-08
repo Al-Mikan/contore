@@ -39,7 +39,7 @@ const schema: Schema<Dummy> = {
     type: 'object',
     default: {}, // 明示的に与えないと子要素が取り出せないバグが起きる
     properties: {
-      fish: { type: 'integer', default: 0 },
+      fish: { type: 'integer', default: 0, minimum: 0 },
     },
     additionalProperties: false,
   },

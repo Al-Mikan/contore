@@ -1,11 +1,15 @@
-import { useState } from 'react'
-import { Sprite } from '@inlet/react-pixi'
-import { InteractionEvent } from 'pixi.js'
+import { useState, useEffect } from 'react'
+import { Sprite, Text, Container } from '@inlet/react-pixi'
+import { InteractionEvent, TextStyle } from 'pixi.js'
 
 import { Position } from '../../types/character'
 import { containsPointClickThrouth } from '../../utils/PixiAPI'
 import CloseBtn from '../buttons/CloseBtn'
+import BuyBtn from '../buttons/BuyBtn'
 import { BasicSpriteProps } from '../../types/sprite'
+import Fish from '../items/Fish'
+import Coin from '../items/Coin'
+import NumText from '../items/NumText'
 
 interface Props extends BasicSpriteProps {
   handleClickToHome: (event: InteractionEvent) => void // Note: useRouterをResultModalから呼ぶとnullが返るのでpropsとして受け取る
@@ -17,9 +21,22 @@ const SettingModal = ({
   scale = 1,
   handleClickToHome,
 }: Props) => {
+  const [coins, setCoins] = useState(0)
+  const [fish, setFish] = useState(0)
   const [dragMode, setDragMode] = useState(false)
   const [pos, setPos] = useState<Position>({ x: x, y: y })
   const [beforeMousePos, setBeforeMousePos] = useState<Position>({ x: 0, y: 0 })
+
+  const BuyFish = async (price: number) => {
+    if (coins - price < 0) {
+      // alertを表示する
+      return
+    }
+    await window.database.update('core.coin', coins - price)
+    setCoins((prev) => prev - price)
+    await window.database.update('shop.fish', fish + 1)
+    setFish((prev) => prev + 1)
+  }
 
   // ドラッグ操作
   const mouseDown = (event: InteractionEvent) => {
@@ -51,6 +68,28 @@ const SettingModal = ({
     setDragMode(false)
   }
 
+  useEffect(() => {
+    const fetchCoins = async () => {
+      // コイン枚数の設定
+      const nowCoins: number = await window.database.read('core.coin')
+      if (nowCoins === undefined) {
+        throw new Error('electron-store: core.coinが存在しません')
+      }
+      setCoins(nowCoins)
+    }
+    const fetchFish = async () => {
+      // コイン枚数の設定
+      const nowFish: number = await window.database.read('shop.fish')
+      if (nowFish === undefined) {
+        throw new Error('electron-store: shop.fishが存在しません')
+      }
+      setFish(nowFish)
+    }
+
+    fetchCoins()
+    fetchFish()
+  }, [])
+
   return (
     <Sprite
       anchor={0.5}
@@ -66,6 +105,45 @@ const SettingModal = ({
       mouseup={mouseUp}
       mouseupoutside={mouseUp}
     >
+      <Container x={-100} y={-50}>
+        <Text
+          text="fish"
+          x={0}
+          y={0}
+          style={
+            new TextStyle({
+              fontSize: 50,
+              fontWeight: '700',
+              fontFamily: 'neue-pixel-sans',
+            })
+          }
+        />
+        <Text
+          text={`× ${fish}`}
+          x={60}
+          y={-25}
+          style={
+            new TextStyle({
+              fontSize: 20,
+              fontWeight: '700',
+              fontFamily: 'neue-pixel-sans',
+            })
+          }
+        />
+        <Fish x={5} y={-10} scale={0.1} />
+        <BuyBtn
+          x={130}
+          y={-10}
+          scale={1}
+          handleStartClick={() => {
+            BuyFish(1)
+          }}
+        />
+      </Container>
+      <Container x={40} y={130} scale={0.5}>
+        <Coin />
+        <NumText n={coins} view_digits={4} x={70} y={-25} />
+      </Container>
       <CloseBtn
         handleClick={handleClickToHome}
         x={150}
