@@ -12,7 +12,10 @@ const LoadFont = ({ children }: Props) => {
   const [isFontLoaded, setIsFontLoaded] = useState(false)
   useEffect(() => {
     Loader.registerPlugin(WebfontLoaderPlugin)
-    app.loader.add({ name: 'neue-pixel-sans', url: '/fonts/NeuePixelSans.ttf' })
+    app.loader.add({
+      name: 'neue-pixel-sans',
+      url: '/static/fonts/NeuePixelSans.ttf',
+    })
     app.loader.load(() => {
       setIsFontLoaded(true)
     })

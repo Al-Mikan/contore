@@ -23,7 +23,7 @@ const CloseBtn = ({
 
   return (
     <Sprite
-      image="/img/close.png"
+      image="/static/img/close.png"
       x={x}
       y={y}
       scale={scale}

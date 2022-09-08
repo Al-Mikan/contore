@@ -91,7 +91,7 @@ const SettingModal = ({
   return (
     <Sprite
       anchor={0.5}
-      image="/img/modal.png"
+      image="/static/img/modal.png"
       visible={true}
       x={pos.x}
       y={pos.y}

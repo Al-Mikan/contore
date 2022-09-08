@@ -24,7 +24,7 @@ const QuitBtn = ({
   // 属性のみの切り替え方法が不明なので要素ごとわける
   return (
     <Sprite
-      image="/img/quit-btn.png"
+      image="/static/img/quit-btn.png"
       x={x}
       y={y}
       scale={scale}

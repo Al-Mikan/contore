@@ -82,7 +82,7 @@ class MiniCatCondition extends CharacterCondition {
 }
 
 // デフォルト引数は全画面表示
-const TargetHeart = forwardRef<ISprite, Props>(
+const TargetHeart = forwardRef<ISprite, Props>( // eslint-disable-line
   ({ isClickThrough = false, defaultX, defaultY, scale, border }, ref) => {
     const [characterState, setCharacterState] = useState<State>({
       currentPos: { x: defaultX, y: defaultY },
@@ -202,7 +202,7 @@ const TargetHeart = forwardRef<ISprite, Props>(
 
     return (
       <Sprite
-        image="/img/fish.png"
+        image="/static/img/fish.png"
         anchor={0.5}
         x={characterState.currentPos.x}
         y={characterState.currentPos.y}

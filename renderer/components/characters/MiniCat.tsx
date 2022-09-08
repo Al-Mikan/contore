@@ -37,18 +37,18 @@ const SQUAT_ANIMATION = 4
 const EAINTG_ANIMATION = 5
 
 const animationMap = new Map<number, Array<string>>()
-animationMap.set(BASIC_ANIMATION, ['/img/mini-cat/1.png'])
+animationMap.set(BASIC_ANIMATION, ['/static/img/mini-cat/1.png'])
 animationMap.set(BLINK_ANIMATION, [
-  '/img/mini-cat/2.png',
-  '/img/mini-cat/3.png',
-  '/img/mini-cat/2.png',
+  '/static/img/mini-cat/2.png',
+  '/static/img/mini-cat/3.png',
+  '/static/img/mini-cat/2.png',
 ])
-animationMap.set(LEFT_ANIMATION, ['/img/mini-cat/left.png'])
-animationMap.set(RIGHT_ANIMATION, ['/img/mini-cat/right.png'])
-animationMap.set(SQUAT_ANIMATION, ['/img/mini-cat/squat.png'])
+animationMap.set(LEFT_ANIMATION, ['/static/img/mini-cat/left.png'])
+animationMap.set(RIGHT_ANIMATION, ['/static/img/mini-cat/right.png'])
+animationMap.set(SQUAT_ANIMATION, ['/static/img/mini-cat/squat.png'])
 animationMap.set(EAINTG_ANIMATION, [
-  '/img/mini-cat/1.png',
-  '/img/mini-cat/tail2.png',
+  '/static/img/mini-cat/1.png',
+  '/static/img/mini-cat/tail2.png',
 ])
 
 class MiniCatCondition extends CharacterCondition {

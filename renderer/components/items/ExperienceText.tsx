@@ -19,11 +19,11 @@ const Level = ({ x = 0, y = 0, scale = 1, n }: Props) => {
 
   return (
     <Container x={x} y={y} scale={scale}>
-      <Sprite image={`img/number/${fifth}.png`} x={0} />
-      <Sprite image={`img/number/${forth}.png`} x={50} />
-      <Sprite image={`img/number/${third}.png`} x={100} />
-      <Sprite image={`img/number/${second}.png`} x={150} />
-      <Sprite image={`img/number/${first}.png`} x={200} />
+      <Sprite image={`/static/img/number/${fifth}.png`} x={0} />
+      <Sprite image={`/static/img/number/${forth}.png`} x={50} />
+      <Sprite image={`/static/img/number/${third}.png`} x={100} />
+      <Sprite image={`/static/img/number/${second}.png`} x={150} />
+      <Sprite image={`/static/img/number/${first}.png`} x={200} />
     </Container>
   )
 }

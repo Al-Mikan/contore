@@ -68,7 +68,7 @@ const ResultModal = ({
   return (
     <Sprite
       anchor={0.5}
-      image="/img/modal.png"
+      image="/static/img/modal.png"
       visible={isOpen}
       x={pos.x}
       y={pos.y}
@@ -81,7 +81,12 @@ const ResultModal = ({
       mouseupoutside={mouseUp}
     >
       {/* RESULT TEXT */}
-      <Sprite anchor={0.5} image="/img/result-text.png" y={-130} scale={0.9} />
+      <Sprite
+        anchor={0.5}
+        image="/static/img/result-text.png"
+        y={-130}
+        scale={0.9}
+      />
 
       {/* TIME */}
       <Container x={-130} y={-70} scale={0.5}>

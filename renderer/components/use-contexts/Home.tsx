@@ -93,7 +93,7 @@ const Home = ({ router }: Props) => {
         handleCloseBtn={handleCloseClick}
       />
       <Sprite
-        image={'/img/background.png'} // 640 * 360
+        image={'/static/img/background.png'} // 640 * 360
         width={1280}
         height={720}
         interactive={true}
@@ -106,7 +106,7 @@ const Home = ({ router }: Props) => {
           border={miniCatBorder}
           isClickThrough={true} // 画面外でも正常にクリック可能に
         />
-        <Sprite image="/img/board.png" x={50} scale={0.5} />
+        <Sprite image="/static/img/board.png" x={50} scale={0.5} />
         <Container x={500} y={50} scale={0.6}>
           <LevelBar n={ex.progress(10)} scale={0.7} />
           <NumText

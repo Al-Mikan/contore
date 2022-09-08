@@ -56,7 +56,7 @@ const SettingModal = ({
   return (
     <>
       <Sprite
-        image="/img/title-bar.png"
+        image="/static/img/title-bar.png"
         visible={true}
         x={x}
         y={y}
