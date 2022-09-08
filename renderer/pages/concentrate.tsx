@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState,useRef} from 'react'
 import { InteractionEvent } from 'pixi.js'
 
 import Layout from '../components/containers/Layout'
@@ -9,6 +9,7 @@ import EndBtn from '../components/buttons/EndBtn'
 import { useRouter } from 'next/router'
 import { shouldStrTimeToSecondNum } from '../utils/api'
 import ExperiencePoint from '../utils/ExperiencePoint'
+import Camera_handle from "../utils/camera"
 
 const timeToCoins = (time: string) => {
   // ここは時間に応じて取得枚数を変える
@@ -20,6 +21,9 @@ const ConcentratePage = () => {
   let [time, setTime] = useState('00:00:00')
   let [resultTime, setResultTime] = useState('00:00:00')
   let [isOpen, setIsOpen] = useState(false)
+  let Camera_handler = useRef(new Camera_handle())
+  // let [Camera_handler,setCamera_handler] = useState(new Camera_handle())
+  
   const miniCatBorder = {
     minX: 0,
     maxX: 1850,
@@ -52,6 +56,8 @@ const ConcentratePage = () => {
 
     setResultTime(time)
     setIsOpen(true)
+
+    Camera_handler.current.stop_camera()
   }
   const handleClickToHome = (event: InteractionEvent) => {
     router.push('/')
@@ -60,9 +66,10 @@ const ConcentratePage = () => {
 
   useEffect(() => {
     window.electronAPI.setAlwaysOnTop(true)
+    Camera_handler.current.start_camera()
 
     return () => {
-      window.electronAPI.setAlwaysOnTop(false)
+      window.electronAPI.setAlwaysOnTop(false);
     }
   }, [])
 
