@@ -3,6 +3,7 @@ import { Stage } from '@inlet/react-pixi'
 import { ReactNode } from 'react'
 
 import LoadFont from './LoadFont'
+import CanvasContext from './CanvasContext'
 
 type Props = {
   children: ReactNode
@@ -11,7 +12,9 @@ type Props = {
 const Canvas = ({ children }: Props) => {
   return (
     <StyledStage height={1080} width={1920} options={{ backgroundAlpha: 0 }}>
-      <LoadFont>{children}</LoadFont>
+      <CanvasContext>
+        <LoadFont>{children}</LoadFont>
+      </CanvasContext>
     </StyledStage>
   )
 }

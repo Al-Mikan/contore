@@ -26,3 +26,15 @@ export const shouldStrTimeToSecondNum = (strTime: string) => {
   const s = 10 * shouldStrToNum(strTime[6]) + shouldStrToNum(strTime[7])
   return 60 * 60 * h + 60 * m + s
 }
+
+export function getNowYMDhmsStr() {
+  const date = new Date()
+  const Y = date.getFullYear()
+  const M = ('00' + (date.getMonth() + 1)).slice(-2)
+  const D = ('00' + date.getDate()).slice(-2)
+  const h = ('00' + date.getHours()).slice(-2)
+  const m = ('00' + date.getMinutes()).slice(-2)
+  const s = ('00' + date.getSeconds()).slice(-2)
+
+  return Y + '-' + M + '-' + D + 'T' + h + ':' + m + ':' + s
+}
