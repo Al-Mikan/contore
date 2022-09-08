@@ -9,7 +9,6 @@ export const shouldFetchSetting = async () => {
 }
 
 export const shouldFetchCoins = async () => {
-  // コイン枚数の設定
   const nowCoins: number = await window.database.read('core.coin')
   if (nowCoins === undefined) {
     throw new Error('electron-store: core.coinが存在しません')
@@ -26,12 +25,27 @@ export const shouldFetchFish = async () => {
 }
 
 export const shouldFetchExperience = async () => {
-  // 経験値の設定
   const nowEx: number = await window.database.read('core.experience_point')
   if (nowEx === undefined) {
     throw new Error('electron-store: core.experience_pointが存在しません')
   }
   return nowEx
+}
+
+export const shouldFetchHP = async () => {
+  const nowHP: number = await window.database.read('core.health_point')
+  if (nowHP === undefined) {
+    throw new Error('electron-store: core.health_pointが存在しません')
+  }
+  return nowHP
+}
+
+export const shouldFetchLastLogin = async () => {
+  const lastLogin: string = await window.database.read('core.last_login')
+  if (lastLogin === undefined) {
+    throw new Error('electron-store: core.last_loginが存在しません')
+  }
+  return lastLogin
 }
 
 export const updateSettingCamera = async (settingCamera: boolean) => {
@@ -52,4 +66,12 @@ export const updateShopFish = async (shopFish: number) => {
 
 export const updateCoreEX = async (experiencePoint: number) => {
   await window.database.update('core.experience_point', experiencePoint)
+}
+
+export const updateCoreHP = async (healthPoint: number) => {
+  await window.database.update('core.health_point', healthPoint)
+}
+
+export const updateCoreLastLogin = async (lastLogin: string) => {
+  await window.database.update('core.last_login', lastLogin)
 }

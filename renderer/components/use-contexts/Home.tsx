@@ -18,6 +18,9 @@ import {
   shouldFetchExperience,
   shouldFetchCoins,
   shouldFetchFish,
+  shouldFetchLastLogin,
+  updateCoreHP,
+  shouldFetchHP,
 } from '../../utils/model'
 import Fish from '../items/Fish'
 import { HealthContext } from '../containers/CanvasContext'
@@ -76,23 +79,10 @@ const Home = ({ router }: Props) => {
     const stateInitFish = async () => {
       setFish(await shouldFetchFish())
     }
-    const fetchLastLoginAndUpdateHP = async () => {
-      const last_login: string = await window.database.read('core.last_login')
-      if (last_login === undefined) {
-        throw new Error('electron-store: core.last_loginが存在しません')
-      }
-      const date_last_login = new Date(last_login)
-      const date_now = new Date()
-      const blank = Math.floor(
-        (date_last_login.getTime() - date_now.getTime()) / 1000
-      )
-    }
-
     // 非同期処理を並行に実行
     stateInitExperience()
     stateInitCoins()
     stateInitFish()
-    fetchLastLoginAndUpdateHP()
   }, [])
 
   return (
