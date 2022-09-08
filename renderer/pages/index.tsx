@@ -15,13 +15,19 @@ import StartBtn from '../components/buttons/StartBtn'
 import SettingBtn from '../components/buttons/SettingBtn'
 import ExperiencePoint from '../utils/ExperiencePoint'
 import NumText from '../components/items/NumText'
-import { shouldFetchExperience, shouldFetchCoins } from '../utils/model'
+import {
+  shouldFetchExperience,
+  shouldFetchCoins,
+  shouldFetchFish,
+} from '../utils/model'
+import Fish from '../components/items/Fish'
 
 const IndexPage = () => {
   const router = useRouter()
   const [pos, setPos] = useState<Position>({ x: 350, y: 200 })
   const [experience, setExperience] = useState(0)
   const [coins, setCoins] = useState(0)
+  const [fish, setFish] = useState(0)
   const [minicatScale, setMinicatScale] = useState(0.4)
 
   const ex = new ExperiencePoint(experience)
@@ -60,10 +66,14 @@ const IndexPage = () => {
     const stateInitCoins = async () => {
       setCoins(await shouldFetchCoins())
     }
+    const stateInitFish = async () => {
+      setFish(await shouldFetchFish())
+    }
 
     // 非同期処理を並行に実行
     stateInitExperience()
     stateInitCoins()
+    stateInitFish()
   }, [])
 
   return (
@@ -108,6 +118,10 @@ const IndexPage = () => {
             <NumText n={coins} view_digits={4} x={30} y={-7} scale={0.3} />
           </Container>
           <LifeGauge n={3} x={530} y={100} scale={0.6} />
+          <Container x={530} y={135} scale={0.2}>
+            <Fish scale={0.2} />
+            <NumText n={fish} view_digits={4} x={100} y={-25} />
+          </Container>
           <SettingBtn
             handleSettingClick={handleSettingClick}
             x={595}
