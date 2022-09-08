@@ -12,7 +12,7 @@ const SettingPage = () => {
   }
 
   return (
-    <Layout title="設定画面 | こんとれ！！">
+    <Layout title="ショップ | こんとれ！！">
       <ShopModal
         x={910}
         y={520}

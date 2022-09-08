@@ -14,14 +14,23 @@ type Props = {
 
 type HealthContextType = {
   health: number
+  plusHealth: (n: number) => void
 }
 
 export const HealthContext = createContext<HealthContextType>({
   health: -1,
+  plusHealth: () => {},
 })
 
 const CanvasContext = ({ children }: Props) => {
   const [health, setHealth] = useState(-1)
+  const plusHealth = (n: number) => {
+    setHealth((prev) => {
+      const _hp = new HealthPoint(prev)
+      _hp.update_health_point(n)
+      return _hp.health_point
+    })
+  }
 
   useEffect(() => {
     const fetchHealthPoint = async () => {
@@ -32,7 +41,7 @@ const CanvasContext = ({ children }: Props) => {
 
     const timerID = setInterval(() => {
       setHealth((prev: number) => {
-        let _hp = new HealthPoint(prev)
+        const _hp = new HealthPoint(prev)
         _hp.update_health_point(-1)
         if (_hp.health_point === 0) {
           console.log('gameover')
@@ -51,6 +60,7 @@ const CanvasContext = ({ children }: Props) => {
     <HealthContext.Provider
       value={{
         health: health,
+        plusHealth: plusHealth,
       }}
     >
       {children}

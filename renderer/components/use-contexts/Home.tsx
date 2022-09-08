@@ -18,9 +18,6 @@ import {
   shouldFetchExperience,
   shouldFetchCoins,
   shouldFetchFish,
-  shouldFetchLastLogin,
-  updateCoreHP,
-  shouldFetchHP,
 } from '../../utils/model'
 import Fish from '../items/Fish'
 import { HealthContext } from '../containers/CanvasContext'
