@@ -4,7 +4,7 @@ import { InteractionEvent } from 'pixi.js'
 
 import Layout from '../components/containers/Layout'
 import MiniCat from '../components/characters/MiniCat'
-import TargetHeart from '../components/characters/TargetHeart'
+import TargetFish from '../components/characters/TargetFish'
 import EndBtn from '../components/buttons/EndBtn'
 import { useRouter } from 'next/router'
 import { getRandomInt } from '../utils/api'
@@ -13,7 +13,7 @@ type ISprite = PixiRef<typeof Sprite>
 
 const ConcentratePage = () => {
   const router = useRouter()
-  const [targetItemScale, setTargetItemScale] = useState(3)
+  const [targetItemScale, setTargetItemScale] = useState(0.2)
   const [targetVisible, setTargetVisible] = useState(true)
   const spriteRef = useRef<ISprite>(null)
   const [minicatScale, setMinicatScale] = useState(0.6)
@@ -61,7 +61,7 @@ const ConcentratePage = () => {
         }}
       />
       {targetVisible && (
-        <TargetHeart
+        <TargetFish
           isClickThrough={true}
           scale={targetItemScale}
           border={miniCatBorder}
