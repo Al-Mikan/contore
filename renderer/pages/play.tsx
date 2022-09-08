@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react'
-import { Sprite, PixiRef } from '@inlet/react-pixi'
-import { InteractionEvent } from 'pixi.js'
+import { Sprite, PixiRef, Text } from '@inlet/react-pixi'
+import { InteractionEvent, TextStyle } from 'pixi.js'
 
 import Layout from '../components/containers/Layout'
 import MiniCat from '../components/characters/MiniCat'
@@ -8,15 +8,17 @@ import TargetFish from '../components/characters/TargetFish'
 import EndBtn from '../components/buttons/EndBtn'
 import { useRouter } from 'next/router'
 import { getRandomInt } from '../utils/api'
+import FishBtn from '../components/buttons/FIshBtn'
 
 type ISprite = PixiRef<typeof Sprite>
 
 const ConcentratePage = () => {
   const router = useRouter()
-  const [targetItemScale, setTargetItemScale] = useState(0.2)
-  const [targetVisible, setTargetVisible] = useState(true)
   const spriteRef = useRef<ISprite>(null)
+  const [targetItemScale, setTargetItemScale] = useState(0.2)
+  const [targetVisible, setTargetVisible] = useState(false)
   const [minicatScale, setMinicatScale] = useState(0.6)
+  const [fish, setFish] = useState(0)
   const miniCatBorder = {
     minX: 40,
     maxX: 1900,
@@ -29,9 +31,28 @@ const ConcentratePage = () => {
   const handleClickToHome = (event: InteractionEvent) => {
     router.push('/')
   }
+  const handleClickFish = async (event: InteractionEvent) => {
+    if (targetVisible) return
+    if (fish <= 0) return
+
+    await window.database.update('shop.fish', fish - 1)
+    setFish((prev) => prev - 1)
+    setTargetVisible(true)
+    setTargetItemScale(0.3)
+  }
 
   useEffect(() => {
+    const fetchFish = async () => {
+      // コイン枚数の設定
+      const nowFish: number = await window.database.read('shop.fish')
+      if (nowFish === undefined) {
+        throw new Error('electron-store: shop.fishが存在しません')
+      }
+      setFish(nowFish)
+    }
+
     window.electronAPI.setAlwaysOnTop(true)
+    fetchFish()
 
     return () => {
       window.electronAPI.setAlwaysOnTop(false)
@@ -50,11 +71,6 @@ const ConcentratePage = () => {
         handleTargetCollision={() => {
           if (spriteRef?.current?.width < 20) {
             setTargetVisible(false) // 一度,ターゲットがUnMountされる
-            // 一定時間後にハートをもう一度降らせる
-            setTimeout(() => {
-              setTargetVisible(true)
-              setTargetItemScale(3)
-            }, 60 * 1000)
           } else {
             setTargetItemScale(spriteRef?.current?.scale.x * 0.99)
           }
@@ -76,6 +92,26 @@ const ConcentratePage = () => {
         x={1800}
         y={1000}
         scale={1}
+      />
+      <FishBtn
+        isClickThrouth={true}
+        x={1798}
+        y={950}
+        scale={0.8}
+        handleClickFish={handleClickFish}
+      />
+      <Text
+        text={`× ${fish}`}
+        x={1815}
+        y={920}
+        style={
+          new TextStyle({
+            fontSize: 25,
+            fontWeight: '700',
+            fontFamily: 'neue-pixel-sans',
+            fill: '#ffffff',
+          })
+        }
       />
     </Layout>
   )
