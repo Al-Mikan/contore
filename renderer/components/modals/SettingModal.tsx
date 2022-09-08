@@ -7,14 +7,11 @@ import { containsPointClickThrouth } from '../../utils/PixiAPI'
 import CloseBtn from '../buttons/CloseBtn'
 import { BasicSpriteProps } from '../../types/sprite'
 import SettingItem from '../items/SettingItem'
+import { Setting } from '../../types/other'
+import { shouldFetchSetting } from '../../utils/model'
 
 interface Props extends BasicSpriteProps {
   handleClickToHome: (event: InteractionEvent) => void // Note: useRouterをResultModalから呼ぶとnullが返るのでpropsとして受け取る
-}
-
-interface Setting {
-  camera: boolean
-  drag: boolean
 }
 
 const SettingModal = ({
@@ -93,15 +90,11 @@ const SettingModal = ({
   )
 
   useEffect(() => {
-    const fetchSetting = async () => {
-      const nowSetting: Setting = await window.database.read('setting')
-      if (nowSetting === undefined) {
-        throw new Error('electron-store: settingが存在しません')
-      }
-      setSetting(nowSetting)
+    const stateInitSetting = async () => {
+      setSetting(await shouldFetchSetting())
     }
 
-    fetchSetting()
+    stateInitSetting()
   }, [])
 
   return (

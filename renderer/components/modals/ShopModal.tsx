@@ -10,6 +10,7 @@ import { BasicSpriteProps } from '../../types/sprite'
 import Fish from '../items/Fish'
 import Coin from '../items/Coin'
 import NumText from '../items/NumText'
+import { shouldFetchCoins, shouldFetchFish } from '../../utils/model'
 
 interface Props extends BasicSpriteProps {
   handleClickToHome: (event: InteractionEvent) => void // Note: useRouterをResultModalから呼ぶとnullが返るのでpropsとして受け取る
@@ -69,25 +70,17 @@ const SettingModal = ({
   }
 
   useEffect(() => {
-    const fetchCoins = async () => {
+    const stateInitCoins = async () => {
       // コイン枚数の設定
-      const nowCoins: number = await window.database.read('core.coin')
-      if (nowCoins === undefined) {
-        throw new Error('electron-store: core.coinが存在しません')
-      }
-      setCoins(nowCoins)
+      setCoins(await shouldFetchCoins())
     }
-    const fetchFish = async () => {
-      // コイン枚数の設定
-      const nowFish: number = await window.database.read('shop.fish')
-      if (nowFish === undefined) {
-        throw new Error('electron-store: shop.fishが存在しません')
-      }
-      setFish(nowFish)
+    const stateInitFish = async () => {
+      setFish(await shouldFetchFish())
     }
 
-    fetchCoins()
-    fetchFish()
+    // 並行に実行
+    stateInitCoins()
+    stateInitFish()
   }, [])
 
   return (

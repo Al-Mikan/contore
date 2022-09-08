@@ -15,6 +15,7 @@ import StartBtn from '../components/buttons/StartBtn'
 import SettingBtn from '../components/buttons/SettingBtn'
 import ExperiencePoint from '../utils/ExperiencePoint'
 import NumText from '../components/items/NumText'
+import { shouldFetchExperience, shouldFetchCoins } from '../utils/model'
 
 const IndexPage = () => {
   const router = useRouter()
@@ -53,26 +54,16 @@ const IndexPage = () => {
   }
 
   useEffect(() => {
-    const fetchExperience = async () => {
-      // 経験値の設定
-      const nowEx: number = await window.database.read('core.experience_point')
-      if (nowEx === undefined) {
-        throw new Error('electron-store: core.experience_pointが存在しません')
-      }
-      setExperience(nowEx)
+    const stateInitExperience = async () => {
+      setExperience(await shouldFetchExperience())
     }
-    const fetchCoins = async () => {
-      // コイン枚数の設定
-      const nowCoins: number = await window.database.read('core.coin')
-      if (nowCoins === undefined) {
-        throw new Error('electron-store: core.coinが存在しません')
-      }
-      setCoins(nowCoins)
+    const stateInitCoins = async () => {
+      setCoins(await shouldFetchCoins())
     }
 
     // 非同期処理を並行に実行
-    fetchExperience()
-    fetchCoins()
+    stateInitExperience()
+    stateInitCoins()
   }, [])
 
   return (

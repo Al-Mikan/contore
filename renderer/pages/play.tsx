@@ -9,6 +9,7 @@ import EndBtn from '../components/buttons/EndBtn'
 import { useRouter } from 'next/router'
 import { getRandomInt } from '../utils/api'
 import FishBtn from '../components/buttons/FIshBtn'
+import { shouldFetchFish } from '../utils/model'
 
 type ISprite = PixiRef<typeof Sprite>
 
@@ -42,17 +43,12 @@ const ConcentratePage = () => {
   }
 
   useEffect(() => {
-    const fetchFish = async () => {
-      // コイン枚数の設定
-      const nowFish: number = await window.database.read('shop.fish')
-      if (nowFish === undefined) {
-        throw new Error('electron-store: shop.fishが存在しません')
-      }
-      setFish(nowFish)
+    const stateInitFish = async () => {
+      setFish(await shouldFetchFish())
     }
 
+    stateInitFish()
     window.electronAPI.setAlwaysOnTop(true)
-    fetchFish()
 
     return () => {
       window.electronAPI.setAlwaysOnTop(false)
