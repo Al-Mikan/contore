@@ -8,7 +8,11 @@ import CloseBtn from '../buttons/CloseBtn'
 import { BasicSpriteProps } from '../../types/sprite'
 import SettingItem from '../items/SettingItem'
 import { Setting } from '../../types/other'
-import { shouldFetchSetting } from '../../utils/model'
+import {
+  shouldFetchSetting,
+  updateSettingCamera,
+  updateSettingDrag,
+} from '../../utils/model'
 
 interface Props extends BasicSpriteProps {
   handleClickToHome: (event: InteractionEvent) => void // Note: useRouterをResultModalから呼ぶとnullが返るのでpropsとして受け取る
@@ -65,23 +69,23 @@ const SettingModal = ({
 
       // イベント移譲
       if (event.target.name.trim() === 'camera') {
-        const updateSettingCamera = async () => {
-          await window.database.update('setting.camera', !setting.camera)
+        const updateSettingCameraState = async () => {
+          await updateSettingCamera(!setting.camera)
           setSetting((prev) => ({
             ...prev,
             camera: !prev.camera,
           }))
         }
-        updateSettingCamera()
+        updateSettingCameraState()
       } else if (event.target.name.trim() === 'drag') {
-        const updateSettingDrag = async () => {
-          await window.database.update('setting.drag', !setting.drag)
+        const updateSettingDragState = async () => {
+          await updateSettingDrag(!setting.drag)
           setSetting((prev) => ({
             ...prev,
             drag: !prev.drag,
           }))
         }
-        updateSettingDrag()
+        updateSettingDragState()
       } else {
         throw new Error('setting: 未対応のイベントです')
       }

@@ -10,7 +10,12 @@ import { BasicSpriteProps } from '../../types/sprite'
 import Fish from '../items/Fish'
 import Coin from '../items/Coin'
 import NumText from '../items/NumText'
-import { shouldFetchCoins, shouldFetchFish } from '../../utils/model'
+import {
+  shouldFetchCoins,
+  shouldFetchFish,
+  updateCoreCoin,
+  updateShopFish,
+} from '../../utils/model'
 
 interface Props extends BasicSpriteProps {
   handleClickToHome: (event: InteractionEvent) => void // Note: useRouterをResultModalから呼ぶとnullが返るのでpropsとして受け取る
@@ -33,9 +38,9 @@ const SettingModal = ({
       // alertを表示する
       return
     }
-    await window.database.update('core.coin', coins - price)
+    await updateCoreCoin(coins - price)
     setCoins((prev) => prev - price)
-    await window.database.update('shop.fish', fish + 1)
+    await updateShopFish(fish + 1)
     setFish((prev) => prev + 1)
   }
 

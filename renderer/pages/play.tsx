@@ -9,7 +9,7 @@ import EndBtn from '../components/buttons/EndBtn'
 import { useRouter } from 'next/router'
 import { getRandomInt } from '../utils/api'
 import FishBtn from '../components/buttons/FIshBtn'
-import { shouldFetchFish } from '../utils/model'
+import { shouldFetchFish, updateShopFish } from '../utils/model'
 
 type ISprite = PixiRef<typeof Sprite>
 
@@ -36,7 +36,7 @@ const ConcentratePage = () => {
     if (targetVisible) return
     if (fish <= 0) return
 
-    await window.database.update('shop.fish', fish - 1)
+    await updateShopFish(fish - 1)
     setFish((prev) => prev - 1)
     setTargetVisible(true)
     setTargetItemScale(0.3)

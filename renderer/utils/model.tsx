@@ -33,3 +33,23 @@ export const shouldFetchExperience = async () => {
   }
   return nowEx
 }
+
+export const updateSettingCamera = async (settingCamera: boolean) => {
+  await window.database.update('setting.camera', settingCamera)
+}
+
+export const updateSettingDrag = async (settingDrag: boolean) => {
+  await window.database.update('setting.drag', settingDrag)
+}
+
+export const updateCoreCoin = async (coreCoin: number) => {
+  await window.database.update('core.coin', coreCoin)
+}
+
+export const updateShopFish = async (shopFish: number) => {
+  await window.database.update('shop.fish', shopFish)
+}
+
+export const updateCoreEX = async (experiencePoint: number) => {
+  await window.database.update('core.experience_point', experiencePoint)
+}

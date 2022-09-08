@@ -9,6 +9,12 @@ import EndBtn from '../components/buttons/EndBtn'
 import { useRouter } from 'next/router'
 import { shouldStrTimeToSecondNum } from '../utils/api'
 import ExperiencePoint from '../utils/ExperiencePoint'
+import {
+  shouldFetchCoins,
+  shouldFetchExperience,
+  updateCoreCoin,
+  updateCoreEX,
+} from '../utils/model'
 
 const timeToCoins = (time: string) => {
   // ここは時間に応じて取得枚数を変える
@@ -32,20 +38,14 @@ const ConcentratePage = () => {
 
   const handleClickOpenModal = (event: InteractionEvent) => {
     const updateExperience = async () => {
-      const nowEx: number = await window.database.read('core.experience_point')
-      if (nowEx === undefined) {
-        throw new Error('electron-store: core.experience_pointが存在しません')
-      }
+      const nowEx = await shouldFetchExperience()
       const ex = new ExperiencePoint(nowEx)
       ex.add_point(shouldStrTimeToSecondNum(time))
-      await window.database.update('core.experience_point', ex.experience_point)
+      await updateCoreEX(ex.experience_point)
     }
     const updateCoins = async () => {
-      const nowCoins: number = await window.database.read('core.coin')
-      if (nowCoins === undefined) {
-        throw new Error('electron-store: core.coinが存在しません')
-      }
-      await window.database.update('core.coin', nowCoins + timeToCoins(time))
+      const nowCoins = await shouldFetchCoins()
+      await updateCoreCoin(nowCoins + timeToCoins(time))
     }
 
     updateExperience()
