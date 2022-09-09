@@ -33,7 +33,7 @@ const schema: Schema<Dummy> = {
     default: {}, // 明示的に与えないと子要素が取り出せないバグが起きる
     properties: {
       experience_point: { type: 'integer', default: 0, minimum: 0 },
-      coin: { type: 'integer', default: 0, minimum: 0, maximum: 9999 },
+      coin: { type: 'integer', default: 30, minimum: 0, maximum: 9999 },
       health_point: {
         type: 'integer',
         default: 96 * 3600,

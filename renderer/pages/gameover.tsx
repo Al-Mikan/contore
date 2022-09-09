@@ -22,7 +22,7 @@ const ConcentratePage = () => {
   const handleNewGame = async (event: InteractionEvent) => {
     await Promise.all([
       updateCoreEX(0),
-      updateCoreCoin(0),
+      updateCoreCoin(30),
       updateCoreHP(96 * 3600),
       updateCoreLastLogin(getNowYMDhmsStr()),
       updateShopFish(0),
@@ -33,7 +33,7 @@ const ConcentratePage = () => {
   const handleEndClick = async (event: InteractionEvent) => {
     await Promise.all([
       updateCoreEX(0),
-      updateCoreCoin(0),
+      updateCoreCoin(30),
       updateCoreHP(96 * 3600),
       updateCoreLastLogin(getNowYMDhmsStr()),
       updateShopFish(0),
