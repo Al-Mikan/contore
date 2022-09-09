@@ -15,7 +15,7 @@ const GameOverText = ({ x = 0, y = 0, scale = 1 }: Props) => {
       anchor={0.5}
       style={
         new TextStyle({
-          fontSize: 100,
+          fontSize: 150,
           fontWeight: '900',
           fill: '#ffffff',
           fontFamily: 'neue-pixel-sans',
