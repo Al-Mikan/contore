@@ -1,7 +1,7 @@
 import { NextRouter } from 'next/router'
 import { InteractionEvent } from 'pixi.js'
-import { Sprite, Container } from '@inlet/react-pixi'
-import { useEffect, useState, useContext } from 'react'
+import { Sprite, Container, Graphics, PixiRef } from '@inlet/react-pixi'
+import { useEffect, useState, useContext, useRef } from 'react'
 
 import LevelBar from '../items/LevelBar'
 import MiniCat from '../characters/MiniCat'
@@ -14,6 +14,8 @@ import StartBtn from '../buttons/StartBtn'
 import SettingBtn from '../buttons/SettingBtn'
 import ExperiencePoint from '../../utils/ExperiencePoint'
 import NumText from '../items/NumText'
+import CodeText from '../texts/CodeText'
+import Mask from '../items/Mask'
 import {
   shouldFetchExperience,
   shouldFetchCoins,
@@ -23,12 +25,15 @@ import Fish from '../items/Fish'
 import { HealthContext } from '../containers/CanvasContext'
 import HealthPoint from '../../utils/HealthPoint'
 
+type IGraphics = PixiRef<typeof Graphics>
+
 interface Props {
   router: NextRouter
 }
 
 const Home = ({ router }: Props) => {
   const { health } = useContext(HealthContext)
+  const maskRef = useRef<IGraphics>(null)
   const [pos, setPos] = useState<Position>({ x: 350, y: 200 })
   const [experience, setExperience] = useState(0)
   const [coins, setCoins] = useState(0)
@@ -156,6 +161,10 @@ const Home = ({ router }: Props) => {
           y={305}
           scale={0.8}
         />
+        <Container x={288} y={35} mask={maskRef.current}>
+          <Mask width={190} height={208} ref={maskRef} />
+          <CodeText />
+        </Container>
       </Sprite>
     </Container>
   )
