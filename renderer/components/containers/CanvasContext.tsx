@@ -7,9 +7,11 @@ import {
   updateCoreHP,
   updateCoreLastLogin,
 } from '../../utils/model'
+import { NextRouter } from 'next/router'
 
 type Props = {
   children: ReactNode
+  router: NextRouter
 }
 
 type HealthContextType = {
@@ -22,7 +24,7 @@ export const HealthContext = createContext<HealthContextType>({
   plusHealth: () => {},
 })
 
-const CanvasContext = ({ children }: Props) => {
+const CanvasContext = ({ children, router }: Props) => {
   const [health, setHealth] = useState(-1)
   const plusHealth = (n: number) => {
     setHealth((prev) => {
@@ -44,7 +46,7 @@ const CanvasContext = ({ children }: Props) => {
         const _hp = new HealthPoint(prev)
         _hp.update_health_point(-1)
         if (_hp.health_point === 0) {
-          console.log('gameover')
+          router.push('/gameover')
         }
         updateCoreHP(_hp.health_point)
         updateCoreLastLogin(getNowYMDhmsStr()) // shutdown対策で毎秒更新
