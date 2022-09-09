@@ -104,14 +104,10 @@ const Home = ({ router }: Props) => {
         interactive={true}
         containsPoint={containsPointClickThrouth}
       >
-        <MiniCat
-          defaultX={200}
-          defaultY={miniCatBorder.maxY}
-          scale={minicatScale}
-          border={miniCatBorder}
-          isClickThrough={true} // 画面外でも正常にクリック可能に
-        />
-        <Sprite image="/static/img/board.png" x={50} scale={0.5} />
+        <Container x={288} y={35} mask={maskRef.current}>
+          <Mask width={190} height={208} ref={maskRef} />
+          <CodeText />
+        </Container>
         <Container x={500} y={50} scale={0.6}>
           <LevelBar n={ex.progress(10)} scale={0.7} />
           <NumText
@@ -137,6 +133,14 @@ const Home = ({ router }: Props) => {
           <Fish scale={0.2} />
           <NumText n={fish} view_digits={4} x={100} y={-25} />
         </Container>
+        <MiniCat
+          defaultX={200}
+          defaultY={miniCatBorder.maxY}
+          scale={minicatScale}
+          border={miniCatBorder}
+          isClickThrough={true} // 画面外でも正常にクリック可能に
+        />
+        <Sprite image="/static/img/board.png" x={50} scale={0.5} />
         <SettingBtn
           handleSettingClick={handleSettingClick}
           x={595}
@@ -161,10 +165,6 @@ const Home = ({ router }: Props) => {
           y={305}
           scale={0.8}
         />
-        <Container x={288} y={35} mask={maskRef.current}>
-          <Mask width={190} height={208} ref={maskRef} />
-          <CodeText />
-        </Container>
       </Sprite>
     </Container>
   )
