@@ -1,11 +1,15 @@
-import { Text } from '@inlet/react-pixi'
+import { Text, useTick } from '@inlet/react-pixi'
 import { TextStyle } from 'pixi.js'
+import { useState } from 'react'
 
 import { BasicSpriteProps } from '../../types/sprite'
 
 interface Props extends BasicSpriteProps {}
 
+let currentTick = 0
+
 const GameOverText = ({ x = 0, y = 0, scale = 1 }: Props) => {
+  const [displayedCodeText, setDisplayedCodeText] = useState('')
   const sourceCodeText = `
 import { Sprite } from '@inlet/react-pixi'
 import { InteractionEvent } from 'pixi.js'
@@ -50,9 +54,25 @@ const BuyBtn = ({
 export default BuyBtn
 `
 
+  useTick(() => {
+    currentTick++
+    if (currentTick >= 3000) {
+      currentTick = 0
+      setDisplayedCodeText('')
+      return
+    }
+
+    const len = displayedCodeText.length
+    if (len === sourceCodeText.length) {
+      return
+    }
+
+    setDisplayedCodeText((prev) => prev + sourceCodeText[len])
+  })
+
   return (
     <Text
-      text={sourceCodeText}
+      text={displayedCodeText}
       x={x}
       y={y}
       scale={scale}
@@ -61,7 +81,7 @@ export default BuyBtn
           fontSize: 5,
           fontWeight: '100',
           fontFamily: 'neue-pixel-sans',
-          fill: '#ffffff',
+          fill: '#C5E99B',
         })
       }
     />
