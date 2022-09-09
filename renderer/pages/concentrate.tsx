@@ -62,9 +62,8 @@ const ConcentratePage = () => {
     setResultTime(time)
     setIsOpen(true)
 
-
-    if(camera_flag)Camera_handler.current.stop_camera()
-    console.log(`score;${Camera_handler.current.cat_detect_ratio}`)
+      Camera_handler.current.stop_camera()
+      console.log(`score;${Camera_handler.current.cat_detect_ratio}`)
   }
   const handleClickToHome = (event: InteractionEvent) => {
     router.push('/')

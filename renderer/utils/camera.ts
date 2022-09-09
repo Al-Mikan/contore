@@ -137,7 +137,7 @@ export default class Camera_handle{
     
     stop_camera(){
       if (this.detect_counter !== 0){
-        this.cat_detect_ratio = 1 - this.is_cat_counter/this.detect_counter;
+        this.cat_detect_ratio = (1 - this.is_cat_counter/this.detect_counter) * 100 ;
 
       }
       this.camera.stop();
