@@ -30,8 +30,8 @@ const UseContextPlay = ({ router }: Props) => {
     maxX: 1900,
     minY: 30 + (minicatScale - 0.8) * 35, // スケール調整時に浮かないように
     maxY: 1050 - (minicatScale - 0.8) * 35,
-    randomTargetMinX: 1400,
-    randomTargetMaxX: 1620,
+    randomTargetMinX: 100,
+    randomTargetMaxX: 1720,
   }
 
   const hp = new HealthPoint(health)
