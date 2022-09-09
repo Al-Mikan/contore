@@ -17,8 +17,9 @@ import {
 } from '../utils/model'
 
 const timeToCoins = (time: string) => {
-  // ここは時間に応じて取得枚数を変える
-  return 10
+  // 1分 -> 1枚
+  const seconds = shouldStrTimeToSecondNum(time)
+  return Math.floor(seconds / 60)
 }
 
 const ConcentratePage = () => {
