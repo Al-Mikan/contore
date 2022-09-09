@@ -3,7 +3,7 @@ import { join } from 'path'
 import { format } from 'url'
 
 // Packages
-import { BrowserWindow, app, ipcMain, screen } from 'electron'
+import { BrowserWindow, app, ipcMain, screen,dialog} from 'electron'
 import isDev from 'electron-is-dev'
 import prepareNext from 'electron-next'
 
@@ -64,6 +64,21 @@ app.on('ready', async () => {
     mainWindow.show()
   })
 
+  const btns = ["OK","NO"]
+  //mainwindowと同じスコープがいい
+  const camera_confirm = ()=>{
+    return dialog.showMessageBox(mainWindow,{
+      title:'alert',
+      message:'確認しておきたいことがあります！',
+      detail:'あなたの姿勢を検出するために、カメラをオンにしてもよろしいですか？',
+      buttons:btns 
+    })
+  }  
+  ipcMain.handle('camera_confirm',async ()=>{
+    const event = await camera_confirm();
+    return btns[event.response] === "OK";
+  })
+
   const display = screen.getPrimaryDisplay()
   mainWindow.setSize(display.workAreaSize.width, display.workAreaSize.height)
   mainWindow.center()
@@ -112,6 +127,7 @@ ipcMain.handle(
   }
 )
 
+
 ipcMain.handle('set-always-on-top', (event, flag: boolean) => {
   BrowserWindow.fromWebContents(event.sender)?.setAlwaysOnTop(flag)
 })
@@ -119,3 +135,4 @@ ipcMain.handle('set-always-on-top', (event, flag: boolean) => {
 ipcMain.handle('close-window', (event) => {
   BrowserWindow.fromWebContents(event.sender)?.close()
 })
+

@@ -36,8 +36,26 @@ const ConcentratePage = () => {
   
   const canUseCamera:()=>Promise<Boolean> = async () => {
     camera_flag = await window.database.read('setting.camera');
+    // console.log(`canUseCamera:${camera_flag}`)
     return camera_flag
  }
+ 
+  const camera_confirmer:()=>Promise<void> = async () =>{
+    const once_asked = localStorage.getItem("once_asked");
+    // console.log(`camera_confirmer_once_asked:${once_asked}`);
+    if (!(once_asked === 'true')){
+      const f = async ()=>{return window.electronAPI.camera_confirm()}
+      const res:Boolean = await f();
+      // console.log(`camera_confirmer_res:${res}`)
+      if (res){
+        localStorage.setItem("once_asked","true")
+        await window.database.update('setting.camera',true)
+      }else{
+        window.database.update("setting.camera",false)
+      }
+      return;
+    }
+  }
 
   const handleClickOpenModal = (event: InteractionEvent) => {
     const updateExperience = async () => {
@@ -70,13 +88,19 @@ const ConcentratePage = () => {
     event.stopPropagation() // modalにクリック判定を与えない
   }
 
+  
+  
   useEffect(() => {
     window.electronAPI.setAlwaysOnTop(true)
-    canUseCamera().then(res =>{
-      camera_flag = res
-      if(camera_flag)Camera_handler.current.start_camera();
+    camera_confirmer().then(()=>{
+      canUseCamera().then(res =>{
+        camera_flag = res
+        if(camera_flag){
+          Camera_handler.current.start_camera();
+        }
+      })
     })
-
+    
     return () => {
       window.electronAPI.setAlwaysOnTop(false);
     }

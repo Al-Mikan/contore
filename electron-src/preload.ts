@@ -29,4 +29,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
   setAlwaysOnTop: (flag: boolean) =>
     ipcRenderer.invoke('set-always-on-top', flag),
   closeWindow: () => ipcRenderer.invoke('close-window'),
+  camera_confirm:async ()=>{
+    const ans:Promise<Boolean> =  await ipcRenderer.invoke('camera_confirm');
+    return ans;
+  }
 })

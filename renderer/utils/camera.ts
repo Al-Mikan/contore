@@ -60,7 +60,7 @@ export default class Camera_handle{
         const mid_y = (l_shoulder[1] + r_shoulder[1])/2 - buf;
 
         if (Math.abs(nose[1] - mid_y) * times < d){res['is_cat'] = true}
-        console.log(res);
+        // console.log(res);
         return res;
 
     }
@@ -118,7 +118,7 @@ export default class Camera_handle{
     //   this.canvasCtx.fillText(`x:${this.poses["NOSE"][0]},y:${this.poses["NOSE"][1]}`,this.poses["NOSE"][0],this.poses["NOSE"][1]);
     //   this.canvasCtx.fillText(`x:${this.poses["L_SHOULDER"][0]},y:${this.poses["L_SHOULDER"][1]}`,this.poses["L_SHOULDER"][0],this.poses["L_SHOULDER"][1]);
     //   this.canvasCtx.fillText(`x:${this.poses["R_SHOULDER"][0]},y:${this.poses["R_SHOULDER"][1]}`,this.poses["R_SHOULDER"][0],this.poses["R_SHOULDER"][1]);
-      console.log(this.poses);
+      // console.log(this.poses);
 
       this.detect_counter+=1;
       
