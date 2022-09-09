@@ -22,7 +22,8 @@ const ConcentratePage = () => {
   let [resultTime, setResultTime] = useState('00:00:00')
   let [isOpen, setIsOpen] = useState(false)
   let Camera_handler = useRef(new Camera_handle())
-  // let [Camera_handler,setCamera_handler] = useState(new Camera_handle())
+  let camera_flag:Boolean
+
   
   const miniCatBorder = {
     minX: 0,
@@ -32,6 +33,11 @@ const ConcentratePage = () => {
     randomTargetMinX: 1400,
     randomTargetMaxX: 1620,
   }
+  
+  const canUseCamera:()=>Promise<Boolean> = async () => {
+    camera_flag = await window.database.read('setting.camera');
+    return camera_flag
+ }
 
   const handleClickOpenModal = (event: InteractionEvent) => {
     const updateExperience = async () => {
@@ -53,11 +59,12 @@ const ConcentratePage = () => {
 
     updateExperience()
     updateCoins()
-
     setResultTime(time)
     setIsOpen(true)
 
-    Camera_handler.current.stop_camera()
+
+    if(camera_flag)Camera_handler.current.stop_camera()
+    console.log(`score;${Camera_handler.current.cat_detect_ratio}`)
   }
   const handleClickToHome = (event: InteractionEvent) => {
     router.push('/')
@@ -66,7 +73,10 @@ const ConcentratePage = () => {
 
   useEffect(() => {
     window.electronAPI.setAlwaysOnTop(true)
-    Camera_handler.current.start_camera()
+    canUseCamera().then(res =>{
+      camera_flag = res
+      if(camera_flag)Camera_handler.current.start_camera();
+    })
 
     return () => {
       window.electronAPI.setAlwaysOnTop(false);

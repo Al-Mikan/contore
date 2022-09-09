@@ -42,13 +42,12 @@ export default class Camera_handle{
             minTrackingConfidence: 0.5
         });
         this.pose.onResults(this.onResults);
-        this.canvasCtx.fillStyle = 'rgb(200,0,0)';
-        this.canvasCtx.fillRect(0,0,200,200);
         
     }
     
     private Judge(poses:Object){
-        const times = 3;
+        const times = 10;
+        const buf = 30;
         //----------------------------
 
         const res = {"is_cat":false}
@@ -58,9 +57,10 @@ export default class Camera_handle{
         const r_shoulder = poses["R_SHOULDER"];
 
         const d = Math.abs(l_shoulder[0] - r_shoulder[0]);
-        const mid_y = (l_shoulder[1] + r_shoulder[1])/2;
+        const mid_y = (l_shoulder[1] + r_shoulder[1])/2 - buf;
 
         if (Math.abs(nose[1] - mid_y) * times < d){res['is_cat'] = true}
+        console.log(res);
         return res;
 
     }
@@ -114,7 +114,7 @@ export default class Camera_handle{
     else{
         message_cat = "Good Pose!"
     }
-    this.canvasCtx.fillText(message_cat,600,30);
+    // this.canvasCtx.fillText(message_cat,600,30);
     //   this.canvasCtx.fillText(`x:${this.poses["NOSE"][0]},y:${this.poses["NOSE"][1]}`,this.poses["NOSE"][0],this.poses["NOSE"][1]);
     //   this.canvasCtx.fillText(`x:${this.poses["L_SHOULDER"][0]},y:${this.poses["L_SHOULDER"][1]}`,this.poses["L_SHOULDER"][0],this.poses["L_SHOULDER"][1]);
     //   this.canvasCtx.fillText(`x:${this.poses["R_SHOULDER"][0]},y:${this.poses["R_SHOULDER"][1]}`,this.poses["R_SHOULDER"][0],this.poses["R_SHOULDER"][1]);
@@ -137,7 +137,7 @@ export default class Camera_handle{
     
     stop_camera(){
       if (this.detect_counter !== 0){
-        this.cat_detect_ratio = this.is_cat_counter/this.detect_counter;
+        this.cat_detect_ratio = 1 - this.is_cat_counter/this.detect_counter;
 
       }
       this.camera.stop();

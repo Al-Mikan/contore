@@ -4,7 +4,7 @@ function click_throuth(f: boolean) {
     window.electronAPI.setIgnoreMouseEvents(false)
   } else {
     // 透過
-    window.electronAPI.setIgnoreMouseEvents(true, { forward: true })
+    // window.electronAPI.setIgnoreMouseEvents(true, { forward: true })
   }
   return f
 }
