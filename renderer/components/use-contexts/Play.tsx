@@ -4,6 +4,7 @@ import { Sprite, PixiRef, Text } from '@inlet/react-pixi'
 import { InteractionEvent, TextStyle } from 'pixi.js'
 
 import MiniCat from '../characters/MiniCat'
+import LifeGauge from '../items/LifeGauge'
 import TargetFish from '../characters/TargetFish'
 import EndBtn from '../buttons/EndBtn'
 import FishBtn from '../buttons/FIshBtn'
@@ -18,7 +19,7 @@ interface Props {
 }
 
 const UseContextPlay = ({ router }: Props) => {
-  const { plusHealth } = useContext(HealthContext)
+  const { health, plusHealth } = useContext(HealthContext)
   const spriteRef = useRef<ISprite>(null)
   const [targetItemScale, setTargetItemScale] = useState(0.2)
   const [targetVisible, setTargetVisible] = useState(false)
@@ -32,6 +33,8 @@ const UseContextPlay = ({ router }: Props) => {
     randomTargetMinX: 1400,
     randomTargetMaxX: 1620,
   }
+
+  const hp = new HealthPoint(health)
 
   const handleClickToHome = (event: InteractionEvent) => {
     router.push('/')
@@ -113,6 +116,12 @@ const UseContextPlay = ({ router }: Props) => {
             fill: '#ffffff',
           })
         }
+      />
+      <LifeGauge
+        n={hp.get_health_point_formatted(10)}
+        x={1790}
+        y={900}
+        scale={0.7}
       />
     </>
   )
