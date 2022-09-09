@@ -11,6 +11,7 @@ import TitleBar from '../items/TitleBar'
 import { Position } from '../../types/character'
 import { containsPointClickThrouth } from '../../utils/PixiAPI'
 import StartBtn from '../buttons/StartBtn'
+import ShopBtn from '../buttons/ShopBtn'
 import SettingBtn from '../buttons/SettingBtn'
 import ExperiencePoint from '../../utils/ExperiencePoint'
 import NumText from '../items/NumText'
@@ -24,6 +25,7 @@ import {
 import Fish from '../items/Fish'
 import { HealthContext } from '../containers/CanvasContext'
 import HealthPoint from '../../utils/HealthPoint'
+import PlayBtn from '../buttons/PlayBtn'
 
 type IGraphics = PixiRef<typeof Graphics>
 
@@ -38,7 +40,7 @@ const Home = ({ router }: Props) => {
   const [experience, setExperience] = useState(0)
   const [coins, setCoins] = useState(0)
   const [fish, setFish] = useState(0)
-  const [minicatScale, setMinicatScale] = useState(0.4)
+  const [minicatScale, setMinicatScale] = useState(0.3)
 
   const ex = new ExperiencePoint(experience)
   const hp = new HealthPoint(health)
@@ -150,21 +152,11 @@ const Home = ({ router }: Props) => {
         <StartBtn
           handleStartClick={handleStartClick}
           x={530}
-          y={305}
+          y={301}
           scale={0.8}
         />
-        <StartBtn
-          handleStartClick={handlePlayClick}
-          x={530}
-          y={250}
-          scale={0.8}
-        />
-        <StartBtn
-          handleStartClick={handleShopClick}
-          x={430}
-          y={305}
-          scale={0.8}
-        />
+        <PlayBtn handleClick={handlePlayClick} x={430} y={305} scale={0.8} />
+        <ShopBtn handleClick={handleShopClick} x={10} y={305} scale={0.8} />
       </Sprite>
     </Container>
   )
