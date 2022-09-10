@@ -23,7 +23,7 @@ const StartBtn = ({
 
   return (
     <Sprite
-      image="/img/start-btn.png"
+      image="/static/img/start-btn.png"
       x={x}
       y={y}
       scale={scale}

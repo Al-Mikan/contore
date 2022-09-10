@@ -7,14 +7,21 @@ import ResultModal from '../components/modals/ResultModal'
 import MiniCat from '../components/characters/MiniCat'
 import EndBtn from '../components/buttons/EndBtn'
 import { useRouter } from 'next/router'
-import { shouldStrTimeToSecondNum } from '../utils/api'
+import { shouldStrTimeToSecondNum } from '../utils/common'
 import ExperiencePoint from '../utils/ExperiencePoint'
 import Loading from '../components/loading'
+import {
+  shouldFetchCoins,
+  shouldFetchExperience,
+  updateCoreCoin,
+  updateCoreEX,
+} from '../utils/model'
 import CameraHandle from '../utils/camera'
 
 const timeToCoins = (time: string) => {
-  // ここは時間に応じて取得枚数を変える
-  return 10
+  // 1分 -> 1枚
+  const seconds = shouldStrTimeToSecondNum(time)
+  return Math.floor(seconds / 60)
 }
 
 const ConcentratePage = () => {
@@ -22,14 +29,15 @@ const ConcentratePage = () => {
   let [time, setTime] = useState('00:00:00')
   let [resultTime, setResultTime] = useState('00:00:00')
   let [isOpen, setIsOpen] = useState(false)
-  let [isLoading,setIsLoading] = useState(true)
+  let [isLoading, setIsLoading] = useState(true)
+  const [minicatScale, setMinicatScale] = useState(0.6)
   let cameraHandleRef = useRef<CameraHandle>(null)
 
   const miniCatBorder = {
-    minX: 0,
-    maxX: 1850,
-    minY: 30,
-    maxY: 1050,
+    minX: 40,
+    maxX: 1900,
+    minY: 30 + (minicatScale - 0.8) * 35, // スケール調整時に浮かないように
+    maxY: 1050 - (minicatScale - 0.8) * 35,
     randomTargetMinX: 1400,
     randomTargetMaxX: 1620,
   }
@@ -57,32 +65,24 @@ const ConcentratePage = () => {
 
   const handleClickOpenModal = (event: InteractionEvent) => {
     const updateExperience = async () => {
-      const nowEx: number = await window.database.read('core.experience_point')
-      if (nowEx === undefined) {
-        throw new Error('electron-store: core.experience_pointが存在しません')
-      }
+      const nowEx = await shouldFetchExperience()
       const ex = new ExperiencePoint(nowEx)
       ex.add_point(shouldStrTimeToSecondNum(time))
-      await window.database.update('core.experience_point', ex.experience_point)
+      await updateCoreEX(ex.experience_point)
     }
     const updateCoins = async () => {
-      const nowCoins: number = await window.database.read('core.coin')
-      if (nowCoins === undefined) {
-        throw new Error('electron-store: core.coinが存在しません')
-      }
-      await window.database.update('core.coin', nowCoins + timeToCoins(time))
+      const nowCoins = await shouldFetchCoins()
+      await updateCoreCoin(nowCoins + timeToCoins(time))
     }
-
-    updateExperience()
-    updateCoins()
-    setResultTime(time)
-    setIsOpen(true)
 
     // カメラを起動しない場合はインスタンスが存在しない
     if (cameraHandleRef.current) {
       cameraHandleRef.current.stop_camera()
-      console.log(`score;${cameraHandleRef.current.cat_detect_ratio}`)
     }
+    updateExperience()
+    updateCoins()
+    setResultTime(time)
+    setIsOpen(true)
   }
   const handleClickToHome = (event: InteractionEvent) => {
     router.push('/')
@@ -106,14 +106,14 @@ const ConcentratePage = () => {
     }
   }, [])
 
-  if (isLoading){
+  if (isLoading) {
     return (
       <Layout title="集中画面｜こんとれ！！">
-         <Loading/>
+        <Loading />
       </Layout>
     )
   }
-    
+
   return (
     <Layout title="集中画面 | こんとれ！！">
       {isOpen ? (
@@ -125,6 +125,11 @@ const ConcentratePage = () => {
           time={resultTime}
           coins={timeToCoins(time)}
           isOpen={isOpen}
+          score={
+            cameraHandleRef.current
+              ? Math.ceil(cameraHandleRef.current.cat_detect_ratio)
+              : -1
+          }
           handleClickToHome={handleClickToHome}
         ></ResultModal>
       ) : (
@@ -141,10 +146,10 @@ const ConcentratePage = () => {
           />
           <MiniCat
             isClickThrough={true}
-            scale={0.8}
+            scale={minicatScale}
             border={miniCatBorder}
             defaultX={950}
-            defaultY={1050}
+            defaultY={miniCatBorder.maxY}
           />
           <EndBtn
             isClickThrouth={true}
