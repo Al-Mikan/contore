@@ -12,7 +12,7 @@ import { Position } from '../../types/character'
 import { containsPointClickThrouth } from '../../utils/PixiAPI'
 import StartBtn from '../buttons/StartBtn'
 import ShopBtn from '../buttons/ShopBtn'
-import SettingBtn from '../buttons/SettingBtn'
+import OptionBtn from '../buttons/OptionBtn'
 import ExperiencePoint from '../../utils/ExperiencePoint'
 import NumText from '../items/NumText'
 import CodeText from '../texts/CodeText'
@@ -151,28 +151,27 @@ const Home = ({ router }: Props) => {
           <NumText n={fish} view_digits={4} x={100} y={-25} />
         </Container>
         <DayText x={1300} y={400} text={String(playTime)} />
+        <Sprite image="/static/img/board.png" x={140} scale={1} />
+        <OptionBtn
+          handleSettingClick={handleSettingClick}
+          x={20}
+          y={782}
+          scale={0.6}
+        />
+        <StartBtn
+          handleStartClick={handleStartClick}
+          x={1250}
+          y={737}
+          scale={2.3}
+        />
+        <PlayBtn handleClick={handlePlayClick} x={1050} y={770} scale={0.75} />
+        <ShopBtn handleClick={handleShopClick} x={860} y={770} scale={0.73} />
         <MiniCat
           defaultX={200}
           defaultY={miniCatBorder.maxY}
           scale={minicatScale}
           border={miniCatBorder}
-          isClickThrough={true} // 画面外でも正常にクリック可能に
         />
-        <Sprite image="/static/img/board.png" x={140} scale={1} />
-        <SettingBtn
-          handleSettingClick={handleSettingClick}
-          x={1530}
-          y={20}
-          scale={0.6}
-        />
-        <StartBtn
-          handleStartClick={handleStartClick}
-          x={1400}
-          y={770}
-          scale={1.5}
-        />
-        <PlayBtn handleClick={handlePlayClick} x={1200} y={770} scale={0.75} />
-        <ShopBtn handleClick={handleShopClick} x={10} y={770} scale={0.73} />
       </Sprite>
     </Container>
   )
