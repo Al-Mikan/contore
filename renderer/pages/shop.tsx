@@ -1,10 +1,10 @@
 import { InteractionEvent } from 'pixi.js'
 
-import Layout from '../components/containers/Layout'
-import ShopModal from '../components/modals/ShopModal'
+import Layout from '../containers/Layout'
+import ShopModal from './ShopModal'
 import { useRouter } from 'next/router'
 
-const SettingPage = () => {
+const ShopPage = () => {
   const router = useRouter()
 
   const handleClickToHome = (event: InteractionEvent) => {
@@ -23,4 +23,4 @@ const SettingPage = () => {
   )
 }
 
-export default SettingPage
+export default ShopPage

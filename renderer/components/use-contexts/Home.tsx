@@ -26,6 +26,9 @@ import Fish from '../items/Fish'
 import { HealthContext } from '../containers/CanvasContext'
 import HealthPoint from '../../utils/HealthPoint'
 import PlayBtn from '../buttons/PlayBtn'
+import ShopModal from '../modals/ShopModal'
+import SettingModal from '../modals/SettingModal'
+import Black from "../items/black"
 
 type IGraphics = PixiRef<typeof Graphics>
 
@@ -41,6 +44,9 @@ const Home = ({ router }: Props) => {
   const [coins, setCoins] = useState(0)
   const [fish, setFish] = useState(0)
   const [minicatScale, setMinicatScale] = useState(0.7)
+  const [isShop,setIsShop] = useState(false)
+  const [isSetting,setIsSetting] = useState(false)
+  const [isBlack,setIsBlack] = useState(false)
 
   const ex = new ExperiencePoint(experience)
   const hp = new HealthPoint(health)
@@ -59,15 +65,30 @@ const Home = ({ router }: Props) => {
   const handleStartClick = (event: InteractionEvent) => {
     router.push('/concentrate')
   }
+
+  const shopHandleClickToHome = ()=>{
+    setIsShop(false)
+    setIsBlack(false)
+  }
+
+  const settingHandleClickToHome = ()=>{
+    setIsSetting(false)
+    setIsBlack(false)
+  }
+
   const handleSettingClick = (event: InteractionEvent) => {
-    router.push('/setting')
+    // router.push('/setting')
+    setIsSetting(true)
+    setIsBlack(true)
   }
 
   const handlePlayClick = (event: InteractionEvent) => {
     router.push('/play')
   }
   const handleShopClick = (event: InteractionEvent) => {
-    router.push('/shop')
+    // router.push('/shop')
+    setIsShop(true)
+    setIsBlack(true)
   }
 
   const handleCloseClick = (event: InteractionEvent) => {
@@ -158,7 +179,21 @@ const Home = ({ router }: Props) => {
         />
         <PlayBtn handleClick={handlePlayClick} x={1200} y={770} scale={0.75} />
         <ShopBtn handleClick={handleShopClick} x={10} y={770} scale={0.73} />
+        
       </Sprite>
+
+        {
+          isBlack &&
+          <Black x={350} y={pos.y}/>
+        }
+        {
+          isShop &&
+          <ShopModal x={650} y={300} handleClickToHome={shopHandleClickToHome}/>
+        }
+        {
+          isSetting &&
+           <SettingModal x={650} y={300} handleClickToHome={settingHandleClickToHome}/>
+        }
     </Container>
   )
 }
