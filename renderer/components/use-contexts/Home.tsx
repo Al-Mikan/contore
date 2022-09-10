@@ -157,7 +157,7 @@ const Home = ({ router }: Props) => {
           scale={1.5}
         />
         <PlayBtn handleClick={handlePlayClick} x={1200} y={770} scale={1.7} />
-        <ShopBtn handleClick={handleShopClick} x={10} y={770} scale={1.7} />
+        <ShopBtn handleClick={handleShopClick} x={10} y={770} scale={0.73} />
       </Sprite>
     </Container>
   )
