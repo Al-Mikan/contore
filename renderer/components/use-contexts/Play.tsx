@@ -59,8 +59,7 @@ const UseContextPlay = ({ router }: Props) => {
   useEffect(() => {
     const stateInitFish = async () => {
       const fishNumber = await shouldFetchFish()
-      if (fishNumber <= 0)
-        setIsEmpty(true)
+      if (fishNumber <= 0) setIsEmpty(true)
       setFish(fishNumber)
     }
 
@@ -112,7 +111,7 @@ const UseContextPlay = ({ router }: Props) => {
         x={1776}
         y={950}
         scale={0.5}
-        isZero = {isEmpty}
+        isZero={isEmpty}
         handleClickFish={handleClickFish}
       />
       <CuteFish x={1795} y={928} scale={0.2} />
@@ -121,19 +120,19 @@ const UseContextPlay = ({ router }: Props) => {
         x={1835}
         y={910}
         style={
-          isEmpty ?
-          new TextStyle({
-            fontSize: 25,
-            fontWeight: '700',
-            fontFamily: 'neue-pixel-sans',
-            fill: '#ff0000'
-          }) :
-          new TextStyle({
-            fontSize: 25,
-            fontWeight: '700',
-            fontFamily: 'neue-pixel-sans',
-            fill: '#ffffff'
-          })
+          isEmpty
+            ? new TextStyle({
+                fontSize: 25,
+                fontWeight: '700',
+                fontFamily: 'neue-pixel-sans',
+                fill: '#ff0000',
+              })
+            : new TextStyle({
+                fontSize: 25,
+                fontWeight: '700',
+                fontFamily: 'neue-pixel-sans',
+                fill: '#ffffff',
+              })
         }
       />
       <LifeGauge

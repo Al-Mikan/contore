@@ -34,7 +34,9 @@ const FishBtn = ({
         alpha={alpha}
         mouseover={mouseover}
         mouseout={mouseout}
-        containsPoint={isClickThrouth ? containsPointClickThrouth : containsPoint}
+        containsPoint={
+          isClickThrouth ? containsPointClickThrouth : containsPoint
+        }
         buttonMode={true}
         click={handleClickFish}
         visible={!isZero}
@@ -48,7 +50,9 @@ const FishBtn = ({
         alpha={alpha}
         mouseover={mouseover}
         mouseout={mouseout}
-        containsPoint={isClickThrouth ? containsPointClickThrouth : containsPoint}
+        containsPoint={
+          isClickThrouth ? containsPointClickThrouth : containsPoint
+        }
         buttonMode={true}
         click={handleClickFish}
         visible={isZero}
