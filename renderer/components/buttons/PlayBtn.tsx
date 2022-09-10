@@ -23,7 +23,7 @@ const PlayBtn = ({
 
   return (
     <Sprite
-      image="/static/img/play-btn.png"
+      image="/static/img/feed-btn.png"
       x={x}
       y={y}
       scale={scale}
