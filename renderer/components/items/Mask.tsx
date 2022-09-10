@@ -8,7 +8,10 @@ interface Props {
   height: number
 }
 
-const Mask = forwardRef<IGraphics, Props>(({ width = 0, height = 0 }, ref) => {
+const Mask = forwardRef<IGraphics, Props>(function MaskComponent(
+  { width = 0, height = 0 },
+  ref
+) {
   const draw = useCallback(
     (g: IGraphics) => {
       g.clear()

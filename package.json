@@ -6,7 +6,7 @@
   "license": "MIT",
   "private": true,
   "main": "main/index.js",
-  "productName": "ElectronTypescriptNext",
+  "productName": "contore",
   "scripts": {
     "clean": "rimraf dist main renderer/out renderer/.next",
     "dev": "npm run build-electron && electron .",
@@ -65,7 +65,15 @@
     "files": [
       "main",
       "renderer/out"
-    ]
+    ],
+    "mac": {
+      "target": "dmg",
+      "icon": "icon.png"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "icon.png"
+    }
   },
   "resolutions": {
     "@types/react": "17.0.2",

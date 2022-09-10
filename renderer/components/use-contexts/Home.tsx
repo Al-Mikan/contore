@@ -123,7 +123,7 @@ const Home = ({ router }: Props) => {
           />
         </Container>
         <Container x={1370} y={200} scale={0.6}>
-          <Coin scale={1} scale={0.8} />
+          <Coin scale={0.8} />
           <NumText n={coins} view_digits={4} x={30} y={-20} scale={0.8} />
         </Container>
         <LifeGauge
