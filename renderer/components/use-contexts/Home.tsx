@@ -30,6 +30,7 @@ import ShopModal from '../modals/ShopModal'
 import SettingModal from '../modals/SettingModal'
 import Black from '../items/black'
 import getPlayTime from '../../utils/common'
+import Level from '../items/Level'
 
 type IGraphics = PixiRef<typeof Graphics>
 
@@ -146,27 +147,28 @@ const Home = ({ router }: Props) => {
           <CodeText />
         </Container>
         <Container x={1230} y={110} scale={1}>
-          <LevelBar n={ex.progress(8)} scale={1} />
+          <LevelBar n={ex.progress(8)} x={-70} y={-50} scale={0.8} />
+          <Level x={130} y={170} scale={0.7} />
           <NumText
             n={ex.get_level()}
             view_digits={3}
-            x={180}
-            y={-15}
-            scale={0.5}
+            x={80}
+            y={140}
+            scale={0.65}
             is_headzero_displayed={true}
           />
         </Container>
-        <Container x={1370} y={200} scale={0.6}>
+        <Container x={1370} y={450} scale={0.6}>
           <Coin scale={0.8} />
           <NumText n={coins} view_digits={4} x={30} y={-35} scale={0.8} />
         </Container>
         <LifeGauge
           n={hp.get_health_point_formatted(10)}
           x={1270}
-          y={250}
+          y={500}
           scale={1.2}
         />
-        <Container x={1300} y={350} scale={0.6}>
+        <Container x={1300} y={600} scale={0.6}>
           <CuteFish x={40} y={8} scale={0.5} />
           <NumText n={fish} view_digits={4} x={100} y={-40} />
         </Container>
