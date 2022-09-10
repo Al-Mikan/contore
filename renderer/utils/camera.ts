@@ -1,19 +1,14 @@
-import {
-  drawConnectors,
-  drawLandmarks,
-} from '@mediapipe/drawing_utils/drawing_utils'
 import { Camera } from '@mediapipe/camera_utils/camera_utils'
-import { Pose, POSE_CONNECTIONS } from '@mediapipe/pose/pose'
-import { threadId } from 'worker_threads'
+import { Pose } from '@mediapipe/pose/pose'
 
 export default class Camera_handle {
-  private count_cat: Number = 0
-  private count_all: Number = 0
+  private count_cat: number = 0
+  private count_all: number = 0
   private videoElement = document.getElementById('video') as HTMLVideoElement
   private canvasElement = document.getElementById('canvas') as HTMLCanvasElement
-  private canvasCtx: any
-  private camera: any
-  private pose: any
+  private canvasCtx: CanvasRenderingContext2D
+  private camera: Camera
+  private pose: Pose
   private keys: Array<string>
   private is_cat_counter: number = 0
   private detect_counter: number = 0
@@ -72,7 +67,6 @@ export default class Camera_handle {
     if (Math.abs(nose[1] - mid_y) * times < d) {
       res['is_cat'] = true
     }
-    // console.log(res);
     return res
   }
 
@@ -86,33 +80,6 @@ export default class Camera_handle {
       console.log('could not detect your body')
       return
     }
-
-    //   this.canvasCtx.save();
-    //   this.canvasCtx.clearRect(0, 0, this.canvasElement.width, this.canvasElement.height);
-    //   this.canvasCtx.drawImage(results.segmentationMask, 0, 0,
-    //                       this.canvasElement.width, this.canvasElement.height);
-
-    //   // Only overwrite existing pixels.
-    //   this.canvasCtx.globalCompositeOperation = 'source-in';
-    //   this.canvasCtx.fillStyle = '#00FF00';
-    //   this.canvasCtx.fillRect(0, 0, this.canvasElement.width, this.canvasElement.height);
-
-    //   // Only overwrite missing pixels.
-    //   this.canvasCtx.globalCompositeOperation = 'destination-atop';
-    //   this.canvasCtx.drawImage(results.segmentationMask, 0, 0,
-    //     this.canvasElement.width, this.canvasElement.height);
-    //   this.canvasCtx.drawImage(
-    //       results.image, 0, 0, this.canvasElement.width, this.canvasElement.height);
-
-    //   this.canvasCtx.globalCompositeOperation = 'source-over';
-    //   drawConnectors(this.canvasCtx, results.poseLandmarks, POSE_CONNECTIONS,
-    //                  {color: '#00FF00', lineWidth: 4});
-    //   drawLandmarks(this.canvasCtx, results.poseLandmarks,
-    //                 {color: '#FF0000', lineWidth: 2});
-    //   this.canvasCtx.restore();
-
-    //   console.log(results.poseWorldLandmarks);
-    //   console.log(results.poseLandmarks);
 
     const landmark_dic = { NOSE: 0, L_SHOULDER: 11, R_SHOULDER: 12 }
     this.keys.forEach((point) => {
@@ -129,11 +96,6 @@ export default class Camera_handle {
     } else {
       message_cat = 'Good Pose!'
     }
-    // this.canvasCtx.fillText(message_cat,600,30);
-    //   this.canvasCtx.fillText(`x:${this.poses["NOSE"][0]},y:${this.poses["NOSE"][1]}`,this.poses["NOSE"][0],this.poses["NOSE"][1]);
-    //   this.canvasCtx.fillText(`x:${this.poses["L_SHOULDER"][0]},y:${this.poses["L_SHOULDER"][1]}`,this.poses["L_SHOULDER"][0],this.poses["L_SHOULDER"][1]);
-    //   this.canvasCtx.fillText(`x:${this.poses["R_SHOULDER"][0]},y:${this.poses["R_SHOULDER"][1]}`,this.poses["R_SHOULDER"][0],this.poses["R_SHOULDER"][1]);
-    // console.log(this.poses);
 
     this.detect_counter += 1
   }
