@@ -10,7 +10,14 @@ const LevelBar = ({ x = 0, y = 0, scale = 1, n }: Props) => {
   if (n < 0 || 10 < n) {
     throw new Error(`範囲外の数値が入力されました => ${n}`)
   }
-  return <Sprite image={`/img/level-bars/${n}.png`} x={x} y={y} scale={scale} />
+  return (
+    <Sprite
+      image={`/static/img/level-bars/${n}.png`}
+      x={x}
+      y={y}
+      scale={scale}
+    />
+  )
 }
 
 export default LevelBar
