@@ -35,6 +35,7 @@ const LEFT_ANIMATION = 2
 const RIGHT_ANIMATION = 3
 const SQUAT_ANIMATION = 4
 const EAINTG_ANIMATION = 5
+const DRAG_ANIMATION = 6
 
 const animationMap = new Map<number, Array<string>>()
 animationMap.set(BASIC_ANIMATION, ['/static/img/mini-cat/1.png'])
@@ -49,6 +50,10 @@ animationMap.set(SQUAT_ANIMATION, ['/static/img/mini-cat/squat.png'])
 animationMap.set(EAINTG_ANIMATION, [
   '/static/img/mini-cat/1.png',
   '/static/img/mini-cat/tail2.png',
+])
+animationMap.set(DRAG_ANIMATION, [
+  '/static/img/mini-cat/drag.png',
+  '/static/img/mini-cat/drag2.png',
 ])
 
 class MiniCatCondition extends CharacterCondition {
@@ -387,6 +392,7 @@ const MiniCat = ({
           ...prev,
           vx: nvx,
           vy: nvy,
+          currentAnimation: DRAG_ANIMATION,
         }
       })
       return
@@ -472,6 +478,27 @@ const MiniCat = ({
       <AnimatedSprite
         images={animationMap.get(EAINTG_ANIMATION)}
         visible={characterState.currentAnimation == EAINTG_ANIMATION}
+        anchor={0.5}
+        isPlaying={true}
+        initialFrame={0}
+        animationSpeed={0.05}
+        x={characterState.currentPos.x}
+        y={characterState.currentPos.y}
+        scale={scale}
+        angle={characterState.angle}
+        interactive={true}
+        containsPoint={
+          isClickThrough ? containsPointClickThrouth : containsPoint
+        }
+        mousedown={mouseDown}
+        mousemove={mouseMove}
+        mouseup={mouseUp}
+        mouseupoutside={mouseUp}
+      />
+      {/* ドラッグ */}
+      <AnimatedSprite
+        images={animationMap.get(DRAG_ANIMATION)}
+        visible={characterState.currentAnimation == DRAG_ANIMATION}
         anchor={0.5}
         isPlaying={true}
         initialFrame={0}
