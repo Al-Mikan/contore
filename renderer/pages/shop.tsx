@@ -1,7 +1,7 @@
 import { InteractionEvent } from 'pixi.js'
 
-import Layout from '../containers/Layout'
-import ShopModal from './ShopModal'
+import Layout from '../components/containers/Layout'
+import ShopModal from '../components/modals/ShopModal'
 import { useRouter } from 'next/router'
 
 const ShopPage = () => {
