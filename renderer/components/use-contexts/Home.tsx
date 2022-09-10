@@ -152,6 +152,8 @@ const Home = ({ router }: Props) => {
         </Container>
         <DayText x={1300} y={400} text={String(playTime)} />
         <Sprite image="/static/img/board.png" x={40} scale={0.8} />
+        <Sprite image="/static/img/days.png" x={300} y={190} scale={0.5} />
+        
         <OptionBtn
           handleSettingClick={handleSettingClick}
           x={20}
