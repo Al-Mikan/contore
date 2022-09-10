@@ -13,7 +13,7 @@ interface Props extends BasicSpriteProps {
   handleCloseBtn: (event: InteractionEvent) => void
 }
 
-const SettingModal = ({
+const TitleBar = ({
   x = 0,
   y = 0,
   width,
@@ -79,4 +79,4 @@ const SettingModal = ({
   )
 }
 
-export default SettingModal
+export default TitleBar
