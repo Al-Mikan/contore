@@ -40,19 +40,20 @@ const Home = ({ router }: Props) => {
   const [experience, setExperience] = useState(0)
   const [coins, setCoins] = useState(0)
   const [fish, setFish] = useState(0)
-  const [minicatScale, setMinicatScale] = useState(0.3)
+  const [minicatScale, setMinicatScale] = useState(0.7)
 
   const ex = new ExperiencePoint(experience)
   const hp = new HealthPoint(health)
 
   // 背景画像のサイズを元に調整する
+  // 1600 × 900
   const miniCatBorder = {
     minX: 0 + 20,
-    maxX: 640 - 20,
+    maxX: 1600 - 20,
     minY: 20 + (minicatScale - 0.5) * 45, // スケール調整時に浮かないように
-    maxY: 360 - 40 - (minicatScale - 0.5) * 45,
+    maxY: 900 - 70 - (minicatScale - 0.5) * 45,
     randomTargetMinX: 0 + 20,
-    randomTargetMaxX: 640 - 20,
+    randomTargetMaxX: 900 - 20,
   }
 
   const handleStartClick = (event: InteractionEvent) => {
@@ -100,38 +101,38 @@ const Home = ({ router }: Props) => {
         handleCloseBtn={handleCloseClick}
       />
       <Sprite
-        image={'/static/img/background.png'} // 640 * 360
+        image={'/static/img/background.png'} // 1600 × 900
         width={1280}
         height={720}
         interactive={true}
         containsPoint={containsPointClickThrouth}
       >
-        <Container x={288} y={35} mask={maskRef.current}>
-          <Mask width={190} height={208} ref={maskRef} />
+        <Container x={715} y={100} mask={maskRef.current}>
+          <Mask width={400} height={508} ref={maskRef} />
           <CodeText />
         </Container>
-        <Container x={500} y={50} scale={0.6}>
-          <LevelBar n={ex.progress(10)} scale={0.7} />
+        <Container x={1230} y={110} scale={1}>
+          <LevelBar n={ex.progress(10)} scale={1} />
           <NumText
             n={ex.get_level()}
             view_digits={3}
-            x={120}
-            y={3}
-            scale={0.2}
+            x={180}
+            y={0}
+            scale={0.5}
             is_headzero_displayed={true}
           />
         </Container>
-        <Container x={540} y={80} scale={0.6}>
-          <Coin scale={0.3} />
-          <NumText n={coins} view_digits={4} x={30} y={-7} scale={0.3} />
+        <Container x={1370} y={200} scale={0.6}>
+          <Coin scale={1} scale={0.8} />
+          <NumText n={coins} view_digits={4} x={30} y={-20} scale={0.8} />
         </Container>
         <LifeGauge
           n={hp.get_health_point_formatted(10)}
-          x={495}
-          y={100}
-          scale={0.6}
+          x={1270}
+          y={250}
+          scale={1.2}
         />
-        <Container x={530} y={135} scale={0.2}>
+        <Container x={1300} y={350} scale={0.6}>
           <Fish scale={0.2} />
           <NumText n={fish} view_digits={4} x={100} y={-25} />
         </Container>
@@ -142,21 +143,21 @@ const Home = ({ router }: Props) => {
           border={miniCatBorder}
           isClickThrough={true} // 画面外でも正常にクリック可能に
         />
-        <Sprite image="/static/img/board.png" x={50} scale={0.5} />
+        <Sprite image="/static/img/board.png" x={140} scale={1} />
         <SettingBtn
           handleSettingClick={handleSettingClick}
-          x={595}
-          y={13}
-          scale={0.4}
+          x={1530}
+          y={20}
+          scale={0.6}
         />
         <StartBtn
           handleStartClick={handleStartClick}
-          x={530}
-          y={301}
-          scale={0.8}
+          x={1400}
+          y={770}
+          scale={1.5}
         />
-        <PlayBtn handleClick={handlePlayClick} x={430} y={305} scale={0.8} />
-        <ShopBtn handleClick={handleShopClick} x={10} y={305} scale={0.8} />
+        <PlayBtn handleClick={handlePlayClick} x={1200} y={770} scale={1.7} />
+        <ShopBtn handleClick={handleShopClick} x={10} y={770} scale={1.7} />
       </Sprite>
     </Container>
   )

@@ -78,7 +78,7 @@ export default BuyBtn
       scale={scale}
       style={
         new TextStyle({
-          fontSize: 5,
+          fontSize: 10,
           fontWeight: '100',
           fontFamily: 'neue-pixel-sans',
           fill: '#C5E99B',
