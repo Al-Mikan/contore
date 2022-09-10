@@ -34,7 +34,7 @@ const schema: Schema<Dummy> = {
       coin: { type: 'integer', default: 0, minimum: 0, maximum: 9999 },
       health_point: { type: 'integer', default: 96 * 3600, maximum : 96 * 3600, minimum : 0},
       last_login: { type: 'string', format: 'date-time' },
-      start_date: { type: 'string', format: 'date-time', default: "default" }
+      start_date: { type: 'string', default: "default" }
     },
     additionalProperties: false,
   },
