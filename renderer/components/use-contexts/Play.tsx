@@ -26,6 +26,7 @@ const UseContextPlay = ({ router }: Props) => {
   const [targetVisible, setTargetVisible] = useState(false)
   const [minicatScale, setMinicatScale] = useState(0.6)
   const [fish, setFish] = useState(0)
+  const [spriteAnimationIndex, setSpriteAnimationIndex] = useState(0)
   const miniCatBorder = {
     minX: 40,
     maxX: 1900,
@@ -73,12 +74,16 @@ const UseContextPlay = ({ router }: Props) => {
         defaultY={miniCatBorder.maxY}
         targetSpriteRef={spriteRef}
         handleTargetCollision={() => {
-          if (spriteRef?.current?.width < 20) {
-            setTargetVisible(false) // 一度,ターゲットがUnMountされる
-            plusHealth(Math.floor(HealthPoint.MAX_TIME / 5)) // ハート一つ分
-          } else {
-            setTargetItemScale(spriteRef?.current?.scale.x * 0.99)
-          }
+          setSpriteAnimationIndex((prev) => {
+            const index = prev + 1
+            const end = 4
+            if (index === end) {
+              setTargetVisible(false)
+              plusHealth(Math.floor(HealthPoint.MAX_TIME / 10)) // ハート一つ分
+              return 0
+            }
+            return index
+          })
         }}
       />
       {targetVisible && (
@@ -87,8 +92,9 @@ const UseContextPlay = ({ router }: Props) => {
           scale={targetItemScale}
           border={miniCatBorder}
           defaultX={getRandomInt(100, 1500)}
-          defaultY={-20}
+          defaultY={20}
           ref={spriteRef}
+          spriteAnimationIndex={spriteAnimationIndex}
         />
       )}
       <EndBtn

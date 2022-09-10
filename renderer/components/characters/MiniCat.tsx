@@ -75,7 +75,11 @@ class MiniCatCondition extends CharacterCondition {
     // ターゲットがあれば追う
     if (this.targetRef && this.targetRef.current) {
       if (this._isCollisionWithTargetRef()) {
-        if (this.handleTargetCollision) this.handleTargetCollision()
+        if (this.handleTargetCollision) {
+          if (this.state.moveTick % 100 == 0) {
+            this.handleTargetCollision()
+          }
+        }
         return
       }
       this.state.targetPos.x = this.targetRef.current.x
