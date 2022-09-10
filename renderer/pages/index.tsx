@@ -1,8 +1,7 @@
 import { useRouter } from 'next/router'
-import { InteractionEvent } from 'pixi.js'
+import { InteractionEvent, TextStyle } from 'pixi.js'
 import { Sprite, Text } from '@inlet/react-pixi'
 import { useEffect, useState } from 'react'
-import * as PIXI from 'pixi.js'
 
 import Layout from '../components/containers/Layout'
 import LevelBar from '../components/items/LevelBar'
@@ -16,6 +15,7 @@ import SettingBtn from '../components/buttons/SettingBtn'
 import EndBtn from '../components/buttons/EndBtn'
 import ExperiencePoint from '../utils/ExperiencePoint'
 import NumText from '../components/items/NumText'
+import DayText from '../components/items/DayText'
 import getPlayTime from '../utils/common'
 
 
@@ -154,29 +154,10 @@ const IndexPage = () => {
           y={13}
           scale={0.4}
         />
-        <Text
-          text={String(playTime)+"日目だよ"}
-          anchor={0}
+        <DayText
           x={170}
           y={20}
-          style={
-            new PIXI.TextStyle({
-              align: 'center',
-              fontFamily: '"Source Sans Pro", Helvetica, sans-serif',
-              fontSize: 50,
-              fill: ['#ffffff', '#00ff99'], // gradient
-              stroke: '#01d27e',
-              strokeThickness: 5,
-              letterSpacing: 20,
-              dropShadow: true,
-              dropShadowColor: '#ccced2',
-              dropShadowBlur: 4,
-              dropShadowAngle: Math.PI / 6,
-              dropShadowDistance: 6,
-              wordWrap: true,
-              wordWrapWidth: 440,
-            })
-          }
+          text={String(playTime)}
         />
         <StartBtn
           handleStartClick={handleStartClick}
