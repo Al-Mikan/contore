@@ -128,12 +128,10 @@ const Home = ({ router }: Props) => {
 
     const firstLogin = async () => {
       const nowStartDate: string = await window.database.read('core.start_date')
-      // if (nowStartDate === 'default') {
-      if (true) {
+      if (nowStartDate === 'default') {
         setIsBlack(true)
         setIsFirstLogin(true)
         window.database.update('core.start_date', getNowYMDhmsStr())
-
       }
     }
 
