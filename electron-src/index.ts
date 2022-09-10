@@ -3,7 +3,7 @@ import { join } from 'path'
 import { format } from 'url'
 
 // Packages
-import { BrowserWindow, app, ipcMain, screen } from 'electron'
+import { BrowserWindow, app, ipcMain, screen, dialog } from 'electron'
 import isDev from 'electron-is-dev'
 import prepareNext from 'electron-next'
 
@@ -23,6 +23,9 @@ interface Dummy {
     camera: boolean
     drag: boolean
   }
+  shop: {
+    fish: number
+  }
 }
 
 const schema: Schema<Dummy> = {
@@ -31,10 +34,27 @@ const schema: Schema<Dummy> = {
     default: {}, // 明示的に与えないと子要素が取り出せないバグが起きる
     properties: {
       experience_point: { type: 'integer', default: 0, minimum: 0 },
-      coin: { type: 'integer', default: 0, minimum: 0, maximum: 9999 },
-      health_point: { type: 'integer', default: 96 * 3600, maximum : 96 * 3600, minimum : 0},
-      last_login: { type: 'string', format: 'date-time' },
-      start_date: { type: 'string', default: "default" }
+      start_date: { type: 'string', default: 'default' },
+      coin: { type: 'integer', default: 30, minimum: 0, maximum: 9999 },
+      health_point: {
+        type: 'integer',
+        default: 96 * 3600,
+        maximum: 96 * 3600,
+        minimum: 0,
+      },
+      last_login: {
+        type: 'string',
+        format: 'date-time',
+        default: getNowYMDhmsStr(),
+      },
+    },
+    additionalProperties: false,
+  },
+  shop: {
+    type: 'object',
+    default: {}, // 明示的に与えないと子要素が取り出せないバグが起きる
+    properties: {
+      fish: { type: 'integer', default: 0, minimum: 0 },
     },
     additionalProperties: false,
   },
@@ -50,24 +70,28 @@ const schema: Schema<Dummy> = {
 }
 
 const store = new Store<Dummy>({ schema })
-function getNowYMDhmsStr(){
+
+function getNowYMDhmsStr() {
   const date = new Date()
   const Y = date.getFullYear()
-  const M = ("00" + (date.getMonth()+1)).slice(-2)
-  const D = ("00" + date.getDate()).slice(-2)
-  const h = ("00" + date.getHours()).slice(-2)
-  const m = ("00" + date.getMinutes()).slice(-2)
-  const s = ("00" + date.getSeconds()).slice(-2)
+  const M = ('00' + (date.getMonth() + 1)).slice(-2)
+  const D = ('00' + date.getDate()).slice(-2)
+  const h = ('00' + date.getHours()).slice(-2)
+  const m = ('00' + date.getMinutes()).slice(-2)
+  const s = ('00' + date.getSeconds()).slice(-2)
 
-  return Y + '-' +  M + '-' + D + 'T' + h + ':' + m + ':' + s
+  return Y + '-' + M + '-' + D + 'T' + h + ':' + m + ':' + s
 }
-if (store.get('core.start_date') == "default") {
+
+if (store.get('core.start_date') == 'default') {
   store.set('core.start_date', getNowYMDhmsStr())
 }
 
 // Prepare the renderer once the app is ready
 app.on('ready', async () => {
   await prepareNext('./renderer')
+
+  updateHealthLastLogin()
 
   const mainWindow = new BrowserWindow({
     frame: false,
@@ -82,6 +106,24 @@ app.on('ready', async () => {
   // レンダリングが終了してから表示する
   mainWindow.once('ready-to-show', () => {
     mainWindow.show()
+  })
+
+  const btns = ['OK', 'NO']
+  //mainwindowと同じスコープがいい
+  const camera_confirm = () => {
+    return dialog.showMessageBox(mainWindow, {
+      title: 'question',
+      type: 'question',
+      message: '確認しておきたいことがあります！',
+      detail:
+        'あなたの姿勢を検出するために、カメラをオンにしてもよろしいですか？',
+      buttons: btns,
+    })
+  }
+  ipcMain.handle('camera-confirm', async () => {
+    const event = await camera_confirm()
+    // Esc, ウィンドウを閉じる場合は1が戻り値 (NOのインデックスが帰ってくる)
+    return btns[event.response] === 'OK'
   })
 
   const display = screen.getPrimaryDisplay()
@@ -99,10 +141,31 @@ app.on('ready', async () => {
   mainWindow.loadURL(url)
 })
 
+const updateHealthLastLogin = () => {
+  const last_login: string = store.get('core.last_login')
+  if (last_login === undefined) {
+    throw new Error('electron-store: core.last_loginが存在しません')
+  }
+  const nowHP: number = store.get('core.health_point')
+  if (nowHP === undefined) {
+    throw new Error('electron-store: core.health_pointが存在しません')
+  }
+
+  const date_last_login = new Date(last_login)
+  const date_now = new Date()
+  const blank = Math.floor(
+    (date_now.getTime() - date_last_login.getTime()) / 1000
+  )
+  store.set('core.health_point', Math.max(nowHP - blank, 0))
+}
+
 app.on('window-all-closed', () => {
+  app.quit()
+})
+
+app.on('quit', () => {
   // 同期的にログイン日時の処理
   store.set('core.last_login', getNowYMDhmsStr())
-  app.quit()
 })
 
 // データベースの処理関数

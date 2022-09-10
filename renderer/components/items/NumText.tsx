@@ -44,7 +44,7 @@ const NumText = ({
           // 空白の役割
           return (
             <Sprite
-              image={`/img/number/0.png`}
+              image={`/static/img/number/0.png`}
               x={50 * i}
               visible={is_headzero_displayed || i + 1 === digit_array.length} // [0] は表示する
               key={i}
@@ -53,7 +53,7 @@ const NumText = ({
         } else {
           return (
             <Sprite
-              image={`/img/number/${v}.png`}
+              image={`/static/img/number/${v}.png`}
               x={50 * i}
               key={i}
               visible={true} // 何故かないと一部の桁が非表示になる

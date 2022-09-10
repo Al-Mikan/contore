@@ -27,7 +27,9 @@ const Toggle = ({
   return (
     <Sprite
       name={name} // イベント移譲用
-      image={isToggle ? '/img/toggle/on.png' : '/img/toggle/off.png'}
+      image={
+        isToggle ? '/static/img/toggle/on.png' : '/static/img/toggle/off.png'
+      }
       x={x}
       y={y}
       scale={scale}

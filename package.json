@@ -6,7 +6,7 @@
   "license": "MIT",
   "private": true,
   "main": "main/index.js",
-  "productName": "ElectronTypescriptNext",
+  "productName": "contore",
   "scripts": {
     "clean": "rimraf dist main renderer/out renderer/.next",
     "dev": "npm run build-electron && electron .",
@@ -27,10 +27,15 @@
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
     "@inlet/react-pixi": "^6.8.0",
+    "@mediapipe/camera_utils": "^0.3.1640029074",
+    "@mediapipe/control_utils": "^0.6.1629159505",
+    "@mediapipe/drawing_utils": "^0.3.1620248257",
+    "@mediapipe/pose": "^0.5.1635988162",
     "electron-is-dev": "^1.1.0",
     "electron-next": "^3.1.5",
     "electron-store": "^8.1.0",
     "framer-motion": "^6",
+    "pixi-webfont-loader": "^1.0.2",
     "pixi.js": "^6.5.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -64,7 +69,15 @@
     "files": [
       "main",
       "renderer/out"
-    ]
+    ],
+    "mac": {
+      "target": "dmg",
+      "icon": "icon.png"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "icon.png"
+    }
   },
   "resolutions": {
     "@types/react": "17.0.2",

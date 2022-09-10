@@ -7,14 +7,15 @@ import { containsPointClickThrouth } from '../../utils/PixiAPI'
 import CloseBtn from '../buttons/CloseBtn'
 import { BasicSpriteProps } from '../../types/sprite'
 import SettingItem from '../items/SettingItem'
+import { Setting } from '../../types/other'
+import {
+  shouldFetchSetting,
+  updateSettingCamera,
+  updateSettingDrag,
+} from '../../utils/model'
 
 interface Props extends BasicSpriteProps {
   handleClickToHome: (event: InteractionEvent) => void // Note: useRouterをResultModalから呼ぶとnullが返るのでpropsとして受け取る
-}
-
-interface Setting {
-  camera: boolean
-  drag: boolean
 }
 
 const SettingModal = ({
@@ -68,23 +69,23 @@ const SettingModal = ({
 
       // イベント移譲
       if (event.target.name.trim() === 'camera') {
-        const updateSettingCamera = async () => {
-          await window.database.update('setting.camera', !setting.camera)
+        const updateSettingCameraState = async () => {
+          await updateSettingCamera(!setting.camera)
           setSetting((prev) => ({
             ...prev,
             camera: !prev.camera,
           }))
         }
-        updateSettingCamera()
+        updateSettingCameraState()
       } else if (event.target.name.trim() === 'drag') {
-        const updateSettingDrag = async () => {
-          await window.database.update('setting.drag', !setting.drag)
+        const updateSettingDragState = async () => {
+          await updateSettingDrag(!setting.drag)
           setSetting((prev) => ({
             ...prev,
             drag: !prev.drag,
           }))
         }
-        updateSettingDrag()
+        updateSettingDragState()
       } else {
         throw new Error('setting: 未対応のイベントです')
       }
@@ -93,21 +94,17 @@ const SettingModal = ({
   )
 
   useEffect(() => {
-    const fetchSetting = async () => {
-      const nowSetting: Setting = await window.database.read('setting')
-      if (nowSetting === undefined) {
-        throw new Error('electron-store: settingが存在しません')
-      }
-      setSetting(nowSetting)
+    const stateInitSetting = async () => {
+      setSetting(await shouldFetchSetting())
     }
 
-    fetchSetting()
+    stateInitSetting()
   }, [])
 
   return (
     <Sprite
       anchor={0.5}
-      image="/img/modal.png"
+      image="/static/img/modal.png"
       visible={true}
       x={pos.x}
       y={pos.y}

@@ -16,6 +16,7 @@ declare global {
   }
 
   var electronAPI: {
+    camera_confirm: () => Promise<Boolean>
     setIgnoreMouseEvents: (
       flag: boolean,
       options?: { forward: boolean }

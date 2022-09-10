@@ -24,7 +24,7 @@ const EndBtn = ({
   // 属性のみの切り替え方法が不明なので要素ごとわける
   return (
     <Sprite
-      image="/img/end-btn.png"
+      image="/static/img/end-btn.png"
       x={x}
       y={y}
       scale={scale}
