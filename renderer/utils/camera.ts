@@ -13,6 +13,7 @@ export default class Camera_handle {
   private is_cat_counter: number = 0
   private detect_counter: number = 0
   private results: any
+  private setIsLoading: any
   public cat_detect_ratio: number
   public score: number = 0
   public poses: Object = {
@@ -21,10 +22,11 @@ export default class Camera_handle {
     R_SHOULDER: [-1, -1],
   }
 
-  constructor() {
+  constructor(setIsLoading) {
     this.onResults = this.onResults.bind(this)
     this.start_camera = this.start_camera.bind(this)
     this.stop_camera = this.stop_camera.bind(this)
+    this.setIsLoading = setIsLoading
 
     if (!this.videoElement)
       this.videoElement = document.getElementById('video') as HTMLVideoElement
@@ -100,15 +102,20 @@ export default class Camera_handle {
     this.detect_counter += 1
   }
 
-  start_camera() {
-    this.camera = new Camera(this.videoElement, {
+  async start_camera() {
+    this.camera = await new Camera(this.videoElement, {
       onFrame: async () => {
         await this.pose.send({ image: this.videoElement })
+        console.log('onFrame!!')
+        this.setIsLoading(false)
       },
       width: 1280,
       height: 720,
     })
-    this.camera.start()
+    console.log('will camera.start()')
+    await this.camera.start()
+    console.log('did camera.start()')
+    return
   }
 
   stop_camera() {
