@@ -105,8 +105,8 @@ const ResultModal = ({
           }
         />
         <Container x={270} y={20}>
-          <Num n={shouldStrToNum(time[0])} x={50 * 0} />
-          <Num n={shouldStrToNum(time[1])} x={50 * 1} />
+          <Num n={shouldStrToNum(time[0])} x={50 * 0} y={-15}/>
+          <Num n={shouldStrToNum(time[1])} x={50 * 1} y={-15}/>
           <Text
             text="h"
             anchor={0.5}
@@ -120,8 +120,8 @@ const ResultModal = ({
               })
             }
           />
-          <Num n={shouldStrToNum(time[3])} x={50 * 3} />
-          <Num n={shouldStrToNum(time[4])} x={50 * 4} />
+          <Num n={shouldStrToNum(time[3])} x={50 * 3} y={-15}/>
+          <Num n={shouldStrToNum(time[4])} x={50 * 4} y={-15}/>
           <Text
             text="m"
             anchor={0.5}
@@ -156,13 +156,13 @@ const ResultModal = ({
           n={shouldStrTimeToSecondNum(time)}
           view_digits={5}
           x={230}
-          y={-20}
+          y={-35}
         />
       </Container>
       {/* COIN */}
       <Container x={-80} y={75} scale={0.5}>
         <Coin x={-20} scale={0.7} />
-        <NumText n={coins} view_digits={3} x={315} y={-30} />
+        <NumText n={coins} view_digits={3} x={315} y={-45} />
       </Container>
 
       {/* SCORE */}
