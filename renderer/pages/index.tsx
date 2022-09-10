@@ -1,7 +1,8 @@
 import { useRouter } from 'next/router'
 import { InteractionEvent } from 'pixi.js'
-import { Sprite } from '@inlet/react-pixi'
+import { Sprite, Text } from '@inlet/react-pixi'
 import { useEffect, useState } from 'react'
+import * as PIXI from 'pixi.js'
 
 import Layout from '../components/containers/Layout'
 import LevelBar from '../components/items/LevelBar'
@@ -17,6 +18,7 @@ import ExperiencePoint from '../utils/ExperiencePoint'
 import NumText from '../components/items/NumText'
 import getPlayTime from '../utils/common'
 
+
 const IndexPage = () => {
   const router = useRouter()
   const [dragMode, setDragMode] = useState(false)
@@ -24,7 +26,7 @@ const IndexPage = () => {
   const [beforeMousePos, setBeforeMousePos] = useState<Position>({ x: 0, y: 0 })
   const [experience, setExperience] = useState(0)
   const [coins, setCoins] = useState(0)
-  const [startDate, setStartDate] = useState("")
+  const [playTime, setPlayTime] = useState(0)
 
   const ex = new ExperiencePoint(experience)
   // 背景画像のサイズを元に調整する
@@ -96,15 +98,13 @@ const IndexPage = () => {
     }
 
     const fetchStartDate = async () => {
-      // コイン枚数の設定
+      // ログイン日数の設定
       const nowStartDate: string = await window.database.read('core.start_date')
       if (nowStartDate === undefined) {
         throw new Error('electron-store: core.start_dateが存在しません')
       }
-      setStartDate(nowStartDate)
-    
       let startDate_ = new Date(nowStartDate)
-      console.log(getPlayTime(startDate_))
+      setPlayTime(getPlayTime(startDate_))
     }
 
     // 非同期処理を並行に実行
@@ -153,6 +153,30 @@ const IndexPage = () => {
           x={595}
           y={13}
           scale={0.4}
+        />
+        <Text
+          text={String(playTime)+"日目だよ"}
+          anchor={0}
+          x={170}
+          y={20}
+          style={
+            new PIXI.TextStyle({
+              align: 'center',
+              fontFamily: '"Source Sans Pro", Helvetica, sans-serif',
+              fontSize: 50,
+              fill: ['#ffffff', '#00ff99'], // gradient
+              stroke: '#01d27e',
+              strokeThickness: 5,
+              letterSpacing: 20,
+              dropShadow: true,
+              dropShadowColor: '#ccced2',
+              dropShadowBlur: 4,
+              dropShadowAngle: Math.PI / 6,
+              dropShadowDistance: 6,
+              wordWrap: true,
+              wordWrapWidth: 440,
+            })
+          }
         />
         <StartBtn
           handleStartClick={handleStartClick}
