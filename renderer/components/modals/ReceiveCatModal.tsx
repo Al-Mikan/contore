@@ -56,6 +56,13 @@ const ReceiveCatModal = ({
       image="/static/img/modal.png"
       visible={true}
       scale={scale}
+      x={pos.x}
+      y={pos.y}
+      interactive={true}
+      mousedown={mouseDown}
+      mousemove={mouseMove}
+      mouseup={mouseUp}
+      mouseupoutside={mouseUp}
     >
       <CloseBtn
         handleClick={handleClickToHome}

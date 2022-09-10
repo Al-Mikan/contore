@@ -53,7 +53,6 @@ const Home = ({ router }: Props) => {
   const [isBlack, setIsBlack] = useState(false)
   const [playTime, setPlayTime] = useState(0)
   const [isFirstLogin, setIsFirstLogin] = useState(false)
-  const [isReceiveCat, setIsReceiveCat] = useState(false)
 
   const ex = new ExperiencePoint(experience)
   const hp = new HealthPoint(health)
@@ -84,7 +83,7 @@ const Home = ({ router }: Props) => {
   }
 
   const ReceiveCatHandleClickToHome = () => {
-    setIsReceiveCat(false)
+    setIsFirstLogin(false)
     setIsBlack(false)
   }
 
@@ -129,9 +128,12 @@ const Home = ({ router }: Props) => {
 
     const firstLogin = async () => {
       const nowStartDate: string = await window.database.read('core.start_date')
-      if (nowStartDate === 'default') {
+      // if (nowStartDate === 'default') {
+      if (true) {
+        setIsBlack(true)
         setIsFirstLogin(true)
         window.database.update('core.start_date', getNowYMDhmsStr())
+
       }
     }
 
