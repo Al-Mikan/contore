@@ -96,7 +96,7 @@ const ConcentratePage = () => {
       if (cameraFlag) {
         cameraHandleRef.current = new CameraHandle(setIsLoading)
         cameraHandleRef.current.start_camera()
-      }else{
+      } else {
         setIsLoading(false)
       }
     }
