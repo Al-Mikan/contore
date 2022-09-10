@@ -99,9 +99,9 @@ const UseContextPlay = ({ router }: Props) => {
       />
       <FishBtn
         isClickThrouth={true}
-        x={1798}
+        x={1793}
         y={950}
-        scale={0.8}
+        scale={0.5}
         handleClickFish={handleClickFish}
       />
       <Text
