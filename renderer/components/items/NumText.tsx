@@ -17,6 +17,7 @@ const NumText = ({
   view_digits,
   is_headzero_displayed = false,
 }: Props) => {
+  const lineSpace = 55
   if (n < 0 || 10 ** view_digits <= n) {
     throw new Error(`範囲外の数値が入力されました => ${n}`)
   }
@@ -45,7 +46,7 @@ const NumText = ({
           return (
             <Sprite
               image={`/static/img/number/0.png`}
-              x={50 * i}
+              x={lineSpace * i}
               visible={is_headzero_displayed || i + 1 === digit_array.length} // [0] は表示する
               key={i}
             />
@@ -54,7 +55,7 @@ const NumText = ({
           return (
             <Sprite
               image={`/static/img/number/${v}.png`}
-              x={50 * i}
+              x={lineSpace * i}
               key={i}
               visible={true} // 何故かないと一部の桁が非表示になる
             />
