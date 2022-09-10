@@ -146,7 +146,7 @@ const Home = ({ router }: Props) => {
           <CodeText />
         </Container>
         <Container x={1230} y={110} scale={1}>
-          <LevelBar n={ex.progress(10)} scale={1} />
+          <LevelBar n={ex.progress(8)} scale={1} />
           <NumText
             n={ex.get_level()}
             view_digits={3}
