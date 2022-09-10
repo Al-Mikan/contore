@@ -23,7 +23,7 @@ const FishBtn = ({
 
   return (
     <Sprite
-      image="/static/img/start-btn.png"
+      image="/static/img/give-btn.png"
       x={x}
       y={y}
       scale={scale}
