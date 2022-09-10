@@ -130,9 +130,9 @@ const SettingModal = ({
         />
         <Fish x={5} y={-10} scale={0.1} />
         <BuyBtn
-          x={130}
-          y={-10}
-          scale={1}
+          x={50}
+          y={75}
+          scale={0.6}
           handleStartClick={() => {
             BuyFish(1)
           }}
