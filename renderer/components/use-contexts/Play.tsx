@@ -8,6 +8,7 @@ import LifeGauge from '../items/LifeGauge'
 import TargetFish from '../characters/TargetFish'
 import EndBtn from '../buttons/EndBtn'
 import FishBtn from '../buttons/FIshBtn'
+import CuteFish from '../items/CuteFish'
 import { HealthContext } from '../containers/CanvasContext'
 import { getRandomInt } from '../../utils/api'
 import { shouldFetchFish, updateShopFish } from '../../utils/model'
@@ -93,21 +94,26 @@ const UseContextPlay = ({ router }: Props) => {
       <EndBtn
         isClickThrouth={true}
         handleClick={handleClickToHome}
-        x={1800}
+        x={1785}
         y={1000}
         scale={1}
       />
       <FishBtn
         isClickThrouth={true}
-        x={1793}
+        x={1776}
         y={950}
         scale={0.5}
         handleClickFish={handleClickFish}
       />
+      <CuteFish
+        x={1780}
+        y={928}
+        scale={0.2}
+      />
       <Text
         text={`× ${fish}`}
         x={1815}
-        y={920}
+        y={910}
         style={
           new TextStyle({
             fontSize: 25,
@@ -119,8 +125,8 @@ const UseContextPlay = ({ router }: Props) => {
       />
       <LifeGauge
         n={hp.get_health_point_formatted(10)}
-        x={1790}
-        y={900}
+        x={1765}
+        y={880}
         scale={0.7}
       />
     </>
