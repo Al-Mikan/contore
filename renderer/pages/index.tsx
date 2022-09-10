@@ -2,6 +2,7 @@ import { useRouter } from 'next/router'
 import { InteractionEvent } from 'pixi.js'
 import { Sprite } from '@inlet/react-pixi'
 import { useEffect, useState } from 'react'
+// import {Pose} from '@mediapipe/pose'
 
 import Layout from '../components/containers/Layout'
 import LevelBar from '../components/items/LevelBar'
@@ -23,6 +24,7 @@ const IndexPage = () => {
   const [beforeMousePos, setBeforeMousePos] = useState<Position>({ x: 0, y: 0 })
   const [experience, setExperience] = useState(0)
   const [coins, setCoins] = useState(0)
+  const hperw = 720 / 1280
 
   const ex = new ExperiencePoint(experience)
   // 背景画像のサイズを元に調整する
@@ -145,10 +147,20 @@ const IndexPage = () => {
           y={315}
           scale={0.8}
         />
-        <EndBtn handleClick={handleEndClick} x={520} y={315} scale={0.8} />
+        <EndBtn
+          handleClick={() => {
+            console.log('いつもお疲れ様！\n頑張ってね！！')
+            window.electronAPI.closeWindow()
+          }}
+          x={520}
+          y={315}
+          scale={0.8}
+        />
       </Sprite>
     </Layout>
   )
 }
+
+//------------------------------
 
 export default IndexPage
