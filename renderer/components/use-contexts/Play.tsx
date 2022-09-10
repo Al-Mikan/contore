@@ -105,10 +105,10 @@ const UseContextPlay = ({ router }: Props) => {
         scale={0.5}
         handleClickFish={handleClickFish}
       />
-      <CuteFish x={1780} y={928} scale={0.2} />
+      <CuteFish x={1795} y={928} scale={0.2} />
       <Text
         text={`× ${fish}`}
-        x={1815}
+        x={1835}
         y={910}
         style={
           new TextStyle({

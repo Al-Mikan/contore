@@ -22,7 +22,7 @@ import {
   shouldFetchCoins,
   shouldFetchFish,
 } from '../../utils/model'
-import Fish from '../items/Fish'
+import CuteFish from '../items/CuteFish'
 import { HealthContext } from '../containers/CanvasContext'
 import HealthPoint from '../../utils/HealthPoint'
 import PlayBtn from '../buttons/PlayBtn'
@@ -133,7 +133,7 @@ const Home = ({ router }: Props) => {
           scale={1.2}
         />
         <Container x={1300} y={350} scale={0.6}>
-          <Fish scale={0.2} />
+          <CuteFish x={40} y={8} scale={0.5} />
           <NumText n={fish} view_digits={4} x={100} y={-25} />
         </Container>
         <MiniCat
