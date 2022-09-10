@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { InteractionEvent } from 'pixi.js'
 
 import Layout from '../components/containers/Layout'
@@ -15,6 +15,7 @@ import {
   updateCoreCoin,
   updateCoreEX,
 } from '../utils/model'
+import CameraHandle from '../utils/camera'
 
 const timeToCoins = (time: string) => {
   // 1分 -> 1枚
@@ -28,6 +29,8 @@ const ConcentratePage = () => {
   const [resultTime, setResultTime] = useState('00:00:00')
   const [isOpen, setIsOpen] = useState(false)
   const [minicatScale, setMinicatScale] = useState(0.6)
+  let cameraHandleRef = useRef<CameraHandle>(null)
+
   const miniCatBorder = {
     minX: 40,
     maxX: 1900,
@@ -35,6 +38,27 @@ const ConcentratePage = () => {
     maxY: 1050 - (minicatScale - 0.8) * 35,
     randomTargetMinX: 1400,
     randomTargetMaxX: 1620,
+  }
+
+  const canUseCamera = async () => {
+    const camera_flag: boolean = await window.database.read('setting.camera')
+    return camera_flag
+  }
+
+  const camera_confirmer = async () => {
+    const once_asked = localStorage.getItem('once_asked')
+    // 初回のみ
+    if (!once_asked) {
+      const res = await window.electronAPI.camera_confirm()
+      if (res) {
+        window.localStorage.setItem('once_asked', 'true')
+        await window.database.update('setting.camera', true)
+      } else {
+        window.localStorage.setItem('once_asked', 'false')
+        window.database.update('setting.camera', false)
+      }
+      return
+    }
   }
 
   const handleClickOpenModal = (event: InteractionEvent) => {
@@ -51,9 +75,14 @@ const ConcentratePage = () => {
 
     updateExperience()
     updateCoins()
-
     setResultTime(time)
     setIsOpen(true)
+
+    // カメラを起動しない場合はインスタンスが存在しない
+    if (cameraHandleRef.current) {
+      cameraHandleRef.current.stop_camera()
+      console.log(`score;${cameraHandleRef.current.cat_detect_ratio}`)
+    }
   }
   const handleClickToHome = (event: InteractionEvent) => {
     router.push('/')
@@ -61,8 +90,17 @@ const ConcentratePage = () => {
   }
 
   useEffect(() => {
-    window.electronAPI.setAlwaysOnTop(true)
+    const cameraUse = async () => {
+      await camera_confirmer()
+      const cameraFlag = await canUseCamera()
+      if (cameraFlag) {
+        cameraHandleRef.current = new CameraHandle()
+        cameraHandleRef.current.start_camera()
+      }
+    }
 
+    cameraUse()
+    window.electronAPI.setAlwaysOnTop(true)
     return () => {
       window.electronAPI.setAlwaysOnTop(false)
     }

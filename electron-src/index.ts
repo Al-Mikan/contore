@@ -3,7 +3,7 @@ import { join } from 'path'
 import { format } from 'url'
 
 // Packages
-import { BrowserWindow, app, ipcMain, screen } from 'electron'
+import { BrowserWindow, app, ipcMain, screen, dialog } from 'electron'
 import isDev from 'electron-is-dev'
 import prepareNext from 'electron-next'
 
@@ -88,6 +88,24 @@ app.on('ready', async () => {
   // レンダリングが終了してから表示する
   mainWindow.once('ready-to-show', () => {
     mainWindow.show()
+  })
+
+  const btns = ['OK', 'NO']
+  //mainwindowと同じスコープがいい
+  const camera_confirm = () => {
+    return dialog.showMessageBox(mainWindow, {
+      title: 'question',
+      type: 'question',
+      message: '確認しておきたいことがあります！',
+      detail:
+        'あなたの姿勢を検出するために、カメラをオンにしてもよろしいですか？',
+      buttons: btns,
+    })
+  }
+  ipcMain.handle('camera-confirm', async () => {
+    const event = await camera_confirm()
+    // Esc, ウィンドウを閉じる場合は1が戻り値 (NOのインデックスが帰ってくる)
+    return btns[event.response] === 'OK'
   })
 
   const display = screen.getPrimaryDisplay()

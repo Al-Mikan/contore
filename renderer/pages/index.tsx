@@ -1,5 +1,4 @@
 import { useRouter } from 'next/router'
-
 import Layout from '../components/containers/Layout'
 import Home from '../components/use-contexts/Home'
 
@@ -12,5 +11,7 @@ const IndexPage = () => {
     </Layout>
   )
 }
+
+//------------------------------
 
 export default IndexPage

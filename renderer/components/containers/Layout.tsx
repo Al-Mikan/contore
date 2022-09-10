@@ -17,6 +17,16 @@ const Layout = ({ children, title = 'こんとれ！！' }: Props) => (
       <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     </Head>
     <Canvas>{children}</Canvas>
+    <video
+      id="video"
+      style={{ visibility: 'hidden', width: '0px', height: '0px' }}
+    />
+    <canvas
+      id="canvas"
+      width="1280px"
+      height="720px"
+      style={{ zIndex: '100' }}
+    />
   </StyledConteiner>
 )
 
