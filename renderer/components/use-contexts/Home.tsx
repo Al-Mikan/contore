@@ -172,15 +172,8 @@ const Home = ({ router }: Props) => {
         </Container>
         <Sprite image="/static/img/board.png" x={40} scale={0.8} />
         <Sprite image="/static/img/days.png" x={300} y={190} scale={0.5} />
-        <NumText
-          is_headzero_displayed={false}
-          x={100}
-          y={175}
-          scale={0.75}
-          n={playTime}
-          view_digits={5}
-        />
-
+        {/*  一日目からスタート */}
+        <NumText x={120} y={171} scale={0.6} n={playTime + 1} view_digits={5} />
         <OptionBtn
           handleSettingClick={handleSettingClick}
           x={20}
