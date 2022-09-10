@@ -26,7 +26,6 @@ import CuteFish from '../items/CuteFish'
 import { HealthContext } from '../containers/CanvasContext'
 import HealthPoint from '../../utils/HealthPoint'
 import PlayBtn from '../buttons/PlayBtn'
-import DayText from '../items/DayText'
 import getPlayTime from '../../utils/common'
 
 type IGraphics = PixiRef<typeof Graphics>
@@ -150,10 +149,17 @@ const Home = ({ router }: Props) => {
           <CuteFish x={40} y={8} scale={0.5} />
           <NumText n={fish} view_digits={4} x={100} y={-25} />
         </Container>
-        <DayText x={1300} y={400} text={String(playTime)} />
         <Sprite image="/static/img/board.png" x={40} scale={0.8} />
         <Sprite image="/static/img/days.png" x={300} y={190} scale={0.5} />
-        
+        <NumText
+          is_headzero_displayed={false}
+          x={100}
+          y={175}
+          scale={0.75}
+          n={playTime}
+          view_digits={5}
+        />
+
         <OptionBtn
           handleSettingClick={handleSettingClick}
           x={20}
