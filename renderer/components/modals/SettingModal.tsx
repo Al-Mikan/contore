@@ -13,6 +13,7 @@ import {
   updateSettingCamera,
   updateSettingDrag,
 } from '../../utils/model'
+import OptionTitle from '../items/OptionTitle'
 
 interface Props extends BasicSpriteProps {
   handleClickToHome: (event: InteractionEvent) => void // Note: useRouterをResultModalから呼ぶとnullが返るのでpropsとして受け取る
@@ -117,6 +118,7 @@ const SettingModal = ({
       mouseupoutside={mouseUp}
     >
       <Container x={-70} y={-70}>
+        <OptionTitle x={70} y={-70} />
         <SettingItem
           x={0}
           y={0}
