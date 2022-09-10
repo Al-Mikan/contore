@@ -9,7 +9,7 @@ import EndBtn from '../components/buttons/EndBtn'
 import { useRouter } from 'next/router'
 import { shouldStrTimeToSecondNum } from '../utils/common'
 import ExperiencePoint from '../utils/ExperiencePoint'
-import Loading from '../components/loading'
+import Loading from '../components/items/Loading'
 import {
   shouldFetchCoins,
   shouldFetchExperience,
@@ -109,7 +109,7 @@ const ConcentratePage = () => {
   if (isLoading) {
     return (
       <Layout title="集中画面｜こんとれ！！">
-        <Loading />
+        <Loading x={1000} y={480} />
       </Layout>
     )
   }
