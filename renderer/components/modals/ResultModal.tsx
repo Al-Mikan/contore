@@ -105,8 +105,8 @@ const ResultModal = ({
           }
         />
         <Container x={270} y={20}>
-          <Num n={shouldStrToNum(time[0])} x={50 * 0} y={-15}/>
-          <Num n={shouldStrToNum(time[1])} x={50 * 1} y={-15}/>
+          <Num n={shouldStrToNum(time[0])} x={50 * 0} y={-15} />
+          <Num n={shouldStrToNum(time[1])} x={50 * 1} y={-15} />
           <Text
             text="h"
             anchor={0.5}
@@ -120,8 +120,8 @@ const ResultModal = ({
               })
             }
           />
-          <Num n={shouldStrToNum(time[3])} x={50 * 3} y={-15}/>
-          <Num n={shouldStrToNum(time[4])} x={50 * 4} y={-15}/>
+          <Num n={shouldStrToNum(time[3])} x={50 * 3} y={-15} />
+          <Num n={shouldStrToNum(time[4])} x={50 * 4} y={-15} />
           <Text
             text="m"
             anchor={0.5}
