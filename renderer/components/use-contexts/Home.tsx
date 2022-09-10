@@ -171,7 +171,6 @@ const Home = ({ router }: Props) => {
           defaultY={miniCatBorder.maxY}
           scale={minicatScale}
           border={miniCatBorder}
-          isClickThrough={true} // 画面外でも正常にクリック可能に
         />
       </Sprite>
     </Container>
