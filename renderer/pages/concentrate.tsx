@@ -1,4 +1,4 @@
-import { useEffect, useState,useRef} from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { InteractionEvent } from 'pixi.js'
 
 import Layout from '../components/containers/Layout'
@@ -9,7 +9,7 @@ import EndBtn from '../components/buttons/EndBtn'
 import { useRouter } from 'next/router'
 import { shouldStrTimeToSecondNum } from '../utils/api'
 import ExperiencePoint from '../utils/ExperiencePoint'
-import Camera_handle from "../utils/camera"
+import Camera_handle from '../utils/camera'
 
 const timeToCoins = (time: string) => {
   // ここは時間に応じて取得枚数を変える
@@ -22,9 +22,8 @@ const ConcentratePage = () => {
   let [resultTime, setResultTime] = useState('00:00:00')
   let [isOpen, setIsOpen] = useState(false)
   let Camera_handler = useRef(new Camera_handle())
-  let camera_flag:Boolean
+  let camera_flag: Boolean
 
-  
   const miniCatBorder = {
     minX: 0,
     maxX: 1850,
@@ -33,27 +32,29 @@ const ConcentratePage = () => {
     randomTargetMinX: 1400,
     randomTargetMaxX: 1620,
   }
-  
-  const canUseCamera:()=>Promise<Boolean> = async () => {
-    camera_flag = await window.database.read('setting.camera');
+
+  const canUseCamera: () => Promise<Boolean> = async () => {
+    camera_flag = await window.database.read('setting.camera')
     // console.log(`canUseCamera:${camera_flag}`)
     return camera_flag
- }
- 
-  const camera_confirmer:()=>Promise<void> = async () =>{
-    const once_asked = localStorage.getItem("once_asked");
+  }
+
+  const camera_confirmer: () => Promise<void> = async () => {
+    const once_asked = localStorage.getItem('once_asked')
     // console.log(`camera_confirmer_once_asked:${once_asked}`);
-    if (!(once_asked === 'true')){
-      const f = async ()=>{return window.electronAPI.camera_confirm()}
-      const res:Boolean = await f();
-      // console.log(`camera_confirmer_res:${res}`)
-      if (res){
-        localStorage.setItem("once_asked","true")
-        await window.database.update('setting.camera',true)
-      }else{
-        window.database.update("setting.camera",false)
+    if (!(once_asked === 'true')) {
+      const f = async () => {
+        return window.electronAPI.camera_confirm()
       }
-      return;
+      const res: Boolean = await f()
+      // console.log(`camera_confirmer_res:${res}`)
+      if (res) {
+        localStorage.setItem('once_asked', 'true')
+        await window.database.update('setting.camera', true)
+      } else {
+        window.database.update('setting.camera', false)
+      }
+      return
     }
   }
 
@@ -80,29 +81,27 @@ const ConcentratePage = () => {
     setResultTime(time)
     setIsOpen(true)
 
-      Camera_handler.current.stop_camera()
-      console.log(`score;${Camera_handler.current.cat_detect_ratio}`)
+    Camera_handler.current.stop_camera()
+    console.log(`score;${Camera_handler.current.cat_detect_ratio}`)
   }
   const handleClickToHome = (event: InteractionEvent) => {
     router.push('/')
     event.stopPropagation() // modalにクリック判定を与えない
   }
 
-  
-  
   useEffect(() => {
     window.electronAPI.setAlwaysOnTop(true)
-    camera_confirmer().then(()=>{
-      canUseCamera().then(res =>{
+    camera_confirmer().then(() => {
+      canUseCamera().then((res) => {
         camera_flag = res
-        if(camera_flag){
-          Camera_handler.current.start_camera();
+        if (camera_flag) {
+          Camera_handler.current.start_camera()
         }
       })
     })
-    
+
     return () => {
-      window.electronAPI.setAlwaysOnTop(false);
+      window.electronAPI.setAlwaysOnTop(false)
     }
   }, [])
 
