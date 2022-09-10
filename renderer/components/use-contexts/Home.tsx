@@ -12,7 +12,7 @@ import { Position } from '../../types/character'
 import { containsPointClickThrouth } from '../../utils/PixiAPI'
 import StartBtn from '../buttons/StartBtn'
 import ShopBtn from '../buttons/ShopBtn'
-import SettingBtn from '../buttons/OptionBtn'
+import OptionBtn from '../buttons/OptionBtn'
 import ExperiencePoint from '../../utils/ExperiencePoint'
 import NumText from '../items/NumText'
 import CodeText from '../texts/CodeText'
@@ -152,7 +152,7 @@ const Home = ({ router }: Props) => {
         </Container>
         <DayText x={1300} y={400} text={String(playTime)} />
         <Sprite image="/static/img/board.png" x={140} scale={1} />
-        <SettingBtn
+        <OptionBtn
           handleSettingClick={handleSettingClick}
           x={20}
           y={782}
