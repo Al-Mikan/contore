@@ -15,7 +15,7 @@ interface Props extends BasicSpriteProps {
   time: string
   coins: number
   isOpen: boolean
-  score:number
+  score: number
   handleClickToHome: (event: InteractionEvent) => void // Note: useRouterをResultModalから呼ぶとnullが返るのでpropsとして受け取る
 }
 
@@ -168,26 +168,22 @@ const ResultModal = ({
       {/* SCORE */}
       <Container x={-140} y={100} scale={0.5}>
         <Text
-            text="SCORE"
-            anchor={0}
-            x={0}
-            y={0}
-            style={
-              new TextStyle({
-                fontSize: 80,
-                fontWeight: '100',
-                fontFamily: 'neue-pixel-sans',
-              })
-            }
-          />
-          { score > 0 ? 
-            <NumText
-            n={score}
-            view_digits={3}
-            x={440}
-            y={19}
-           />:
-           <Text
+          text="SCORE"
+          anchor={0}
+          x={0}
+          y={0}
+          style={
+            new TextStyle({
+              fontSize: 80,
+              fontWeight: '100',
+              fontFamily: 'neue-pixel-sans',
+            })
+          }
+        />
+        {score > 0 ? (
+          <NumText n={score} view_digits={3} x={440} y={19} />
+        ) : (
+          <Text
             text="---"
             x={440}
             y={10}
@@ -198,13 +194,9 @@ const ResultModal = ({
                 fontFamily: 'neue-pixel-sans',
               })
             }
-            />
-
-          }
-          
+          />
+        )}
       </Container>
-
-
 
       {/* CLOSE BUTTON */}
       <CloseBtn

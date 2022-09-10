@@ -72,7 +72,7 @@ const ConcentratePage = () => {
       const nowCoins = await shouldFetchCoins()
       await updateCoreCoin(nowCoins + timeToCoins(time))
     }
-    
+
     // カメラを起動しない場合はインスタンスが存在しない
     if (cameraHandleRef.current) {
       cameraHandleRef.current.stop_camera()
@@ -81,7 +81,6 @@ const ConcentratePage = () => {
     updateCoins()
     setResultTime(time)
     setIsOpen(true)
-
   }
   const handleClickToHome = (event: InteractionEvent) => {
     router.push('/')
@@ -116,7 +115,11 @@ const ConcentratePage = () => {
           time={resultTime}
           coins={timeToCoins(time)}
           isOpen={isOpen}
-          score={cameraHandleRef.current? Math.ceil(cameraHandleRef.current.cat_detect_ratio):-1}
+          score={
+            cameraHandleRef.current
+              ? Math.ceil(cameraHandleRef.current.cat_detect_ratio)
+              : -1
+          }
           handleClickToHome={handleClickToHome}
         ></ResultModal>
       ) : (
