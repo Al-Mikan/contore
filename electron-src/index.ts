@@ -3,7 +3,14 @@ import { join } from 'path'
 import { format } from 'url'
 
 // Packages
-import { BrowserWindow, app, ipcMain, screen, dialog } from 'electron'
+import {
+  BrowserWindow,
+  app,
+  ipcMain,
+  screen,
+  dialog,
+  systemPreferences,
+} from 'electron'
 import isDev from 'electron-is-dev'
 import prepareNext from 'electron-next'
 
@@ -92,7 +99,16 @@ app.on('ready', async () => {
   await prepareNext('./renderer')
 
   updateHealthLastLogin()
-
+  if (process.platform == 'darwin') {
+    await systemPreferences
+      .askForMediaAccess('camera')
+      .then((e) => {
+        console.log('success media access', e)
+      })
+      .catch((e) => {
+        console.log('failed media access', e)
+      })
+  }
   const mainWindow = new BrowserWindow({
     frame: false,
     transparent: true,
