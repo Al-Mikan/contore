@@ -1,10 +1,7 @@
-import {
-  drawConnectors,
-  drawLandmarks,
-} from '@mediapipe/drawing_utils/drawing_utils'
 import { Camera } from '@mediapipe/camera_utils/camera_utils'
 import { Pose, POSE_CONNECTIONS } from '@mediapipe/pose/pose'
-import { threadId } from 'worker_threads'
+import { setupMaster } from 'cluster'
+import { SetStateAction } from 'react'
 
 export default class Camera_handle {
   private count_cat: Number = 0
@@ -18,6 +15,7 @@ export default class Camera_handle {
   private is_cat_counter: number = 0
   private detect_counter: number = 0
   private results: any
+  private setIsLoading:any
   public cat_detect_ratio: number
   public score: number = 0
   public poses: Object = {
@@ -26,10 +24,12 @@ export default class Camera_handle {
     R_SHOULDER: [-1, -1],
   }
 
-  constructor() {
+
+  constructor(setIsLoading) {
     this.onResults = this.onResults.bind(this)
     this.start_camera = this.start_camera.bind(this)
     this.stop_camera = this.stop_camera.bind(this)
+    this.setIsLoading = setIsLoading
 
     if (!this.videoElement)
       this.videoElement = document.getElementById('video') as HTMLVideoElement
@@ -72,7 +72,6 @@ export default class Camera_handle {
     if (Math.abs(nose[1] - mid_y) * times < d) {
       res['is_cat'] = true
     }
-    // console.log(res);
     return res
   }
 
@@ -86,33 +85,6 @@ export default class Camera_handle {
       console.log('could not detect your body')
       return
     }
-
-    //   this.canvasCtx.save();
-    //   this.canvasCtx.clearRect(0, 0, this.canvasElement.width, this.canvasElement.height);
-    //   this.canvasCtx.drawImage(results.segmentationMask, 0, 0,
-    //                       this.canvasElement.width, this.canvasElement.height);
-
-    //   // Only overwrite existing pixels.
-    //   this.canvasCtx.globalCompositeOperation = 'source-in';
-    //   this.canvasCtx.fillStyle = '#00FF00';
-    //   this.canvasCtx.fillRect(0, 0, this.canvasElement.width, this.canvasElement.height);
-
-    //   // Only overwrite missing pixels.
-    //   this.canvasCtx.globalCompositeOperation = 'destination-atop';
-    //   this.canvasCtx.drawImage(results.segmentationMask, 0, 0,
-    //     this.canvasElement.width, this.canvasElement.height);
-    //   this.canvasCtx.drawImage(
-    //       results.image, 0, 0, this.canvasElement.width, this.canvasElement.height);
-
-    //   this.canvasCtx.globalCompositeOperation = 'source-over';
-    //   drawConnectors(this.canvasCtx, results.poseLandmarks, POSE_CONNECTIONS,
-    //                  {color: '#00FF00', lineWidth: 4});
-    //   drawLandmarks(this.canvasCtx, results.poseLandmarks,
-    //                 {color: '#FF0000', lineWidth: 2});
-    //   this.canvasCtx.restore();
-
-    //   console.log(results.poseWorldLandmarks);
-    //   console.log(results.poseLandmarks);
 
     const landmark_dic = { NOSE: 0, L_SHOULDER: 11, R_SHOULDER: 12 }
     this.keys.forEach((point) => {
@@ -129,24 +101,24 @@ export default class Camera_handle {
     } else {
       message_cat = 'Good Pose!'
     }
-    // this.canvasCtx.fillText(message_cat,600,30);
-    //   this.canvasCtx.fillText(`x:${this.poses["NOSE"][0]},y:${this.poses["NOSE"][1]}`,this.poses["NOSE"][0],this.poses["NOSE"][1]);
-    //   this.canvasCtx.fillText(`x:${this.poses["L_SHOULDER"][0]},y:${this.poses["L_SHOULDER"][1]}`,this.poses["L_SHOULDER"][0],this.poses["L_SHOULDER"][1]);
-    //   this.canvasCtx.fillText(`x:${this.poses["R_SHOULDER"][0]},y:${this.poses["R_SHOULDER"][1]}`,this.poses["R_SHOULDER"][0],this.poses["R_SHOULDER"][1]);
-    // console.log(this.poses);
 
     this.detect_counter += 1
   }
 
-  start_camera() {
-    this.camera = new Camera(this.videoElement, {
+  async start_camera(){
+    this.camera = await new Camera(this.videoElement, {
       onFrame: async () => {
         await this.pose.send({ image: this.videoElement })
+        console.log("onFrame!!")
+        this.setIsLoading(false)
       },
       width: 1280,
       height: 720,
     })
-    this.camera.start()
+    console.log("will camera.start()")
+    await this.camera.start()
+    console.log("did camera.start()")
+    return;
   }
 
   stop_camera() {

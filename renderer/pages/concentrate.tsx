@@ -10,6 +10,8 @@ import { useRouter } from 'next/router'
 import { shouldStrTimeToSecondNum } from '../utils/api'
 import ExperiencePoint from '../utils/ExperiencePoint'
 import Camera_handle from '../utils/camera'
+import Loading from '../components/loading'
+import { runInThisContext } from 'vm'
 
 const timeToCoins = (time: string) => {
   // ここは時間に応じて取得枚数を変える
@@ -21,7 +23,8 @@ const ConcentratePage = () => {
   let [time, setTime] = useState('00:00:00')
   let [resultTime, setResultTime] = useState('00:00:00')
   let [isOpen, setIsOpen] = useState(false)
-  let Camera_handler = useRef(new Camera_handle())
+  let [isLoading,setIsLoading] = useState(true)
+  let Camera_handler = useRef(new Camera_handle(setIsLoading))
   let camera_flag: Boolean
 
   const miniCatBorder = {
@@ -105,6 +108,14 @@ const ConcentratePage = () => {
     }
   }, [])
 
+  if (isLoading){
+    return (
+      <Layout title="集中画面｜こんとれ！！">
+         <Loading/>
+      </Layout>
+    )
+  }
+    
   return (
     <Layout title="集中画面 | こんとれ！！">
       {isOpen ? (
