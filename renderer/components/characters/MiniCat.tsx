@@ -51,7 +51,10 @@ animationMap.set(EAINTG_ANIMATION, [
   '/static/img/mini-cat/1.png',
   '/static/img/mini-cat/tail2.png',
 ])
-animationMap.set(DRAG_ANIMATION, ['/static/img/mini-cat/drag.png'])
+animationMap.set(DRAG_ANIMATION, [
+  '/static/img/mini-cat/drag.png',
+  '/static/img/mini-cat/drag2.png',
+])
 
 class MiniCatCondition extends CharacterCondition {
   public targetRef: MutableRefObject<ISprite> | null | undefined
