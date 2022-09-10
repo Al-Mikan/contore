@@ -90,10 +90,6 @@ function getNowYMDhmsStr() {
   return Y + '-' + M + '-' + D + 'T' + h + ':' + m + ':' + s
 }
 
-if (store.get('core.start_date') == 'default') {
-  store.set('core.start_date', getNowYMDhmsStr())
-}
-
 // Prepare the renderer once the app is ready
 app.on('ready', async () => {
   await prepareNext('./renderer')
