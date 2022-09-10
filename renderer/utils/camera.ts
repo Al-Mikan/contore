@@ -1,16 +1,14 @@
 import { Camera } from '@mediapipe/camera_utils/camera_utils'
-import { Pose, POSE_CONNECTIONS } from '@mediapipe/pose/pose'
-import { setupMaster } from 'cluster'
-import { SetStateAction } from 'react'
+import { Pose } from '@mediapipe/pose/pose'
 
 export default class Camera_handle {
-  private count_cat: Number = 0
-  private count_all: Number = 0
+  private count_cat: number = 0
+  private count_all: number = 0
   private videoElement = document.getElementById('video') as HTMLVideoElement
   private canvasElement = document.getElementById('canvas') as HTMLCanvasElement
-  private canvasCtx: any
-  private camera: any
-  private pose: any
+  private canvasCtx: CanvasRenderingContext2D
+  private camera: Camera
+  private pose: Pose
   private keys: Array<string>
   private is_cat_counter: number = 0
   private detect_counter: number = 0

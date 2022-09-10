@@ -150,6 +150,7 @@ const IndexPage = () => {
         <EndBtn
           handleClick={() => {
             console.log('いつもお疲れ様！\n頑張ってね！！')
+            window.electronAPI.closeWindow()
           }}
           x={520}
           y={315}
