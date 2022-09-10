@@ -1,7 +1,7 @@
 import React, { ReactNode, createContext, useEffect, useState } from 'react'
 
 import HealthPoint from '../../utils/HealthPoint'
-import { getNowYMDhmsStr } from '../../utils/api'
+import { getNowYMDhmsStr } from '../../utils/common'
 import {
   shouldFetchHP,
   updateCoreHP,

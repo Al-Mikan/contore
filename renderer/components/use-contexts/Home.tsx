@@ -1,6 +1,6 @@
 import { NextRouter } from 'next/router'
-import { InteractionEvent } from 'pixi.js'
-import { Sprite, Container, Graphics, PixiRef } from '@inlet/react-pixi'
+import { InteractionEvent, TextStyle } from 'pixi.js'
+import { Sprite, Container, Graphics, PixiRef, Text } from '@inlet/react-pixi'
 import { useEffect, useState, useContext, useRef } from 'react'
 
 import LevelBar from '../items/LevelBar'
@@ -26,6 +26,8 @@ import Fish from '../items/Fish'
 import { HealthContext } from '../containers/CanvasContext'
 import HealthPoint from '../../utils/HealthPoint'
 import PlayBtn from '../buttons/PlayBtn'
+import DayText from '../items/DayText'
+import getPlayTime from '../../utils/common'
 
 type IGraphics = PixiRef<typeof Graphics>
 
@@ -41,6 +43,7 @@ const Home = ({ router }: Props) => {
   const [coins, setCoins] = useState(0)
   const [fish, setFish] = useState(0)
   const [minicatScale, setMinicatScale] = useState(0.7)
+  const [playTime, setPlayTime] = useState(0)
 
   const ex = new ExperiencePoint(experience)
   const hp = new HealthPoint(health)
@@ -84,10 +87,21 @@ const Home = ({ router }: Props) => {
     const stateInitFish = async () => {
       setFish(await shouldFetchFish())
     }
+    const fetchStartDate = async () => {
+      // ログイン日数の設定
+      const nowStartDate: string = await window.database.read('core.start_date')
+      if (nowStartDate === undefined) {
+        throw new Error('electron-store: core.start_dateが存在しません')
+      }
+      let startDate_ = new Date(nowStartDate)
+      setPlayTime(getPlayTime(startDate_))
+    }
+
     // 非同期処理を並行に実行
     stateInitExperience()
     stateInitCoins()
     stateInitFish()
+    fetchStartDate()
   }, [])
 
   return (
@@ -136,6 +150,7 @@ const Home = ({ router }: Props) => {
           <Fish scale={0.2} />
           <NumText n={fish} view_digits={4} x={100} y={-25} />
         </Container>
+        <DayText x={1300} y={400} text={String(playTime)} />
         <MiniCat
           defaultX={200}
           defaultY={miniCatBorder.maxY}

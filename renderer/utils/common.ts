@@ -1,11 +1,3 @@
-/* 
-   sample.test.tsのtype-checkが通るように作成
-   別の関数が追加されたら書き換える
- */
-export const sampleFunction = () => {
-  return 0
-}
-
 export function getRandomInt(min: number, max: number) {
   return Math.floor(Math.random() * (max - min) + min) //The maximum is exclusive and the minimum is inclusive
 }
@@ -25,6 +17,11 @@ export const shouldStrTimeToSecondNum = (strTime: string) => {
   const m = 10 * shouldStrToNum(strTime[3]) + shouldStrToNum(strTime[4])
   const s = 10 * shouldStrToNum(strTime[6]) + shouldStrToNum(strTime[7])
   return 60 * 60 * h + 60 * m + s
+}
+
+export default function getPlayTime(start_date: Date) {
+  let now_date = new Date()
+  return now_date.getDate() - start_date.getDate()
 }
 
 export function getNowYMDhmsStr() {

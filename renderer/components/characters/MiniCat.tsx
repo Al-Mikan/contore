@@ -9,7 +9,7 @@ import { useState, MutableRefObject } from 'react'
 import { InteractionEvent } from 'pixi.js'
 
 import { containsPoint, containsPointClickThrouth } from '../../utils/PixiAPI'
-import { getRandomInt } from '../../utils/api'
+import { getRandomInt } from '../../utils/common'
 import {
   State,
   Position,

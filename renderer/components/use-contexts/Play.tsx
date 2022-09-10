@@ -9,7 +9,7 @@ import TargetFish from '../characters/TargetFish'
 import EndBtn from '../buttons/EndBtn'
 import FishBtn from '../buttons/FIshBtn'
 import { HealthContext } from '../containers/CanvasContext'
-import { getRandomInt } from '../../utils/api'
+import { getRandomInt } from '../../utils/common'
 import { shouldFetchFish, updateShopFish } from '../../utils/model'
 import HealthPoint from '../../utils/HealthPoint'
 

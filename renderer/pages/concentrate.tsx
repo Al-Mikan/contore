@@ -7,7 +7,7 @@ import ResultModal from '../components/modals/ResultModal'
 import MiniCat from '../components/characters/MiniCat'
 import EndBtn from '../components/buttons/EndBtn'
 import { useRouter } from 'next/router'
-import { shouldStrTimeToSecondNum } from '../utils/api'
+import { shouldStrTimeToSecondNum } from '../utils/common'
 import ExperiencePoint from '../utils/ExperiencePoint'
 import {
   shouldFetchCoins,

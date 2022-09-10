@@ -5,7 +5,7 @@ import NewGameBtn from '../components/buttons/NewGameBtn'
 import GameOverText from '../components/texts/GameOverText'
 import Layout from '../components/containers/Layout'
 import { useRouter } from 'next/router'
-import { getNowYMDhmsStr } from '../utils/api'
+import { getNowYMDhmsStr } from '../utils/common'
 import {
   updateCoreCoin,
   updateCoreEX,
