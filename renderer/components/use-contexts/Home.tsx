@@ -29,7 +29,6 @@ import PlayBtn from '../buttons/PlayBtn'
 import ShopModal from '../modals/ShopModal'
 import SettingModal from '../modals/SettingModal'
 import Black from '../items/black'
-import DayText from '../items/DayText'
 import getPlayTime from '../../utils/common'
 
 type IGraphics = PixiRef<typeof Graphics>
@@ -171,8 +170,10 @@ const Home = ({ router }: Props) => {
           <CuteFish x={40} y={8} scale={0.5} />
           <NumText n={fish} view_digits={4} x={100} y={-40} />
         </Container>
-        <DayText x={1300} y={400} text={String(playTime)} />
-        <Sprite image="/static/img/board.png" x={140} scale={1} />
+        <Sprite image="/static/img/board.png" x={40} scale={0.8} />
+        <Sprite image="/static/img/days.png" x={300} y={190} scale={0.5} />
+        {/*  一日目からスタート */}
+        <NumText x={120} y={171} scale={0.6} n={playTime + 1} view_digits={5} />
         <OptionBtn
           handleSettingClick={handleSettingClick}
           x={20}
