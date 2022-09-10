@@ -152,14 +152,14 @@ const Home = ({ router }: Props) => {
             n={ex.get_level()}
             view_digits={3}
             x={180}
-            y={0}
+            y={-15}
             scale={0.5}
             is_headzero_displayed={true}
           />
         </Container>
         <Container x={1370} y={200} scale={0.6}>
           <Coin scale={0.8} />
-          <NumText n={coins} view_digits={4} x={30} y={-20} scale={0.8} />
+          <NumText n={coins} view_digits={4} x={30} y={-35} scale={0.8} />
         </Container>
         <LifeGauge
           n={hp.get_health_point_formatted(10)}
@@ -169,7 +169,7 @@ const Home = ({ router }: Props) => {
         />
         <Container x={1300} y={350} scale={0.6}>
           <CuteFish x={40} y={8} scale={0.5} />
-          <NumText n={fish} view_digits={4} x={100} y={-25} />
+          <NumText n={fish} view_digits={4} x={100} y={-40} />
         </Container>
         <DayText x={1300} y={400} text={String(playTime)} />
         <Sprite image="/static/img/board.png" x={140} scale={1} />

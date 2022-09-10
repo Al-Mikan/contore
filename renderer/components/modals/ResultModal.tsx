@@ -29,6 +29,7 @@ const ResultModal = ({
   score,
   handleClickToHome,
 }: Props) => {
+  const lineSpace = 55
   const [dragMode, setDragMode] = useState(false)
   const [pos, setPos] = useState<Position>({ x: x, y: y })
   const [beforeMousePos, setBeforeMousePos] = useState<Position>({ x: 0, y: 0 })
@@ -105,12 +106,12 @@ const ResultModal = ({
           }
         />
         <Container x={270} y={20}>
-          <Num n={shouldStrToNum(time[0])} x={50 * 0} />
-          <Num n={shouldStrToNum(time[1])} x={50 * 1} />
+          <Num n={shouldStrToNum(time[0])} x={lineSpace * 0} y={-15} />
+          <Num n={shouldStrToNum(time[1])} x={lineSpace * 1} y={-15} />
           <Text
             text="h"
             anchor={0.5}
-            x={50 * 2 + 20}
+            x={lineSpace * 2 + 20}
             y={40}
             style={
               new TextStyle({
@@ -120,12 +121,12 @@ const ResultModal = ({
               })
             }
           />
-          <Num n={shouldStrToNum(time[3])} x={50 * 3} />
-          <Num n={shouldStrToNum(time[4])} x={50 * 4} />
+          <Num n={shouldStrToNum(time[3])} x={lineSpace * 3} y={-15} />
+          <Num n={shouldStrToNum(time[4])} x={lineSpace * 4} y={-15} />
           <Text
             text="m"
             anchor={0.5}
-            x={50 * 5 + 20}
+            x={lineSpace * 5 + 20}
             y={40}
             style={
               new TextStyle({
@@ -155,16 +156,16 @@ const ResultModal = ({
         <NumText
           n={shouldStrTimeToSecondNum(time)}
           view_digits={5}
-          x={230}
-          y={-20}
+          x={190}
+          y={-35}
+          is_headzero_displayed={true}
         />
       </Container>
       {/* COIN */}
       <Container x={-80} y={75} scale={0.5}>
         <Coin x={-20} scale={0.7} />
-        <NumText n={coins} view_digits={3} x={315} y={-30} />
+        <NumText n={coins} view_digits={5} x={170} y={-45} />
       </Container>
-
       {/* SCORE */}
       <Container x={-140} y={100} scale={0.5}>
         <Text
@@ -181,11 +182,11 @@ const ResultModal = ({
           }
         />
         {score > 0 ? (
-          <NumText n={score} view_digits={3} x={440} y={19} />
+          <NumText n={score} view_digits={3} x={400} y={19} />
         ) : (
           <Text
             text="---"
-            x={440}
+            x={430}
             y={10}
             style={
               new TextStyle({
