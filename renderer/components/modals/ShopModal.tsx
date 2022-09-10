@@ -142,7 +142,7 @@ const SettingModal = ({
       </Container>
       <Container x={40} y={130} scale={0.5}>
         <Coin />
-        <NumText n={coins} view_digits={4} x={70} y={-25} />
+        <NumText n={coins} view_digits={4} x={70} y={-40} />
       </Container>
       <CloseBtn
         handleClick={handleClickToHome}

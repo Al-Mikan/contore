@@ -1,6 +1,6 @@
 import { NextRouter } from 'next/router'
-import { InteractionEvent, TextStyle } from 'pixi.js'
-import { Sprite, Container, Graphics, PixiRef, Text } from '@inlet/react-pixi'
+import { InteractionEvent } from 'pixi.js'
+import { Sprite, Container, Graphics, PixiRef } from '@inlet/react-pixi'
 import { useEffect, useState, useContext, useRef } from 'react'
 
 import LevelBar from '../items/LevelBar'
@@ -26,6 +26,9 @@ import CuteFish from '../items/CuteFish'
 import { HealthContext } from '../containers/CanvasContext'
 import HealthPoint from '../../utils/HealthPoint'
 import PlayBtn from '../buttons/PlayBtn'
+import ShopModal from '../modals/ShopModal'
+import SettingModal from '../modals/SettingModal'
+import Black from '../items/black'
 import getPlayTime from '../../utils/common'
 
 type IGraphics = PixiRef<typeof Graphics>
@@ -42,6 +45,9 @@ const Home = ({ router }: Props) => {
   const [coins, setCoins] = useState(0)
   const [fish, setFish] = useState(0)
   const [minicatScale, setMinicatScale] = useState(0.7)
+  const [isShop, setIsShop] = useState(false)
+  const [isSetting, setIsSetting] = useState(false)
+  const [isBlack, setIsBlack] = useState(false)
   const [playTime, setPlayTime] = useState(0)
 
   const ex = new ExperiencePoint(experience)
@@ -61,15 +67,30 @@ const Home = ({ router }: Props) => {
   const handleStartClick = (event: InteractionEvent) => {
     router.push('/concentrate')
   }
+
+  const shopHandleClickToHome = () => {
+    setIsShop(false)
+    setIsBlack(false)
+  }
+
+  const settingHandleClickToHome = () => {
+    setIsSetting(false)
+    setIsBlack(false)
+  }
+
   const handleSettingClick = (event: InteractionEvent) => {
-    router.push('/setting')
+    // router.push('/setting')
+    setIsSetting(true)
+    setIsBlack(true)
   }
 
   const handlePlayClick = (event: InteractionEvent) => {
     router.push('/play')
   }
   const handleShopClick = (event: InteractionEvent) => {
-    router.push('/shop')
+    // router.push('/shop')
+    setIsShop(true)
+    setIsBlack(true)
   }
 
   const handleCloseClick = (event: InteractionEvent) => {
@@ -130,14 +151,14 @@ const Home = ({ router }: Props) => {
             n={ex.get_level()}
             view_digits={3}
             x={180}
-            y={0}
+            y={-15}
             scale={0.5}
             is_headzero_displayed={true}
           />
         </Container>
         <Container x={1370} y={200} scale={0.6}>
           <Coin scale={0.8} />
-          <NumText n={coins} view_digits={4} x={30} y={-20} scale={0.8} />
+          <NumText n={coins} view_digits={4} x={30} y={-35} scale={0.8} />
         </Container>
         <LifeGauge
           n={hp.get_health_point_formatted(10)}
@@ -147,7 +168,7 @@ const Home = ({ router }: Props) => {
         />
         <Container x={1300} y={350} scale={0.6}>
           <CuteFish x={40} y={8} scale={0.5} />
-          <NumText n={fish} view_digits={4} x={100} y={-25} />
+          <NumText n={fish} view_digits={4} x={100} y={-40} />
         </Container>
         <Sprite image="/static/img/board.png" x={40} scale={0.8} />
         <Sprite image="/static/img/days.png" x={300} y={190} scale={0.5} />
@@ -181,6 +202,18 @@ const Home = ({ router }: Props) => {
           border={miniCatBorder}
         />
       </Sprite>
+
+      {isBlack && <Black x={350} y={pos.y} />}
+      {isShop && (
+        <ShopModal x={650} y={300} handleClickToHome={shopHandleClickToHome} />
+      )}
+      {isSetting && (
+        <SettingModal
+          x={650}
+          y={300}
+          handleClickToHome={settingHandleClickToHome}
+        />
+      )}
     </Container>
   )
 }

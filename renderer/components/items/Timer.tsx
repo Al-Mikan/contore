@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { Container, Sprite } from '@inlet/react-pixi'
 
-import Num from './Num'
+import WhiteNum from './WhiteNum'
 import { shouldStrToNum } from '../../utils/common'
 import { BasicSpriteProps } from '../../types/sprite'
 
@@ -31,14 +31,14 @@ const Timer = ({ x = 0, y = 0, scale = 1, time, setTime }: Props) => {
 
   return (
     <Container x={x} y={y} scale={scale}>
-      <Num n={shouldStrToNum(time[0])} x={0} />
-      <Num n={shouldStrToNum(time[1])} x={50} />
-      <Sprite image="/static/img/number/colon.png" x={100} />
-      <Num n={shouldStrToNum(time[3])} x={150} />
-      <Num n={shouldStrToNum(time[4])} x={200} />
-      <Sprite image="/static/img/number/colon.png" x={250} />
-      <Num n={shouldStrToNum(time[6])} x={300} />
-      <Num n={shouldStrToNum(time[7])} x={350} />
+      <WhiteNum n={shouldStrToNum(time[0])} x={0} />
+      <WhiteNum n={shouldStrToNum(time[1])} x={50} />
+      <Sprite image="/static/img/white-border-number/colon.png" x={115} y={5} />
+      <WhiteNum n={shouldStrToNum(time[3])} x={150} />
+      <WhiteNum n={shouldStrToNum(time[4])} x={200} />
+      <Sprite image="/static/img/white-border-number/colon.png" x={265} y={5} />
+      <WhiteNum n={shouldStrToNum(time[6])} x={300} />
+      <WhiteNum n={shouldStrToNum(time[7])} x={350} />
     </Container>
   )
 }
