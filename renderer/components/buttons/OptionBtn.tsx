@@ -15,7 +15,7 @@ const SettingBtn = ({ x = 0, y = 0, scale = 1, handleSettingClick }: Props) => {
   const mouseout = () => setAlpha(1)
   return (
     <Sprite
-      image="/static/img/hamburger.png"
+      image="/static/img/option-btn.png"
       x={x}
       y={y}
       scale={scale}
