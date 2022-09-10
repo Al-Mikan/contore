@@ -23,7 +23,7 @@ const BuyBtn = ({
 
   return (
     <Sprite
-      image="/static/img/start-btn.png"
+      image="/static/img/ok-btn.png"
       x={x}
       y={y}
       scale={scale}

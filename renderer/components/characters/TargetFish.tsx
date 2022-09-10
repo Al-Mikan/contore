@@ -202,7 +202,7 @@ const TargetHeart = forwardRef<ISprite, Props>( // eslint-disable-line
 
     return (
       <Sprite
-        image="/static/img/fish.png"
+        image="/static/img/cute-fish.png"
         anchor={{ x: 0.5, y: 0.8 }}
         x={characterState.currentPos.x}
         y={characterState.currentPos.y}

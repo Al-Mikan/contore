@@ -7,7 +7,7 @@ import { containsPointClickThrouth } from '../../utils/PixiAPI'
 import CloseBtn from '../buttons/CloseBtn'
 import BuyBtn from '../buttons/BuyBtn'
 import { BasicSpriteProps } from '../../types/sprite'
-import Fish from '../items/Fish'
+import CuteFish from '../items/CuteFish'
 import Coin from '../items/Coin'
 import NumText from '../items/NumText'
 import {
@@ -16,6 +16,7 @@ import {
   updateCoreCoin,
   updateShopFish,
 } from '../../utils/model'
+import ShopTitle from '../items/ShopTitle'
 
 interface Props extends BasicSpriteProps {
   handleClickToHome: (event: InteractionEvent) => void // Note: useRouterをResultModalから呼ぶとnullが返るのでpropsとして受け取る
@@ -104,6 +105,7 @@ const SettingModal = ({
       mouseupoutside={mouseUp}
     >
       <Container x={-100} y={-50}>
+        <ShopTitle x={100} y={-80} />
         <Text
           text="fish"
           x={0}
@@ -128,11 +130,11 @@ const SettingModal = ({
             })
           }
         />
-        <Fish x={5} y={-10} scale={0.1} />
+        <CuteFish x={12} y={-10} scale={0.2} />
         <BuyBtn
-          x={130}
-          y={-10}
-          scale={1}
+          x={50}
+          y={75}
+          scale={0.6}
           handleStartClick={() => {
             BuyFish(1)
           }}

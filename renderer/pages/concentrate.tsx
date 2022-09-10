@@ -7,8 +7,9 @@ import ResultModal from '../components/modals/ResultModal'
 import MiniCat from '../components/characters/MiniCat'
 import EndBtn from '../components/buttons/EndBtn'
 import { useRouter } from 'next/router'
-import { shouldStrTimeToSecondNum } from '../utils/api'
+import { shouldStrTimeToSecondNum } from '../utils/common'
 import ExperiencePoint from '../utils/ExperiencePoint'
+import Loading from '../components/items/Loading'
 import {
   shouldFetchCoins,
   shouldFetchExperience,
@@ -25,9 +26,10 @@ const timeToCoins = (time: string) => {
 
 const ConcentratePage = () => {
   const router = useRouter()
-  const [time, setTime] = useState('00:00:00')
-  const [resultTime, setResultTime] = useState('00:00:00')
-  const [isOpen, setIsOpen] = useState(false)
+  let [time, setTime] = useState('00:00:00')
+  let [resultTime, setResultTime] = useState('00:00:00')
+  let [isOpen, setIsOpen] = useState(false)
+  let [isLoading, setIsLoading] = useState(true)
   const [minicatScale, setMinicatScale] = useState(0.6)
   let cameraHandleRef = useRef<CameraHandle>(null)
 
@@ -92,7 +94,7 @@ const ConcentratePage = () => {
       await camera_confirmer()
       const cameraFlag = await canUseCamera()
       if (cameraFlag) {
-        cameraHandleRef.current = new CameraHandle()
+        cameraHandleRef.current = new CameraHandle(setIsLoading)
         cameraHandleRef.current.start_camera()
       }
     }
@@ -103,6 +105,14 @@ const ConcentratePage = () => {
       window.electronAPI.setAlwaysOnTop(false)
     }
   }, [])
+
+  if (isLoading) {
+    return (
+      <Layout title="集中画面｜こんとれ！！">
+        <Loading x={1000} y={480} />
+      </Layout>
+    )
+  }
 
   return (
     <Layout title="集中画面 | こんとれ！！">

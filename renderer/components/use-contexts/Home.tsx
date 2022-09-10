@@ -12,7 +12,7 @@ import { Position } from '../../types/character'
 import { containsPointClickThrouth } from '../../utils/PixiAPI'
 import StartBtn from '../buttons/StartBtn'
 import ShopBtn from '../buttons/ShopBtn'
-import SettingBtn from '../buttons/SettingBtn'
+import OptionBtn from '../buttons/OptionBtn'
 import ExperiencePoint from '../../utils/ExperiencePoint'
 import NumText from '../items/NumText'
 import CodeText from '../texts/CodeText'
@@ -22,13 +22,15 @@ import {
   shouldFetchCoins,
   shouldFetchFish,
 } from '../../utils/model'
-import Fish from '../items/Fish'
+import CuteFish from '../items/CuteFish'
 import { HealthContext } from '../containers/CanvasContext'
 import HealthPoint from '../../utils/HealthPoint'
 import PlayBtn from '../buttons/PlayBtn'
 import ShopModal from '../modals/ShopModal'
 import SettingModal from '../modals/SettingModal'
 import Black from '../items/black'
+import DayText from '../items/DayText'
+import getPlayTime from '../../utils/common'
 
 type IGraphics = PixiRef<typeof Graphics>
 
@@ -47,6 +49,7 @@ const Home = ({ router }: Props) => {
   const [isShop, setIsShop] = useState(false)
   const [isSetting, setIsSetting] = useState(false)
   const [isBlack, setIsBlack] = useState(false)
+  const [playTime, setPlayTime] = useState(0)
 
   const ex = new ExperiencePoint(experience)
   const hp = new HealthPoint(health)
@@ -105,10 +108,21 @@ const Home = ({ router }: Props) => {
     const stateInitFish = async () => {
       setFish(await shouldFetchFish())
     }
+    const fetchStartDate = async () => {
+      // ログイン日数の設定
+      const nowStartDate: string = await window.database.read('core.start_date')
+      if (nowStartDate === undefined) {
+        throw new Error('electron-store: core.start_dateが存在しません')
+      }
+      let startDate_ = new Date(nowStartDate)
+      setPlayTime(getPlayTime(startDate_))
+    }
+
     // 非同期処理を並行に実行
     stateInitExperience()
     stateInitCoins()
     stateInitFish()
+    fetchStartDate()
   }, [])
 
   return (
@@ -154,31 +168,31 @@ const Home = ({ router }: Props) => {
           scale={1.2}
         />
         <Container x={1300} y={350} scale={0.6}>
-          <Fish scale={0.2} />
+          <CuteFish x={40} y={8} scale={0.5} />
           <NumText n={fish} view_digits={4} x={100} y={-25} />
         </Container>
+        <DayText x={1300} y={400} text={String(playTime)} />
+        <Sprite image="/static/img/board.png" x={140} scale={1} />
+        <OptionBtn
+          handleSettingClick={handleSettingClick}
+          x={20}
+          y={782}
+          scale={0.6}
+        />
+        <StartBtn
+          handleStartClick={handleStartClick}
+          x={1250}
+          y={737}
+          scale={2.3}
+        />
+        <PlayBtn handleClick={handlePlayClick} x={1050} y={770} scale={0.75} />
+        <ShopBtn handleClick={handleShopClick} x={860} y={770} scale={0.73} />
         <MiniCat
           defaultX={200}
           defaultY={miniCatBorder.maxY}
           scale={minicatScale}
           border={miniCatBorder}
-          isClickThrough={true} // 画面外でも正常にクリック可能に
         />
-        <Sprite image="/static/img/board.png" x={140} scale={1} />
-        <SettingBtn
-          handleSettingClick={handleSettingClick}
-          x={1530}
-          y={20}
-          scale={0.6}
-        />
-        <StartBtn
-          handleStartClick={handleStartClick}
-          x={1400}
-          y={770}
-          scale={1.5}
-        />
-        <PlayBtn handleClick={handlePlayClick} x={1200} y={770} scale={0.75} />
-        <ShopBtn handleClick={handleShopClick} x={10} y={770} scale={0.73} />
       </Sprite>
 
       {isBlack && <Black x={350} y={pos.y} />}

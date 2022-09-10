@@ -17,6 +17,7 @@ interface Dummy {
     coin: number
     health_point: number
     last_login: string
+    start_date: string
   }
   setting: {
     camera: boolean
@@ -33,6 +34,7 @@ const schema: Schema<Dummy> = {
     default: {}, // 明示的に与えないと子要素が取り出せないバグが起きる
     properties: {
       experience_point: { type: 'integer', default: 0, minimum: 0 },
+      start_date: { type: 'string', default: 'default' },
       coin: { type: 'integer', default: 30, minimum: 0, maximum: 9999 },
       health_point: {
         type: 'integer',
@@ -68,6 +70,22 @@ const schema: Schema<Dummy> = {
 }
 
 const store = new Store<Dummy>({ schema })
+
+function getNowYMDhmsStr() {
+  const date = new Date()
+  const Y = date.getFullYear()
+  const M = ('00' + (date.getMonth() + 1)).slice(-2)
+  const D = ('00' + date.getDate()).slice(-2)
+  const h = ('00' + date.getHours()).slice(-2)
+  const m = ('00' + date.getMinutes()).slice(-2)
+  const s = ('00' + date.getSeconds()).slice(-2)
+
+  return Y + '-' + M + '-' + D + 'T' + h + ':' + m + ':' + s
+}
+
+if (store.get('core.start_date') == 'default') {
+  store.set('core.start_date', getNowYMDhmsStr())
+}
 
 // Prepare the renderer once the app is ready
 app.on('ready', async () => {
@@ -139,18 +157,6 @@ const updateHealthLastLogin = () => {
     (date_now.getTime() - date_last_login.getTime()) / 1000
   )
   store.set('core.health_point', Math.max(nowHP - blank, 0))
-}
-
-function getNowYMDhmsStr() {
-  const date = new Date()
-  const Y = date.getFullYear()
-  const M = ('00' + (date.getMonth() + 1)).slice(-2)
-  const D = ('00' + date.getDate()).slice(-2)
-  const h = ('00' + date.getHours()).slice(-2)
-  const m = ('00' + date.getMinutes()).slice(-2)
-  const s = ('00' + date.getSeconds()).slice(-2)
-
-  return Y + '-' + M + '-' + D + 'T' + h + ':' + m + ':' + s
 }
 
 app.on('window-all-closed', () => {
