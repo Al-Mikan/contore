@@ -9,7 +9,7 @@ import EndBtn from '../components/buttons/EndBtn'
 import { useRouter } from 'next/router'
 import { shouldStrTimeToSecondNum } from '../utils/api'
 import ExperiencePoint from '../utils/ExperiencePoint'
-import Camera_handle from '../utils/camera'
+import CameraHandle from '../utils/camera'
 
 const timeToCoins = (time: string) => {
   // ここは時間に応じて取得枚数を変える
@@ -21,7 +21,7 @@ const ConcentratePage = () => {
   let [time, setTime] = useState('00:00:00')
   let [resultTime, setResultTime] = useState('00:00:00')
   let [isOpen, setIsOpen] = useState(false)
-  let Camera_handler = useRef(new Camera_handle())
+  let cameraHandleRef = useRef<CameraHandle>(null)
   let camera_flag: Boolean
 
   const miniCatBorder = {
@@ -81,8 +81,8 @@ const ConcentratePage = () => {
     setResultTime(time)
     setIsOpen(true)
 
-    Camera_handler.current.stop_camera()
-    console.log(`score;${Camera_handler.current.cat_detect_ratio}`)
+    cameraHandleRef.current.stop_camera()
+    console.log(`score;${cameraHandleRef.current.cat_detect_ratio}`)
   }
   const handleClickToHome = (event: InteractionEvent) => {
     router.push('/')
@@ -91,11 +91,12 @@ const ConcentratePage = () => {
 
   useEffect(() => {
     window.electronAPI.setAlwaysOnTop(true)
+    cameraHandleRef.current = new CameraHandle()
     camera_confirmer().then(() => {
       canUseCamera().then((res) => {
         camera_flag = res
         if (camera_flag) {
-          Camera_handler.current.start_camera()
+          cameraHandleRef.current.start_camera()
         }
       })
     })
