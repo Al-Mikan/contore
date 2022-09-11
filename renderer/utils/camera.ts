@@ -106,15 +106,12 @@ export default class Camera_handle {
     this.camera = await new Camera(this.videoElement, {
       onFrame: async () => {
         await this.pose.send({ image: this.videoElement })
-        console.log('onFrame!!')
         this.setIsLoading(false)
       },
       width: 1280,
       height: 720,
     })
-    console.log('will camera.start()')
     await this.camera.start()
-    console.log('did camera.start()')
     return
   }
 
