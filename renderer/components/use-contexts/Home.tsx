@@ -3,6 +3,7 @@ import { InteractionEvent } from 'pixi.js'
 import { Sprite, Container, Graphics, PixiRef } from '@inlet/react-pixi'
 import { useEffect, useState, useContext, useRef } from 'react'
 
+import { getNowYMDhmsStr } from '../../utils/common'
 import LevelBar from '../items/LevelBar'
 import MiniCat from '../characters/MiniCat'
 import LifeGauge from '../items/LifeGauge'
@@ -28,8 +29,10 @@ import HealthPoint from '../../utils/HealthPoint'
 import PlayBtn from '../buttons/PlayBtn'
 import ShopModal from '../modals/ShopModal'
 import SettingModal from '../modals/SettingModal'
+import ReceiveCatModal from '../modals/ReceiveCatModal'
 import Black from '../items/black'
 import getPlayTime from '../../utils/common'
+import Level from '../items/Level'
 
 type IGraphics = PixiRef<typeof Graphics>
 
@@ -49,6 +52,7 @@ const Home = ({ router }: Props) => {
   const [isSetting, setIsSetting] = useState(false)
   const [isBlack, setIsBlack] = useState(false)
   const [playTime, setPlayTime] = useState(0)
+  const [isFirstLogin, setIsFirstLogin] = useState(false)
 
   const ex = new ExperiencePoint(experience)
   const hp = new HealthPoint(health)
@@ -75,6 +79,11 @@ const Home = ({ router }: Props) => {
 
   const settingHandleClickToHome = () => {
     setIsSetting(false)
+    setIsBlack(false)
+  }
+
+  const ReceiveCatHandleClickToHome = () => {
+    setIsFirstLogin(false)
     setIsBlack(false)
   }
 
@@ -117,11 +126,22 @@ const Home = ({ router }: Props) => {
       setPlayTime(getPlayTime(startDate_))
     }
 
+    const firstLogin = async () => {
+      const nowStartDate: string = await window.database.read('core.start_date')
+      if (nowStartDate === 'default') {
+        setIsBlack(true)
+        setIsFirstLogin(true)
+        window.database.update('core.start_date', getNowYMDhmsStr())
+      }
+    }
+
     // 非同期処理を並行に実行
-    stateInitExperience()
-    stateInitCoins()
-    stateInitFish()
-    fetchStartDate()
+    firstLogin().then(() => {
+      stateInitExperience()
+      stateInitCoins()
+      stateInitFish()
+      fetchStartDate()
+    })
   }, [])
 
   return (
@@ -145,30 +165,31 @@ const Home = ({ router }: Props) => {
           <Mask width={400} height={508} ref={maskRef} />
           <CodeText />
         </Container>
-        <Container x={1230} y={110} scale={1}>
-          <LevelBar n={ex.progress(10)} scale={1} />
+        <Container x={1170} y={180} scale={1}>
+          <LevelBar n={ex.progress(8)} x={-60} y={-30} scale={0.75} />
+          <Level x={130} y={170} scale={0.7} />
           <NumText
             n={ex.get_level()}
             view_digits={3}
-            x={180}
-            y={-15}
-            scale={0.5}
+            x={80}
+            y={140}
+            scale={0.65}
             is_headzero_displayed={true}
           />
         </Container>
-        <Container x={1370} y={200} scale={0.6}>
-          <Coin scale={0.8} />
-          <NumText n={coins} view_digits={4} x={30} y={-35} scale={0.8} />
+        <Container x={1150} y={600} scale={0.6}>
+          <Coin x={-20} scale={0.8} />
+          <NumText n={coins} view_digits={4} x={50} y={-25} scale={0.7} />
         </Container>
         <LifeGauge
           n={hp.get_health_point_formatted(10)}
-          x={1270}
-          y={250}
+          x={1200}
+          y={510}
           scale={1.2}
         />
-        <Container x={1300} y={350} scale={0.6}>
-          <CuteFish x={40} y={8} scale={0.5} />
-          <NumText n={fish} view_digits={4} x={100} y={-40} />
+        <Container x={1300} y={600} scale={0.6}>
+          <CuteFish x={60} y={8} scale={0.4} />
+          <NumText n={fish} view_digits={4} x={150} y={-25} scale={0.7} />
         </Container>
         <Sprite image="/static/img/board.png" x={40} scale={0.8} />
         <Sprite image="/static/img/days.png" x={300} y={190} scale={0.5} />
@@ -176,7 +197,7 @@ const Home = ({ router }: Props) => {
         <NumText x={120} y={171} scale={0.6} n={playTime + 1} view_digits={5} />
         <OptionBtn
           handleSettingClick={handleSettingClick}
-          x={20}
+          x={60}
           y={782}
           scale={0.6}
         />
@@ -205,6 +226,13 @@ const Home = ({ router }: Props) => {
           x={650}
           y={300}
           handleClickToHome={settingHandleClickToHome}
+        />
+      )}
+      {isFirstLogin && (
+        <ReceiveCatModal
+          x={650}
+          y={300}
+          handleClickToHome={ReceiveCatHandleClickToHome}
         />
       )}
     </Container>

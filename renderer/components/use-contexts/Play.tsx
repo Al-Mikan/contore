@@ -27,6 +27,7 @@ const UseContextPlay = ({ router }: Props) => {
   const [minicatScale, setMinicatScale] = useState(0.6)
   const [fish, setFish] = useState(0)
   const [spriteAnimationIndex, setSpriteAnimationIndex] = useState(0)
+  const [isEmpty, setIsEmpty] = useState(false)
   const miniCatBorder = {
     minX: 40,
     maxX: 1900,
@@ -43,7 +44,12 @@ const UseContextPlay = ({ router }: Props) => {
   }
   const handleClickFish = async (event: InteractionEvent) => {
     if (targetVisible) return
-    if (fish <= 0) return
+    if (fish <= 0) {
+      setIsEmpty(true)
+      return
+    } else if (fish === 1) {
+      setIsEmpty(true)
+    }
 
     await updateShopFish(fish - 1)
     setFish((prev) => prev - 1)
@@ -53,7 +59,9 @@ const UseContextPlay = ({ router }: Props) => {
 
   useEffect(() => {
     const stateInitFish = async () => {
-      setFish(await shouldFetchFish())
+      const fishNumber = await shouldFetchFish()
+      if (fishNumber <= 0) setIsEmpty(true)
+      setFish(fishNumber)
     }
 
     stateInitFish()
@@ -109,6 +117,7 @@ const UseContextPlay = ({ router }: Props) => {
         x={1776}
         y={950}
         scale={0.5}
+        isZero={isEmpty}
         handleClickFish={handleClickFish}
       />
       <CuteFish x={1795} y={928} scale={0.2} />
@@ -117,12 +126,19 @@ const UseContextPlay = ({ router }: Props) => {
         x={1835}
         y={910}
         style={
-          new TextStyle({
-            fontSize: 25,
-            fontWeight: '700',
-            fontFamily: 'neue-pixel-sans',
-            fill: '#ffffff',
-          })
+          isEmpty
+            ? new TextStyle({
+                fontSize: 25,
+                fontWeight: '700',
+                fontFamily: 'neue-pixel-sans',
+                fill: '#ff0000',
+              })
+            : new TextStyle({
+                fontSize: 25,
+                fontWeight: '700',
+                fontFamily: 'neue-pixel-sans',
+                fill: '#ffffff',
+              })
         }
       />
       <LifeGauge
