@@ -3,6 +3,7 @@ import { InteractionEvent } from 'pixi.js'
 import { Sprite, Container, Graphics, PixiRef } from '@inlet/react-pixi'
 import { useEffect, useState, useContext, useRef } from 'react'
 
+import { getNowYMDhmsStr } from '../../utils/common'
 import LevelBar from '../items/LevelBar'
 import MiniCat from '../characters/MiniCat'
 import LifeGauge from '../items/LifeGauge'
@@ -28,6 +29,7 @@ import HealthPoint from '../../utils/HealthPoint'
 import PlayBtn from '../buttons/PlayBtn'
 import ShopModal from '../modals/ShopModal'
 import SettingModal from '../modals/SettingModal'
+import ReceiveCatModal from '../modals/ReceiveCatModal'
 import Black from '../items/black'
 import getPlayTime from '../../utils/common'
 
@@ -49,6 +51,7 @@ const Home = ({ router }: Props) => {
   const [isSetting, setIsSetting] = useState(false)
   const [isBlack, setIsBlack] = useState(false)
   const [playTime, setPlayTime] = useState(0)
+  const [isFirstLogin, setIsFirstLogin] = useState(false)
 
   const ex = new ExperiencePoint(experience)
   const hp = new HealthPoint(health)
@@ -75,6 +78,11 @@ const Home = ({ router }: Props) => {
 
   const settingHandleClickToHome = () => {
     setIsSetting(false)
+    setIsBlack(false)
+  }
+
+  const ReceiveCatHandleClickToHome = () => {
+    setIsFirstLogin(false)
     setIsBlack(false)
   }
 
@@ -117,11 +125,22 @@ const Home = ({ router }: Props) => {
       setPlayTime(getPlayTime(startDate_))
     }
 
+    const firstLogin = async () => {
+      const nowStartDate: string = await window.database.read('core.start_date')
+      if (nowStartDate === 'default') {
+        setIsBlack(true)
+        setIsFirstLogin(true)
+        window.database.update('core.start_date', getNowYMDhmsStr())
+      }
+    }
+
     // 非同期処理を並行に実行
-    stateInitExperience()
-    stateInitCoins()
-    stateInitFish()
-    fetchStartDate()
+    firstLogin().then(() => {
+      stateInitExperience()
+      stateInitCoins()
+      stateInitFish()
+      fetchStartDate()
+    })
   }, [])
 
   return (
@@ -205,6 +224,13 @@ const Home = ({ router }: Props) => {
           x={650}
           y={300}
           handleClickToHome={settingHandleClickToHome}
+        />
+      )}
+      {isFirstLogin && (
+        <ReceiveCatModal
+          x={650}
+          y={300}
+          handleClickToHome={ReceiveCatHandleClickToHome}
         />
       )}
     </Container>
