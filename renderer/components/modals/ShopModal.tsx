@@ -36,13 +36,14 @@ const SettingModal = ({
   const [dragMode, setDragMode] = useState(false)
   const [pos, setPos] = useState<Position>({ x: x, y: y })
   const [beforeMousePos, setBeforeMousePos] = useState<Position>({ x: 0, y: 0 })
+  const [buyFish, setBuyFish] = useState(0)
 
   const minusHandleClick = () => {
-    setFish(Math.max(0, fish - 1))
+    setBuyFish(Math.max(0, buyFish - 1))
   }
 
   const plusHandleClick = () => {
-    setFish(Math.min(coins, fish + 1))
+    setBuyFish(Math.min(coins, buyFish + 1))
   }
 
   const BuyFish = async (price: number) => {
@@ -52,8 +53,8 @@ const SettingModal = ({
     }
     await updateCoreCoin(coins - price)
     setCoins((prev) => prev - price)
-    await updateShopFish(fish + 1)
-    setFish((prev) => prev + 1)
+    await updateShopFish(fish + price)
+    setFish((prev) => prev + price)
   }
 
   // ドラッグ操作
@@ -98,6 +99,9 @@ const SettingModal = ({
     // 並行に実行
     stateInitCoins()
     stateInitFish()
+    return () => {
+      window.location.reload()
+    }
   }, [])
 
   return (
@@ -149,7 +153,7 @@ const SettingModal = ({
             anchor={0.5}
             x={188}
             y={33}
-            text={`${fish}`}
+            text={`${buyFish}`}
             style={
               new TextStyle({
                 fontSize: 25,
@@ -178,7 +182,7 @@ const SettingModal = ({
           <Text
             x={150}
             y={60}
-            text={`x ${fish}`}
+            text={`x ${buyFish}`}
             style={
               new TextStyle({
                 fontSize: 45,
@@ -194,7 +198,7 @@ const SettingModal = ({
           y={150}
           scale={0.7}
           handleStartClick={() => {
-            BuyFish(1)
+            BuyFish(buyFish)
           }}
         />
       </Container>
