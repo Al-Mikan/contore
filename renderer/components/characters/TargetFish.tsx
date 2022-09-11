@@ -1,4 +1,4 @@
-import { Sprite, useTick, PixiRef } from '@inlet/react-pixi'
+import { Sprite, useTick, PixiRef, AnimatedSprite } from '@inlet/react-pixi'
 import { useState, forwardRef } from 'react'
 import { InteractionEvent } from 'pixi.js'
 
@@ -18,7 +18,15 @@ interface Props {
   defaultY: number
   scale: number
   border: Border
+  spriteAnimationIndex: number
 }
+
+const spriteAnimations = [
+  '/static/img/cute-fish/1.png',
+  '/static/img/cute-fish/2.png',
+  '/static/img/cute-fish/3.png',
+  '/static/img/cute-fish/4.png',
+]
 
 class MiniCatCondition extends CharacterCondition {
   protected _updateNextTargetPos() {
@@ -83,7 +91,17 @@ class MiniCatCondition extends CharacterCondition {
 
 // デフォルト引数は全画面表示
 const TargetHeart = forwardRef<ISprite, Props>( // eslint-disable-line
-  ({ isClickThrough = false, defaultX, defaultY, scale, border }, ref) => {
+  (
+    {
+      isClickThrough = false,
+      defaultX,
+      defaultY,
+      scale,
+      border,
+      spriteAnimationIndex,
+    },
+    ref
+  ) => {
     const [characterState, setCharacterState] = useState<State>({
       currentPos: { x: defaultX, y: defaultY },
       targetPos: { x: defaultX, y: defaultY },
@@ -202,8 +220,8 @@ const TargetHeart = forwardRef<ISprite, Props>( // eslint-disable-line
 
     return (
       <Sprite
-        image="/static/img/cute-fish.png"
-        anchor={{ x: 0.5, y: 0.8 }}
+        image={spriteAnimations[spriteAnimationIndex]}
+        anchor={{ x: 0.5, y: 0.5 }}
         x={characterState.currentPos.x}
         y={characterState.currentPos.y}
         scale={scale}
