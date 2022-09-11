@@ -165,7 +165,7 @@ const Home = ({ router }: Props) => {
         <LifeGauge
           n={hp.get_health_point_formatted(10)}
           x={1200}
-          y={490}
+          y={510}
           scale={1.2}
         />
         <Container x={1300} y={600} scale={0.6}>
