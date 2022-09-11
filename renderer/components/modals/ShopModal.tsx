@@ -17,6 +17,9 @@ import {
   updateShopFish,
 } from '../../utils/model'
 import ShopTitle from '../items/ShopTitle'
+import Minus from '../items/Minus'
+import Plus from '../items/Plus'
+import NumCon from '../items/NumCon'
 
 interface Props extends BasicSpriteProps {
   handleClickToHome: (event: InteractionEvent) => void // Note: useRouterをResultModalから呼ぶとnullが返るのでpropsとして受け取る
@@ -33,6 +36,15 @@ const SettingModal = ({
   const [dragMode, setDragMode] = useState(false)
   const [pos, setPos] = useState<Position>({ x: x, y: y })
   const [beforeMousePos, setBeforeMousePos] = useState<Position>({ x: 0, y: 0 })
+  const [buyFish, setBuyFish] = useState(0)
+
+  const minusHandleClick = () => {
+    setBuyFish(Math.max(0, buyFish - 1))
+  }
+
+  const plusHandleClick = () => {
+    setBuyFish(Math.min(coins, buyFish + 1))
+  }
 
   const BuyFish = async (price: number) => {
     if (coins - price < 0) {
@@ -41,8 +53,8 @@ const SettingModal = ({
     }
     await updateCoreCoin(coins - price)
     setCoins((prev) => prev - price)
-    await updateShopFish(fish + 1)
-    setFish((prev) => prev + 1)
+    await updateShopFish(fish + price)
+    setFish((prev) => prev + price)
   }
 
   // ドラッグ操作
@@ -87,6 +99,9 @@ const SettingModal = ({
     // 並行に実行
     stateInitCoins()
     stateInitFish()
+    return () => {
+      window.location.reload()
+    }
   }, [])
 
   return (
@@ -106,7 +121,7 @@ const SettingModal = ({
     >
       <Container x={-100} y={-50}>
         <ShopTitle x={100} y={-80} />
-        <Text
+        {/* <Text
           text="fish"
           x={0}
           y={0}
@@ -117,8 +132,8 @@ const SettingModal = ({
               fontFamily: 'neue-pixel-sans',
             })
           }
-        />
-        <Text
+        /> */}
+        {/* <Text
           text={`× ${fish}`}
           x={60}
           y={-25}
@@ -129,18 +144,65 @@ const SettingModal = ({
               fontFamily: 'neue-pixel-sans',
             })
           }
-        />
-        <CuteFish x={12} y={-10} scale={0.2} />
+        /> */}
+        <CuteFish x={5} y={14} scale={0.4} />
+        <Container x={-55} y={-35} scale={1.3}>
+          <Minus x={117} y={15} handleClick={minusHandleClick} />
+          <NumCon x={145} y={12} />
+          <Text
+            anchor={0.5}
+            x={188}
+            y={33}
+            text={`${buyFish}`}
+            style={
+              new TextStyle({
+                fontSize: 25,
+                fontWeight: '700',
+                fontFamily: 'neue-pixel-sans',
+              })
+            }
+          />
+          <Plus x={232} y={16} handleClick={plusHandleClick} />
+        </Container>
+
+        <Container>
+          <Text
+            x={0}
+            y={45}
+            text={`=`}
+            style={
+              new TextStyle({
+                fontSize: 60,
+                fontWeight: '700',
+                fontFamily: 'neue-pixel-sans',
+              })
+            }
+          />
+          <Coin x={100} y={90} scale={0.5} />
+          <Text
+            x={150}
+            y={60}
+            text={`x ${buyFish}`}
+            style={
+              new TextStyle({
+                fontSize: 45,
+                fontWeight: '700',
+                fontFamily: 'neue-pixel-sans',
+              })
+            }
+          />
+        </Container>
+
         <BuyBtn
-          x={50}
-          y={75}
-          scale={0.6}
+          x={-20}
+          y={150}
+          scale={0.7}
           handleStartClick={() => {
-            BuyFish(1)
+            BuyFish(buyFish)
           }}
         />
       </Container>
-      <Container x={40} y={130} scale={0.5}>
+      <Container x={70} y={140} scale={0.3}>
         <Coin />
         <NumText n={coins} view_digits={4} x={70} y={-40} />
       </Container>
