@@ -21,7 +21,6 @@ import Minus from '../items/Minus'
 import Plus from '../items/Plus'
 import NumCon from '../items/NumCon'
 
-
 interface Props extends BasicSpriteProps {
   handleClickToHome: (event: InteractionEvent) => void // Note: useRouterをResultModalから呼ぶとnullが返るのでpropsとして受け取る
 }
@@ -38,12 +37,12 @@ const SettingModal = ({
   const [pos, setPos] = useState<Position>({ x: x, y: y })
   const [beforeMousePos, setBeforeMousePos] = useState<Position>({ x: 0, y: 0 })
 
-  const minusHandleClick = () =>{
-    setFish(Math.max(0,fish-1))
+  const minusHandleClick = () => {
+    setFish(Math.max(0, fish - 1))
   }
 
   const plusHandleClick = () => {
-    setFish(Math.min(coins,fish+1))
+    setFish(Math.min(coins, fish + 1))
   }
 
   const BuyFish = async (price: number) => {
@@ -144,22 +143,22 @@ const SettingModal = ({
         /> */}
         <CuteFish x={5} y={14} scale={0.4} />
         <Container x={-55} y={-35} scale={1.3}>
-        <Minus x={117} y={15} handleClick={minusHandleClick}/>
-        <NumCon x={145} y={12}/>
-        <Text
-          anchor={0.5}
-          x={188}
-          y={33}
-          text={`${fish}`}
-          style={
-            new TextStyle({
-              fontSize: 25,
-              fontWeight: '700',
-              fontFamily: 'neue-pixel-sans',
-            })
-          }
-        />
-        <Plus x={232} y={16} handleClick={plusHandleClick}/>
+          <Minus x={117} y={15} handleClick={minusHandleClick} />
+          <NumCon x={145} y={12} />
+          <Text
+            anchor={0.5}
+            x={188}
+            y={33}
+            text={`${fish}`}
+            style={
+              new TextStyle({
+                fontSize: 25,
+                fontWeight: '700',
+                fontFamily: 'neue-pixel-sans',
+              })
+            }
+          />
+          <Plus x={232} y={16} handleClick={plusHandleClick} />
         </Container>
 
         <Container>
@@ -175,7 +174,7 @@ const SettingModal = ({
               })
             }
           />
-          <Coin x={100} y={90} scale={0.5}/>
+          <Coin x={100} y={90} scale={0.5} />
           <Text
             x={150}
             y={60}

@@ -3,10 +3,10 @@ import { InteractionEvent } from 'pixi.js'
 import { BasicSpriteProps } from '../../types/sprite'
 
 interface Props extends BasicSpriteProps {
-    handleClick:(event: InteractionEvent) => void 
+  handleClick: (event: InteractionEvent) => void
 }
 
-const Minus = ({ x, y, scale = 1 ,handleClick}: Props) => {
+const Minus = ({ x, y, scale = 1, handleClick }: Props) => {
   return (
     <Sprite
       image="/static/img/ShopSelectNum/minus.png"
