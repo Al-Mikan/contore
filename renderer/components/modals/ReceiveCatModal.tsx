@@ -66,16 +66,30 @@ const ReceiveCatModal = ({
     >
       <Sprite
         anchor={0.5}
-        image="/static/img/firstModal/txt.png"
+        image="/static/img/firstModal/txt1.png"
+        visible={true}
+        scale={1.8}
+        interactive={true}
+        y={20}
+        x={0}
+      />
+      <Sprite
+        anchor={0.5}
+        image="/static/img/firstModal/txt2.png"
         visible={true}
         scale={1.8}
         interactive={true}
         y={50}
         x={0}
-        mousedown={mouseDown}
-        mousemove={mouseMove}
-        mouseup={mouseUp}
-        mouseupoutside={mouseUp}
+      />
+      <Sprite
+        anchor={0.5}
+        image="/static/img/firstModal/txt3.png"
+        visible={true}
+        scale={1.8}
+        interactive={true}
+        y={80}
+        x={0}
       />
       <CloseBtn
         handleClick={handleClickToHome}
