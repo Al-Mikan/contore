@@ -1,19 +1,19 @@
-import { useState, useCallback, useEffect } from 'react'
 import { Container, Sprite } from '@inlet/react-pixi'
 import { InteractionEvent } from 'pixi.js'
+import { useCallback, useEffect, useState } from 'react'
 
 import { Position } from '../../types/character'
-import { containsPointClickThrouth } from '../../utils/PixiAPI'
-import CloseBtn from '../buttons/CloseBtn'
-import { BasicSpriteProps } from '../../types/sprite'
-import SettingItem from '../items/SettingItem'
 import { Setting } from '../../types/other'
+import { BasicSpriteProps } from '../../types/sprite'
+import { containsPointClickThrouth } from '../../utils/PixiAPI'
 import {
   shouldFetchSetting,
   updateSettingCamera,
   updateSettingDrag,
 } from '../../utils/model'
+import CloseBtn from '../buttons/CloseBtn'
 import OptionTitle from '../items/OptionTitle'
+import SettingItem from '../items/SettingItem'
 
 interface Props extends BasicSpriteProps {
   handleClickToHome: (event: InteractionEvent) => void // Note: useRouterをResultModalから呼ぶとnullが返るのでpropsとして受け取る

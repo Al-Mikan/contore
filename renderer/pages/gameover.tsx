@@ -1,10 +1,12 @@
-import { useEffect } from 'react'
-import { InteractionEvent } from 'pixi.js'
-
-import NewGameBtn from '../components/buttons/NewGameBtn'
-import GameOverText from '../components/texts/GameOverText'
-import Layout from '../components/containers/Layout'
 import { useRouter } from 'next/router'
+import { InteractionEvent } from 'pixi.js'
+import { useEffect } from 'react'
+
+import EndBtn from '../components/buttons/EndBtn'
+import NewGameBtn from '../components/buttons/NewGameBtn'
+import DeadMiniCat from '../components/characters/DeadMiniCat'
+import Layout from '../components/containers/Layout'
+import GameOverText from '../components/texts/GameOverText'
 import { getNowYMDhmsStr } from '../utils/common'
 import {
   updateCoreCoin,
@@ -13,8 +15,6 @@ import {
   updateCoreLastLogin,
   updateShopFish,
 } from '../utils/model'
-import DeadMiniCat from '../components/characters/DeadMiniCat'
-import EndBtn from '../components/buttons/EndBtn'
 
 const ConcentratePage = () => {
   const router = useRouter()

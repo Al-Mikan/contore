@@ -1,8 +1,8 @@
 import { Sprite } from '@inlet/react-pixi'
 import { InteractionEvent } from 'pixi.js'
-import { containsPointClickThrouth } from '../../utils/PixiAPI'
 
 import { BasicSpriteProps } from '../../types/sprite'
+import { containsPointClickThrouth } from '../../utils/PixiAPI'
 
 interface Props extends BasicSpriteProps {}
 

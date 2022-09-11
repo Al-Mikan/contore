@@ -1,12 +1,12 @@
-import React, { ReactNode } from 'react'
-import Head from 'next/head'
 import { RouterContext } from 'next/dist/shared/lib/router-context'
+import Head from 'next/head'
+import React, { ReactNode } from 'react'
 import styled from 'styled-components'
 
 import Canvas from './Canvas'
-import LoadFont from './LoadFont'
 import CanvasContext from './CanvasContext'
 import ContextBridge from './ContextBridge'
+import LoadFont from './LoadFont'
 
 type Props = {
   children: ReactNode

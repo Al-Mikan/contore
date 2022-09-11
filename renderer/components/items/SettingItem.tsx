@@ -1,4 +1,4 @@
-import { Text, Container } from '@inlet/react-pixi'
+import { Container, Text } from '@inlet/react-pixi'
 import { InteractionEvent, TextStyle } from 'pixi.js'
 
 import { BasicSpriteProps } from '../../types/sprite'

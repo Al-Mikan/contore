@@ -1,4 +1,4 @@
-import { Sprite, Container } from '@inlet/react-pixi'
+import { Container, Sprite } from '@inlet/react-pixi'
 
 import { BasicSpriteProps } from '../../types/sprite'
 

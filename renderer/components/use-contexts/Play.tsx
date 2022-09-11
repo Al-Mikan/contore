@@ -1,18 +1,18 @@
-import { useEffect, useState, useRef, useContext } from 'react'
+import { PixiRef, Sprite, Text } from '@inlet/react-pixi'
 import { NextRouter } from 'next/router'
-import { Sprite, PixiRef, Text } from '@inlet/react-pixi'
 import { InteractionEvent, TextStyle } from 'pixi.js'
+import { useContext, useEffect, useRef, useState } from 'react'
 
-import MiniCat from '../characters/MiniCat'
-import LifeGauge from '../items/LifeGauge'
-import TargetFish from '../characters/TargetFish'
-import EndBtn from '../buttons/EndBtn'
-import FishBtn from '../buttons/FIshBtn'
-import CuteFish from '../items/CuteFish'
-import { HealthContext } from '../containers/CanvasContext'
+import HealthPoint from '../../utils/HealthPoint'
 import { getRandomInt } from '../../utils/common'
 import { shouldFetchFish, updateShopFish } from '../../utils/model'
-import HealthPoint from '../../utils/HealthPoint'
+import EndBtn from '../buttons/EndBtn'
+import FishBtn from '../buttons/FIshBtn'
+import MiniCat from '../characters/MiniCat'
+import TargetFish from '../characters/TargetFish'
+import { HealthContext } from '../containers/CanvasContext'
+import CuteFish from '../items/CuteFish'
+import LifeGauge from '../items/LifeGauge'
 
 type ISprite = PixiRef<typeof Sprite>
 interface Props {

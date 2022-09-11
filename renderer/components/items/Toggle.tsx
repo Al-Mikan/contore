@@ -2,8 +2,8 @@ import { Sprite } from '@inlet/react-pixi'
 import { InteractionEvent } from 'pixi.js'
 import { useState } from 'react'
 
-import { containsPoint } from '../../utils/PixiAPI'
 import { BasicSpriteProps } from '../../types/sprite'
+import { containsPoint } from '../../utils/PixiAPI'
 
 interface Props extends BasicSpriteProps {
   isToggle?: boolean

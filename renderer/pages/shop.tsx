@@ -1,8 +1,8 @@
+import { useRouter } from 'next/router'
 import { InteractionEvent } from 'pixi.js'
 
 import Layout from '../components/containers/Layout'
 import ShopModal from '../components/modals/ShopModal'
-import { useRouter } from 'next/router'
 
 const ShopPage = () => {
   const router = useRouter()

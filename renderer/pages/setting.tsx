@@ -1,8 +1,8 @@
+import { useRouter } from 'next/router'
 import { InteractionEvent } from 'pixi.js'
 
 import Layout from '../components/containers/Layout'
 import SettingModal from '../components/modals/SettingModal'
-import { useRouter } from 'next/router'
 
 const SettingPage = () => {
   const router = useRouter()

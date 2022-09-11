@@ -1,5 +1,5 @@
 import { Graphics, PixiRef } from '@inlet/react-pixi'
-import { useCallback, forwardRef } from 'react'
+import { forwardRef, useCallback } from 'react'
 
 type IGraphics = PixiRef<typeof Graphics>
 
