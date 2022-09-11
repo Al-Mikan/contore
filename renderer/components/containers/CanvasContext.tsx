@@ -1,4 +1,5 @@
 import React, { ReactNode, createContext, useEffect, useState } from 'react'
+import { useRouter } from 'next/router'
 
 import HealthPoint from '../../utils/HealthPoint'
 import { getNowYMDhmsStr } from '../../utils/common'
@@ -7,11 +8,9 @@ import {
   updateCoreHP,
   updateCoreLastLogin,
 } from '../../utils/model'
-import { NextRouter } from 'next/router'
 
 type Props = {
   children: ReactNode
-  router: NextRouter
 }
 
 type HealthContextType = {
@@ -24,17 +23,19 @@ export const HealthContext = createContext<HealthContextType>({
   plusHealth: () => {},
 })
 
-const CanvasContext = ({ children, router }: Props) => {
+const CanvasContext = ({ children }: Props) => {
+  const router = useRouter()
   const [health, setHealth] = useState(-1)
   const plusHealth = (n: number) => {
     setHealth((prev) => {
-      const _hp = new HealthPoint(prev)
-      _hp.update_health_point(n)
-      return _hp.health_point
+      const hp = new HealthPoint(prev)
+      hp.update_health_point(n)
+      return hp.health_point
     })
   }
 
   useEffect(() => {
+    const intervalMillSec = 1000
     const fetchHealthPoint = async () => {
       setHealth(await shouldFetchHP())
     }
@@ -43,16 +44,16 @@ const CanvasContext = ({ children, router }: Props) => {
 
     const timerID = setInterval(() => {
       setHealth((prev: number) => {
-        const _hp = new HealthPoint(prev)
-        _hp.update_health_point(-1)
-        if (_hp.health_point === 0) {
+        const hp = new HealthPoint(prev)
+        hp.update_health_point(-1)
+        if (hp.health_point === 0) {
           router.push('/gameover')
         }
-        updateCoreHP(_hp.health_point)
+        updateCoreHP(hp.health_point)
         updateCoreLastLogin(getNowYMDhmsStr()) // shutdown対策で毎秒更新
-        return _hp.health_point
+        return hp.health_point
       })
-    }, 1 * 1000)
+    }, intervalMillSec)
     return () => {
       clearInterval(timerID)
     }

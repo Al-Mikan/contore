@@ -1,8 +1,12 @@
 import React, { ReactNode } from 'react'
 import Head from 'next/head'
+import { RouterContext } from 'next/dist/shared/lib/router-context'
 import styled from 'styled-components'
 
 import Canvas from './Canvas'
+import LoadFont from './LoadFont'
+import CanvasContext from './CanvasContext'
+import ContextBridge from './ContextBridge'
 
 type Props = {
   children: ReactNode
@@ -16,7 +20,15 @@ const Layout = ({ children, title = 'こんとれ！！' }: Props) => (
       <meta charSet="utf-8" />
       <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     </Head>
-    <Canvas>{children}</Canvas>
+    <ContextBridge
+      Context={RouterContext}
+      render={(renderchildren) => <Canvas>{renderchildren}</Canvas>}
+    >
+      <CanvasContext>
+        <LoadFont>{children}</LoadFont>
+      </CanvasContext>
+    </ContextBridge>
+    {/* TODO: 直コンポーネントをまとめる */}
     <video
       id="video"
       style={{ visibility: 'hidden', width: '0px', height: '0px' }}
