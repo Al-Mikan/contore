@@ -178,7 +178,7 @@ const Home = ({ router }: Props) => {
         <NumText x={120} y={171} scale={0.6} n={playTime + 1} view_digits={5} />
         <OptionBtn
           handleSettingClick={handleSettingClick}
-          x={20}
+          x={60}
           y={782}
           scale={0.6}
         />
