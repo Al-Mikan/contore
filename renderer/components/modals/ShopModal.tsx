@@ -1,25 +1,25 @@
-import { useState, useEffect } from 'react'
-import { Sprite, Text, Container } from '@inlet/react-pixi'
+import { Container, Sprite, Text } from '@inlet/react-pixi'
 import { InteractionEvent, TextStyle } from 'pixi.js'
+import { useEffect, useState } from 'react'
 
 import { Position } from '../../types/character'
-import { containsPointClickThrouth } from '../../utils/PixiAPI'
-import CloseBtn from '../buttons/CloseBtn'
-import BuyBtn from '../buttons/BuyBtn'
 import { BasicSpriteProps } from '../../types/sprite'
-import CuteFish from '../items/CuteFish'
-import Coin from '../items/Coin'
-import NumText from '../items/NumText'
+import { containsPointClickThrouth } from '../../utils/PixiAPI'
 import {
   shouldFetchCoins,
   shouldFetchFish,
   updateCoreCoin,
   updateShopFish,
 } from '../../utils/model'
-import ShopTitle from '../items/ShopTitle'
+import BuyBtn from '../buttons/BuyBtn'
+import CloseBtn from '../buttons/CloseBtn'
+import Coin from '../items/Coin'
+import CuteFish from '../items/CuteFish'
 import Minus from '../items/Minus'
-import Plus from '../items/Plus'
 import NumCon from '../items/NumCon'
+import NumText from '../items/NumText'
+import Plus from '../items/Plus'
+import ShopTitle from '../items/ShopTitle'
 
 interface Props extends BasicSpriteProps {
   handleClickToHome: (event: InteractionEvent) => void // Note: useRouterをResultModalから呼ぶとnullが返るのでpropsとして受け取る

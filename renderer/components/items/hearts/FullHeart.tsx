@@ -1,4 +1,5 @@
 import { Sprite } from '@inlet/react-pixi'
+
 import { HeartProps } from '../../../types/heart'
 
 const Heart = ({ x = 0, y = 0, scale = 1 }: HeartProps) => {

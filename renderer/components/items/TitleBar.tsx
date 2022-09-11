@@ -1,11 +1,11 @@
-import { useState } from 'react'
 import { Sprite } from '@inlet/react-pixi'
 import { InteractionEvent } from 'pixi.js'
+import { useState } from 'react'
 
 import { Position } from '../../types/character'
+import { BasicSpriteProps } from '../../types/sprite'
 import { containsPointClickThrouth } from '../../utils/PixiAPI'
 import CloseBtn from '../buttons/CloseBtn'
-import { BasicSpriteProps } from '../../types/sprite'
 
 interface Props extends BasicSpriteProps {
   width: number

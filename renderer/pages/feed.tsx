@@ -1,25 +1,23 @@
-import { useEffect, useState, useRef, useContext } from 'react'
-import { NextRouter } from 'next/router'
-import { Sprite, PixiRef, Text } from '@inlet/react-pixi'
+import { PixiRef, Sprite, Text } from '@inlet/react-pixi'
+import { useRouter } from 'next/router'
 import { InteractionEvent, TextStyle } from 'pixi.js'
+import { useContext, useEffect, useRef, useState } from 'react'
 
-import MiniCat from '../characters/MiniCat'
-import LifeGauge from '../items/LifeGauge'
-import TargetFish from '../characters/TargetFish'
-import EndBtn from '../buttons/EndBtn'
-import FishBtn from '../buttons/FIshBtn'
-import CuteFish from '../items/CuteFish'
-import { HealthContext } from '../containers/CanvasContext'
-import { getRandomInt } from '../../utils/common'
-import { shouldFetchFish, updateShopFish } from '../../utils/model'
-import HealthPoint from '../../utils/HealthPoint'
+import EndBtn from '../components/buttons/EndBtn'
+import FishBtn from '../components/buttons/FIshBtn'
+import MiniCat from '../components/characters/MiniCat'
+import TargetFish from '../components/characters/TargetFish'
+import { HealthContext } from '../components/containers/CanvasContext'
+import CuteFish from '../components/items/CuteFish'
+import LifeGauge from '../components/items/LifeGauge'
+import HealthPoint from '../utils/HealthPoint'
+import { getRandomInt } from '../utils/common'
+import { shouldFetchFish, updateShopFish } from '../utils/model'
 
 type ISprite = PixiRef<typeof Sprite>
-interface Props {
-  router: NextRouter
-}
 
-const UseContextPlay = ({ router }: Props) => {
+const Feed = () => {
+  const router = useRouter()
   const { health, plusHealth } = useContext(HealthContext)
   const spriteRef = useRef<ISprite>(null)
   const [targetItemScale, setTargetItemScale] = useState(0.2)
@@ -151,4 +149,4 @@ const UseContextPlay = ({ router }: Props) => {
   )
 }
 
-export default UseContextPlay
+export default Feed

@@ -1,22 +1,21 @@
-import { useEffect, useState, useRef } from 'react'
+import { useRouter } from 'next/router'
 import { InteractionEvent } from 'pixi.js'
+import { useEffect, useRef, useState } from 'react'
 
-import Layout from '../components/containers/Layout'
+import EndBtn from '../components/buttons/EndBtn'
+import MiniCat from '../components/characters/MiniCat'
+import Loading from '../components/items/Loading'
 import Timer from '../components/items/Timer'
 import ResultModal from '../components/modals/ResultModal'
-import MiniCat from '../components/characters/MiniCat'
-import EndBtn from '../components/buttons/EndBtn'
-import { useRouter } from 'next/router'
-import { shouldStrTimeToSecondNum } from '../utils/common'
 import ExperiencePoint from '../utils/ExperiencePoint'
-import Loading from '../components/items/Loading'
+import CameraHandle from '../utils/camera'
+import { shouldStrTimeToSecondNum } from '../utils/common'
 import {
   shouldFetchCoins,
   shouldFetchExperience,
   updateCoreCoin,
   updateCoreEX,
 } from '../utils/model'
-import CameraHandle from '../utils/camera'
 
 const timeToCoins = (time: string) => {
   // 1分 -> 1枚
@@ -109,15 +108,11 @@ const ConcentratePage = () => {
   }, [])
 
   if (isLoading) {
-    return (
-      <Layout title="集中画面｜こんとれ！！">
-        <Loading x={1000} y={480} />
-      </Layout>
-    )
+    return <Loading x={1000} y={480} />
   }
 
   return (
-    <Layout title="集中画面 | こんとれ！！">
+    <>
       {isOpen ? (
         // endボタンを推すとモーダル表示
         <ResultModal
@@ -162,7 +157,7 @@ const ConcentratePage = () => {
           />
         </>
       )}
-    </Layout>
+    </>
   )
 }
 

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-namespace */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { contextBridge, ipcRenderer, IpcRenderer } from 'electron'
+import { IpcRenderer, contextBridge, ipcRenderer } from 'electron'
 
 declare global {
   namespace NodeJS {

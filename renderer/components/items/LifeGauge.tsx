@@ -1,10 +1,10 @@
 import { Container } from '@inlet/react-pixi'
 
 import { HeartProps } from '../../types/heart'
+import { BasicSpriteProps } from '../../types/sprite'
+import EmptyHeart from './hearts/EmptyHeart'
 import FullHeart from './hearts/FullHeart'
 import HalfHeart from './hearts/HalfHeart'
-import EmptyHeart from './hearts/EmptyHeart'
-import { BasicSpriteProps } from '../../types/sprite'
 
 interface Props extends BasicSpriteProps {
   n: number // 1 -> ハート半個

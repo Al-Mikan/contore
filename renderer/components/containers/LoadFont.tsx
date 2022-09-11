@@ -1,7 +1,7 @@
 import { Container, useApp } from '@inlet/react-pixi'
-import { ReactNode, useEffect, useState } from 'react'
-import { Loader } from 'pixi.js'
 import { WebfontLoaderPlugin } from 'pixi-webfont-loader'
+import { Loader } from 'pixi.js'
+import { ReactNode, useEffect, useState } from 'react'
 
 type Props = {
   children: ReactNode

@@ -1,21 +1,19 @@
 // Native
-import { join } from 'path'
-import { format } from 'url'
-
 // Packages
 import {
   BrowserWindow,
   app,
+  dialog,
   ipcMain,
   screen,
-  dialog,
   systemPreferences,
 } from 'electron'
 import isDev from 'electron-is-dev'
 import prepareNext from 'electron-next'
-
 // electron-storeの初期化
 import Store, { Schema } from 'electron-store'
+import { join } from 'path'
+import { format } from 'url'
 
 /* トップレベルでJsonSchamaを置くことは仕様上無理 */
 interface Dummy {

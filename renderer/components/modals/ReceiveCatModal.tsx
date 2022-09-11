@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react'
-import { Sprite, Text, Container } from '@inlet/react-pixi'
+import { Container, Sprite, Text } from '@inlet/react-pixi'
 import { InteractionEvent, TextStyle } from 'pixi.js'
+import { useEffect, useState } from 'react'
 
 import { Position } from '../../types/character'
-import CloseBtn from '../buttons/CloseBtn'
 import { BasicSpriteProps } from '../../types/sprite'
+import CloseBtn from '../buttons/CloseBtn'
 
 interface Props extends BasicSpriteProps {
   handleClickToHome: (event: InteractionEvent) => void // Note: useRouterをResultModalから呼ぶとnullが返るのでpropsとして受け取る

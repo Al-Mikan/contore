@@ -1,10 +1,11 @@
-import { useEffect } from 'react'
-import { InteractionEvent } from 'pixi.js'
-
-import NewGameBtn from '../components/buttons/NewGameBtn'
-import GameOverText from '../components/texts/GameOverText'
-import Layout from '../components/containers/Layout'
 import { useRouter } from 'next/router'
+import { InteractionEvent } from 'pixi.js'
+import { useEffect } from 'react'
+
+import EndBtn from '../components/buttons/EndBtn'
+import NewGameBtn from '../components/buttons/NewGameBtn'
+import DeadMiniCat from '../components/characters/DeadMiniCat'
+import GameOverText from '../components/texts/GameOverText'
 import { getNowYMDhmsStr } from '../utils/common'
 import {
   updateCoreCoin,
@@ -13,8 +14,6 @@ import {
   updateCoreLastLogin,
   updateShopFish,
 } from '../utils/model'
-import DeadMiniCat from '../components/characters/DeadMiniCat'
-import EndBtn from '../components/buttons/EndBtn'
 
 const ConcentratePage = () => {
   const router = useRouter()
@@ -50,7 +49,7 @@ const ConcentratePage = () => {
   }, [])
 
   return (
-    <Layout title="ゲームオーバー | こんとれ！！">
+    <>
       <DeadMiniCat x={900} y={1040} isClickThrouth={true} />
       <GameOverText x={900} y={500} scale={1} />
       <NewGameBtn
@@ -67,7 +66,7 @@ const ConcentratePage = () => {
         handleClick={handleEndClick}
         isClickThrouth={true}
       />
-    </Layout>
+    </>
   )
 }
 
