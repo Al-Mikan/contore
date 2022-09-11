@@ -1,11 +1,14 @@
-import Layout from '../components/Layout'
-import StartBtn from '../components/StartBtn'
+import { useRouter } from 'next/router'
+
+import Layout from '../components/containers/Layout'
+import Home from '../components/use-contexts/Home'
 
 const IndexPage = () => {
+  const router = useRouter()
+
   return (
     <Layout title="Home | こんとれ！！">
-      <h1>はろー こんとれ！！</h1>
-      <StartBtn></StartBtn>
+      <Home router={router} />
     </Layout>
   )
 }

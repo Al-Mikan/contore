@@ -6,29 +6,39 @@
   "license": "MIT",
   "private": true,
   "main": "main/index.js",
-  "productName": "ElectronTypescriptNext",
+  "productName": "contore",
   "scripts": {
     "clean": "rimraf dist main renderer/out renderer/.next",
     "dev": "npm run build-electron && electron .",
     "build-renderer": "next build renderer && next export renderer",
     "build-electron": "tsc -p electron-src",
     "build": "npm run build-renderer && npm run build-electron",
-    "pack-app": "npm run build && electron-builder --dir",
+    "pack-app:debug": "npm run build && electron-builder --dir",
+    "pack-app:win": "npm run build && electron-builder --win --x64",
+    "pack-app:mac": "npm run build && electron-builder --mac --universal",
     "dist": "npm run build && electron-builder",
     "type-check": "tsc -p ./renderer/tsconfig.json && tsc -p ./electron-src/tsconfig.json",
     "lint": "next lint renderer electron-src",
     "lint:fix": "yarn lint --fix",
-    "format:check": "prettier --check ./**/*.{js,jsx,ts,tsx,json}",
-    "format": "prettier --write ./**/*.{js,jsx,ts,tsx,json}",
+    "format:check": "prettier --check \"./**/*.{js,jsx,ts,tsx,json}\"",
+    "format": "prettier --write \"./**/*.{js,jsx,ts,tsx,json}\"",
     "test": "jest"
   },
   "dependencies": {
     "@chakra-ui/react": "^1.8.8",
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
+    "@inlet/react-pixi": "^6.8.0",
+    "@mediapipe/camera_utils": "^0.3.1640029074",
+    "@mediapipe/control_utils": "^0.6.1629159505",
+    "@mediapipe/drawing_utils": "^0.3.1620248257",
+    "@mediapipe/pose": "^0.5.1635988162",
     "electron-is-dev": "^1.1.0",
     "electron-next": "^3.1.5",
+    "electron-store": "^8.1.0",
     "framer-motion": "^6",
+    "pixi-webfont-loader": "^1.0.2",
+    "pixi.js": "^6.5.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-icons": "^4.4.0"
@@ -46,6 +56,7 @@
     "eslint": "8.22.0",
     "eslint-config-next": "^12.2.5",
     "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-jest": "^26.8.3",
     "jest": "^28.1.3",
     "next": "latest",
     "prettier": "^2.7.1",
@@ -60,6 +71,18 @@
     "files": [
       "main",
       "renderer/out"
-    ]
+    ],
+    "mac": {
+      "target": "dmg",
+      "icon": "icon.png"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "icon.png"
+    }
+  },
+  "resolutions": {
+    "@types/react": "17.0.2",
+    "@types/react-dom": "17.0.2"
   }
 }
