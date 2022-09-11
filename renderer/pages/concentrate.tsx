@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from 'react'
 
 import EndBtn from '../components/buttons/EndBtn'
 import MiniCat from '../components/characters/MiniCat'
-import Layout from '../components/containers/Layout'
 import Loading from '../components/items/Loading'
 import Timer from '../components/items/Timer'
 import ResultModal from '../components/modals/ResultModal'
@@ -109,15 +108,11 @@ const ConcentratePage = () => {
   }, [])
 
   if (isLoading) {
-    return (
-      <Layout title="集中画面｜こんとれ！！">
-        <Loading x={1000} y={480} />
-      </Layout>
-    )
+    return <Loading x={1000} y={480} />
   }
 
   return (
-    <Layout title="集中画面 | こんとれ！！">
+    <>
       {isOpen ? (
         // endボタンを推すとモーダル表示
         <ResultModal
@@ -162,7 +157,7 @@ const ConcentratePage = () => {
           />
         </>
       )}
-    </Layout>
+    </>
   )
 }
 

@@ -38,7 +38,6 @@ type IGraphics = PixiRef<typeof Graphics>
 
 const IndexPage = () => {
   const router = useRouter()
-  console.log(router)
   const { health } = useContext(HealthContext)
   const maskRef = useRef<IGraphics>(null)
   const [pos, setPos] = useState<Position>({ x: 350, y: 200 })
@@ -86,16 +85,14 @@ const IndexPage = () => {
   }
 
   const handleSettingClick = (event: InteractionEvent) => {
-    // router.push('/setting')
     setIsSetting(true)
     setIsBlack(true)
   }
 
   const handlePlayClick = (event: InteractionEvent) => {
-    router.push('/play')
+    router.push('/feed')
   }
   const handleShopClick = (event: InteractionEvent) => {
-    // router.push('/shop')
     setIsShop(true)
     setIsBlack(true)
   }

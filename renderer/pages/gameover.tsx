@@ -5,7 +5,6 @@ import { useEffect } from 'react'
 import EndBtn from '../components/buttons/EndBtn'
 import NewGameBtn from '../components/buttons/NewGameBtn'
 import DeadMiniCat from '../components/characters/DeadMiniCat'
-import Layout from '../components/containers/Layout'
 import GameOverText from '../components/texts/GameOverText'
 import { getNowYMDhmsStr } from '../utils/common'
 import {
@@ -50,7 +49,7 @@ const ConcentratePage = () => {
   }, [])
 
   return (
-    <Layout title="ゲームオーバー | こんとれ！！">
+    <>
       <DeadMiniCat x={900} y={1040} isClickThrouth={true} />
       <GameOverText x={900} y={500} scale={1} />
       <NewGameBtn
@@ -67,7 +66,7 @@ const ConcentratePage = () => {
         handleClick={handleEndClick}
         isClickThrouth={true}
       />
-    </Layout>
+    </>
   )
 }
 
