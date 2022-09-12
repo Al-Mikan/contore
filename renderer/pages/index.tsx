@@ -40,6 +40,7 @@ const IndexPage = () => {
   const router = useRouter()
   const { health } = useContext(HealthContext)
   const maskRef = useRef<IGraphics>(null)
+
   const [pos, setPos] = useState<Position>({ x: 350, y: 200 })
   const [experience, setExperience] = useState(0)
   const [coins, setCoins] = useState(0)
@@ -97,10 +98,6 @@ const IndexPage = () => {
     setIsBlack(true)
   }
 
-  const handleCloseClick = (event: InteractionEvent) => {
-    window.electronAPI.closeWindow()
-  }
-
   useEffect(() => {
     const stateInitExperience = async () => {
       setExperience(await shouldFetchExperience())
@@ -144,10 +141,9 @@ const IndexPage = () => {
       <TitleBar
         y={-39}
         width={1280}
-        setParentPos={(pos: Position) => {
+        setPositionHook={(pos: Position) => {
           setPos(pos)
         }}
-        handleCloseBtn={handleCloseClick}
       />
       <BackGround width={1280} height={720}>
         <Container x={715} y={100} mask={maskRef.current}>
