@@ -9,6 +9,7 @@ import ShopBtn from '../components/buttons/ShopBtn'
 import StartBtn from '../components/buttons/StartBtn'
 import MiniCat from '../components/characters/MiniCat'
 import { HealthContext } from '../components/containers/CanvasContext'
+import BackGround from '../components/items/BackGround'
 import Coin from '../components/items/Coin'
 import CuteFish from '../components/items/CuteFish'
 import Level from '../components/items/Level'
@@ -25,7 +26,6 @@ import CodeText from '../components/texts/CodeText'
 import { Position } from '../types/character'
 import ExperiencePoint from '../utils/ExperiencePoint'
 import HealthPoint from '../utils/HealthPoint'
-import { containsPointClickThrouth } from '../utils/PixiAPI'
 import { getNowYMDhmsStr } from '../utils/common'
 import { getTotalPlayTimeinDays } from '../utils/common'
 import {
@@ -149,13 +149,7 @@ const IndexPage = () => {
         }}
         handleCloseBtn={handleCloseClick}
       />
-      <Sprite
-        image={'/static/img/background.png'} // 1600 × 900
-        width={1280}
-        height={720}
-        interactive={true}
-        containsPoint={containsPointClickThrouth}
-      >
+      <BackGround width={1280} height={720}>
         <Container x={715} y={100} mask={maskRef.current}>
           <Mask width={400} height={508} ref={maskRef} />
           <CodeText />
@@ -210,7 +204,7 @@ const IndexPage = () => {
           scale={minicatScale}
           border={miniCatBorder}
         />
-      </Sprite>
+      </BackGround>
 
       {isBlack && <Black x={350} y={pos.y} />}
       {isShop && (
