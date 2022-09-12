@@ -5,6 +5,7 @@ import useCoin from '../../hooks/useCoin'
 import useExperience from '../../hooks/useExperience'
 import useFish from '../../hooks/useFish'
 import useHealth from '../../hooks/useHealth'
+import useStartDate from '../../hooks/useStartDate'
 
 type Props = {
   children: ReactNode
@@ -19,6 +20,8 @@ type GameContextType = {
   plusExInStateAndDB: (n: number) => Promise<void>
   fish: number
   plusFishInStateAndDB: (n: number) => Promise<void>
+  startDate: string
+  setStartDateInStateAndDB: (s: string) => Promise<void>
 }
 
 export const GameContext = createContext<GameContextType>({
@@ -30,6 +33,8 @@ export const GameContext = createContext<GameContextType>({
   plusExInStateAndDB: async () => {},
   fish: -1,
   plusFishInStateAndDB: async () => {},
+  startDate: '',
+  setStartDateInStateAndDB: async () => {},
 })
 
 const CanvasContext = ({ children }: Props) => {
@@ -38,9 +43,14 @@ const CanvasContext = ({ children }: Props) => {
   const [coin, plusCoinInStateAndDB] = useCoin()
   const [experiencePoint, plusExInStateAndDB] = useExperience()
   const [fish, plusFishInStateAndDB] = useFish()
+  const [startDate, setStartDateInStateAndDB] = useStartDate()
 
   const isLoading =
-    health === -1 || coin === -1 || experiencePoint === -1 || fish === -1
+    health === -1 ||
+    coin === -1 ||
+    experiencePoint === -1 ||
+    fish === -1 ||
+    startDate === ''
 
   if (isLoading) {
     return null
@@ -62,6 +72,8 @@ const CanvasContext = ({ children }: Props) => {
         plusExInStateAndDB: plusExInStateAndDB,
         fish: fish,
         plusFishInStateAndDB: plusFishInStateAndDB,
+        startDate: startDate,
+        setStartDateInStateAndDB: setStartDateInStateAndDB,
       }}
     >
       {children}

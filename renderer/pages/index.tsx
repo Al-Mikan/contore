@@ -1,4 +1,4 @@
-import { Container, Sprite } from '@inlet/react-pixi'
+import { Container } from '@inlet/react-pixi'
 import { useRouter } from 'next/router'
 import { InteractionEvent } from 'pixi.js'
 import { useContext, useEffect, useState } from 'react'
@@ -10,7 +10,7 @@ import StartBtn from '../components/buttons/StartBtn'
 import MiniCat from '../components/characters/MiniCat'
 import { GameContext } from '../components/containers/CanvasContext'
 import BackGround from '../components/items/BackGround'
-import NumText from '../components/items/NumText'
+import Board from '../components/items/CorkBoard'
 import StatusBox from '../components/items/StatusBox'
 import TitleBar from '../components/items/TitleBar'
 import Black from '../components/items/black'
@@ -19,24 +19,14 @@ import SettingModal from '../components/modals/SettingModal'
 import ShopModal from '../components/modals/ShopModal'
 import { Position } from '../types/character'
 import { getNowYMDhmsStr } from '../utils/common'
-import { getTotalPlayTimeinDays } from '../utils/common'
-import {
-  shouldFetchCoins,
-  shouldFetchExperience,
-  shouldFetchFish,
-} from '../utils/model'
 
 const IndexPage = () => {
   const router = useRouter()
-  const { health } = useContext(GameContext)
-
+  const { startDate } = useContext(GameContext)
   const [windowPosition, setWindowPosition] = useState<Position>({
     x: 350,
     y: 200,
   })
-  const [experience, setExperience] = useState(0)
-  const [coins, setCoins] = useState(0)
-  const [fish, setFish] = useState(0)
   const [minicatScale, setMinicatScale] = useState(0.7)
   const [isShop, setIsShop] = useState(false)
   const [isSetting, setIsSetting] = useState(false)
@@ -59,6 +49,19 @@ const IndexPage = () => {
     router.push('/concentrate')
   }
 
+  const handleSettingClick = (event: InteractionEvent) => {
+    setIsSetting(true)
+    setIsBlack(true)
+  }
+
+  const handlePlayClick = (event: InteractionEvent) => {
+    router.push('/feed')
+  }
+  const handleShopClick = (event: InteractionEvent) => {
+    setIsShop(true)
+    setIsBlack(true)
+  }
+
   const shopHandleClickToHome = () => {
     setIsShop(false)
     setIsBlack(false)
@@ -74,55 +77,12 @@ const IndexPage = () => {
     setIsBlack(false)
   }
 
-  const handleSettingClick = (event: InteractionEvent) => {
-    setIsSetting(true)
-    setIsBlack(true)
-  }
-
-  const handlePlayClick = (event: InteractionEvent) => {
-    router.push('/feed')
-  }
-  const handleShopClick = (event: InteractionEvent) => {
-    setIsShop(true)
-    setIsBlack(true)
-  }
-
   useEffect(() => {
-    const stateInitExperience = async () => {
-      setExperience(await shouldFetchExperience())
+    if (startDate === 'default') {
+      setIsBlack(true)
+      setIsFirstLogin(true)
+      window.database.update('core.start_date', getNowYMDhmsStr())
     }
-    const stateInitCoins = async () => {
-      setCoins(await shouldFetchCoins())
-    }
-    const stateInitFish = async () => {
-      setFish(await shouldFetchFish())
-    }
-    const fetchStartDate = async () => {
-      // ログイン日数の設定
-      const nowStartDate: string = await window.database.read('core.start_date')
-      if (nowStartDate === undefined) {
-        throw new Error('electron-store: core.start_dateが存在しません')
-      }
-      let startDate_ = new Date(nowStartDate)
-      setPlayTime(getTotalPlayTimeinDays(startDate_))
-    }
-
-    const firstLogin = async () => {
-      const nowStartDate: string = await window.database.read('core.start_date')
-      if (nowStartDate === 'default') {
-        setIsBlack(true)
-        setIsFirstLogin(true)
-        window.database.update('core.start_date', getNowYMDhmsStr())
-      }
-    }
-
-    // 非同期処理を並行に実行
-    firstLogin().then(() => {
-      stateInitExperience()
-      stateInitCoins()
-      stateInitFish()
-      fetchStartDate()
-    })
   }, [])
 
   return (
@@ -135,10 +95,7 @@ const IndexPage = () => {
       />
       <BackGround>
         <StatusBox x={1170} y={180} />
-        <Sprite image="/static/img/board.png" x={40} scale={0.8} />
-        <Sprite image="/static/img/days.png" x={300} y={190} scale={0.5} />
-        {/*  一日目からスタート */}
-        <NumText x={120} y={171} scale={0.6} n={playTime + 1} view_digits={5} />
+        <Board x={50} scale={0.8} />
         <OptionBtn
           handleSettingClick={handleSettingClick}
           x={60}
