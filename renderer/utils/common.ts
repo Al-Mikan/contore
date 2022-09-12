@@ -20,8 +20,11 @@ export const shouldStrTimeToSecondNum = (strTime: string) => {
 }
 
 export default function getPlayTime(start_date: Date) {
-  let now_date: Date = new Date()
-  return Math.floor((now_date.getTime() - start_date.getTime()) / 86400000)
+  const now_date = new Date()
+  const millSeconsdOfDay = 24 * 60 * 60 * 1000
+  return Math.floor(
+    (now_date.getTime() - start_date.getTime()) / millSeconsdOfDay
+  )
 }
 
 export function getNowYMDhmsStr() {
