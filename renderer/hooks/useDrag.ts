@@ -3,21 +3,26 @@ import { useState } from 'react'
 
 import { Position } from '../types/character'
 
-type PixiEventHandler = (event: InteractionEvent) => void
-type DragItem = [boolean, PixiEventHandler, PixiEventHandler, PixiEventHandler]
+interface DragHandler {
+  mouseDown: (event: InteractionEvent) => void
+  mouseMove: (event: InteractionEvent) => void
+  mouseUp: (event: InteractionEvent) => void
+}
 
-const useDrag = (setPositionHook: (position: Position) => void) => {
+const useDrag = (
+  setPositionHook: (position: Position) => void
+): [boolean, DragHandler] => {
   const [isDragging, setIsDragging] = useState(false)
   const [beforeMousePos, setBeforeMousePos] = useState<Position>({ x: 0, y: 0 })
 
-  const mouseDown: PixiEventHandler = (event) => {
+  const mouseDown = (event: InteractionEvent) => {
     const mouseGlobalX = event.data.global.x
     const mouseGlobalY = event.data.global.y
     setBeforeMousePos({ x: mouseGlobalX, y: mouseGlobalY })
     setIsDragging(true)
   }
 
-  const mouseMove: PixiEventHandler = (event) => {
+  const mouseMove = (event: InteractionEvent) => {
     if (!isDragging) return
     /* currentTargetがnullのバグが発生したので条件分岐する */
     if (event.currentTarget === null || event.currentTarget === undefined)
@@ -35,12 +40,11 @@ const useDrag = (setPositionHook: (position: Position) => void) => {
     setBeforeMousePos({ x: mouseGlobalX, y: mouseGlobalY })
   }
 
-  const mouseUp: PixiEventHandler = (event) => {
+  const mouseUp = (event: InteractionEvent) => {
     setIsDragging(false)
   }
 
-  const retItem: DragItem = [isDragging, mouseDown, mouseMove, mouseUp]
-  return retItem
+  return [isDragging, { mouseDown, mouseMove, mouseUp }]
 }
 
 export default useDrag

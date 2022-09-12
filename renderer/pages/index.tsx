@@ -1,5 +1,5 @@
 import { Container, Graphics, PixiRef, Sprite } from '@inlet/react-pixi'
-import { NextRouter, useRouter } from 'next/router'
+import { useRouter } from 'next/router'
 import { InteractionEvent } from 'pixi.js'
 import { useContext, useEffect, useRef, useState } from 'react'
 

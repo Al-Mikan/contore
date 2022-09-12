@@ -1,7 +1,7 @@
 import { Sprite } from '@inlet/react-pixi'
 import { InteractionEvent } from 'pixi.js'
-import { useState } from 'react'
 
+import useHover from '../../hooks/useHover'
 import { BasicSpriteProps } from '../../types/sprite'
 import { containsPoint, containsPointClickThrouth } from '../../utils/PixiAPI'
 
@@ -17,9 +17,7 @@ const CloseBtn = ({
   isClickThrouth = false,
   handleClick,
 }: Props) => {
-  const [alpha, setAlpha] = useState(1)
-  const mouseover = () => setAlpha(0.8)
-  const mouseout = () => setAlpha(1)
+  const [alpha, { mouseOver, mouseOut }] = useHover()
 
   return (
     <Sprite
@@ -28,11 +26,11 @@ const CloseBtn = ({
       y={y}
       scale={scale}
       interactive={true}
+      buttonMode={true}
       alpha={alpha}
       click={handleClick}
-      mouseover={mouseover}
-      mouseout={mouseout}
-      buttonMode={true}
+      mouseover={mouseOver}
+      mouseout={mouseOut}
       containsPoint={isClickThrouth ? containsPointClickThrouth : containsPoint}
     />
   )

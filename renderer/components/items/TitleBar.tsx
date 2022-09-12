@@ -12,7 +12,7 @@ interface Props extends BasicSpriteProps {
 }
 
 const TitleBar = ({ x = 0, y = 0, scale = 1, setPositionHook }: Props) => {
-  const [dragMode, mouseDown, mouseMove, mouseUp] = useDrag(setPositionHook)
+  const [dragMode, { mouseDown, mouseMove, mouseUp }] = useDrag(setPositionHook)
 
   const handleCloseClick = (event: InteractionEvent) => {
     window.electronAPI.closeWindow()
