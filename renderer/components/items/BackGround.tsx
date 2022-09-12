@@ -6,16 +6,15 @@ import { containsPointClickThrouth } from '../../utils/PixiAPI'
 
 interface Props extends BasicSpriteProps {
   children: ReactNode
-  width: number
-  height: number
 }
 
-const BackGround = ({ children, width, height }: Props) => {
+const BackGround = ({ x = 0, y = 0, scale = 1, children }: Props) => {
   return (
     <Sprite
+      x={x}
+      y={y}
+      scale={scale}
       image={'/static/img/background.png'} // 1600 × 900
-      width={width}
-      height={height}
       interactive={true}
       containsPoint={containsPointClickThrouth}
     >

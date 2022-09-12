@@ -8,11 +8,10 @@ import { containsPointClickThrouth } from '../../utils/PixiAPI'
 import CloseBtn from '../buttons/CloseBtn'
 
 interface Props extends BasicSpriteProps {
-  width: number
   setPositionHook: (position: Position) => void
 }
 
-const TitleBar = ({ x = 0, y = 0, width, setPositionHook }: Props) => {
+const TitleBar = ({ x = 0, y = 0, scale = 1, setPositionHook }: Props) => {
   const [dragMode, mouseDown, mouseMove, mouseUp] = useDrag(setPositionHook)
 
   const handleCloseClick = (event: InteractionEvent) => {
@@ -25,7 +24,7 @@ const TitleBar = ({ x = 0, y = 0, width, setPositionHook }: Props) => {
         image="/static/img/title-bar.png"
         x={x}
         y={y}
-        width={width}
+        scale={scale}
         interactive={true}
         containsPoint={containsPointClickThrouth}
         mousedown={mouseDown}
@@ -34,8 +33,8 @@ const TitleBar = ({ x = 0, y = 0, width, setPositionHook }: Props) => {
         mouseupoutside={mouseUp}
       >
         <CloseBtn
-          x={0}
-          y={0}
+          x={5}
+          y={2}
           scale={0.4}
           handleClick={handleCloseClick}
           isClickThrouth={true}

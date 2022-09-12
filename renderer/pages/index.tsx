@@ -41,7 +41,10 @@ const IndexPage = () => {
   const { health } = useContext(HealthContext)
   const maskRef = useRef<IGraphics>(null)
 
-  const [pos, setPos] = useState<Position>({ x: 350, y: 200 })
+  const [windowPosition, setWindowPosition] = useState<Position>({
+    x: 350,
+    y: 200,
+  })
   const [experience, setExperience] = useState(0)
   const [coins, setCoins] = useState(0)
   const [fish, setFish] = useState(0)
@@ -137,15 +140,14 @@ const IndexPage = () => {
   }, [])
 
   return (
-    <Container x={pos.x} y={pos.y}>
+    <Container x={windowPosition.x} y={windowPosition.y} scale={0.85}>
       <TitleBar
-        y={-39}
-        width={1280}
+        y={-40}
         setPositionHook={(pos: Position) => {
-          setPos(pos)
+          setWindowPosition(pos)
         }}
       />
-      <BackGround width={1280} height={720}>
+      <BackGround>
         <Container x={715} y={100} mask={maskRef.current}>
           <Mask width={400} height={508} ref={maskRef} />
           <CodeText />
@@ -202,7 +204,7 @@ const IndexPage = () => {
         />
       </BackGround>
 
-      {isBlack && <Black x={350} y={pos.y} />}
+      {isBlack && <Black x={350} y={windowPosition.y} />}
       {isShop && (
         <ShopModal x={650} y={300} handleClickToHome={shopHandleClickToHome} />
       )}
