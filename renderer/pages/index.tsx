@@ -11,14 +11,13 @@ import MiniCat from '../components/characters/MiniCat'
 import { GameContext } from '../components/containers/CanvasContext'
 import BackGround from '../components/items/BackGround'
 import NumText from '../components/items/NumText'
+import StatusBox from '../components/items/StatusBox'
 import TitleBar from '../components/items/TitleBar'
 import Black from '../components/items/black'
 import ReceiveCatModal from '../components/modals/ReceiveCatModal'
 import SettingModal from '../components/modals/SettingModal'
 import ShopModal from '../components/modals/ShopModal'
 import { Position } from '../types/character'
-import ExperiencePoint from '../utils/ExperiencePoint'
-import HealthPoint from '../utils/HealthPoint'
 import { getNowYMDhmsStr } from '../utils/common'
 import { getTotalPlayTimeinDays } from '../utils/common'
 import {
@@ -44,9 +43,6 @@ const IndexPage = () => {
   const [isBlack, setIsBlack] = useState(false)
   const [playTime, setPlayTime] = useState(0)
   const [isFirstLogin, setIsFirstLogin] = useState(false)
-
-  const ex = new ExperiencePoint(experience)
-  const hp = new HealthPoint(health)
 
   // 背景画像のサイズを元に調整する
   // 1600 × 900
@@ -138,6 +134,7 @@ const IndexPage = () => {
         }}
       />
       <BackGround>
+        <StatusBox x={1170} y={180} />
         <Sprite image="/static/img/board.png" x={40} scale={0.8} />
         <Sprite image="/static/img/days.png" x={300} y={190} scale={0.5} />
         {/*  一日目からスタート */}

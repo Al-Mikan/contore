@@ -1,5 +1,10 @@
 import { Container } from '@inlet/react-pixi'
+import { useContext } from 'react'
 
+import { BasicSpriteProps } from '../../types/sprite'
+import ExperiencePoint from '../../utils/ExperiencePoint'
+import HealthPoint from '../../utils/HealthPoint'
+import { GameContext } from '../containers/CanvasContext'
 import Coin from './Coin'
 import CuteFish from './CuteFish'
 import Level from './Level'
@@ -7,10 +12,16 @@ import LevelBar from './LevelBar'
 import LifeGauge from './LifeGauge'
 import NumText from './NumText'
 
-const StatusBox = () => {
+interface Props extends BasicSpriteProps {}
+
+const StatusBox = ({ x = 0, y = 0, scale = 1 }: Props) => {
+  const { coin, fish, experiencePoint, health } = useContext(GameContext)
+  const ex = new ExperiencePoint(experiencePoint)
+  const hp = new HealthPoint(health)
+
   return (
-    <Container>
-      <Container x={1170} y={180} scale={1}>
+    <Container x={x} y={y} scale={scale}>
+      <Container>
         <LevelBar n={ex.progress(8)} x={-60} y={-30} scale={0.75} />
         <Level x={130} y={170} scale={0.7} />
         <NumText
@@ -22,19 +33,19 @@ const StatusBox = () => {
           is_headzero_displayed={true}
         />
       </Container>
-      <Container x={1150} y={600} scale={0.6}>
-        <Coin x={-20} scale={0.8} />
-        <NumText n={coins} view_digits={4} x={50} y={-25} scale={0.7} />
-      </Container>
       <LifeGauge
         n={hp.get_health_point_formatted(10)}
-        x={1200}
-        y={510}
+        x={30}
+        y={330}
         scale={1.2}
       />
-      <Container x={1300} y={600} scale={0.6}>
-        <CuteFish x={60} y={8} scale={0.4} />
-        <NumText n={fish} view_digits={4} x={150} y={-25} scale={0.7} />
+      <Container x={-40} y={420} scale={0.5}>
+        <Coin />
+        <NumText n={coin} view_digits={4} x={75} y={-25} scale={0.8} />
+      </Container>
+      <Container x={170} y={425} scale={0.3}>
+        <CuteFish />
+        <NumText n={fish} view_digits={4} x={200} y={-63} scale={1.4} />
       </Container>
     </Container>
   )
