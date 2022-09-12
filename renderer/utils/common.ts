@@ -19,7 +19,7 @@ export const shouldStrTimeToSecondNum = (strTime: string) => {
   return 60 * 60 * h + 60 * m + s
 }
 
-export default function getPlayTime(start_date: Date) {
+export const getTotalPlayTimeinDays = (start_date: Date) => {
   const now_date = new Date()
   const millSeconsdOfDay = 24 * 60 * 60 * 1000
   return Math.floor(

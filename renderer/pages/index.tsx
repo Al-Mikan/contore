@@ -27,7 +27,7 @@ import ExperiencePoint from '../utils/ExperiencePoint'
 import HealthPoint from '../utils/HealthPoint'
 import { containsPointClickThrouth } from '../utils/PixiAPI'
 import { getNowYMDhmsStr } from '../utils/common'
-import getPlayTime from '../utils/common'
+import { getTotalPlayTimeinDays } from '../utils/common'
 import {
   shouldFetchCoins,
   shouldFetchExperience,
@@ -118,7 +118,7 @@ const IndexPage = () => {
         throw new Error('electron-store: core.start_dateが存在しません')
       }
       let startDate_ = new Date(nowStartDate)
-      setPlayTime(getPlayTime(startDate_))
+      setPlayTime(getTotalPlayTimeinDays(startDate_))
     }
 
     const firstLogin = async () => {
