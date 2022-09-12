@@ -1,73 +1,64 @@
 import { useRouter } from 'next/router'
-import React, { ReactNode, createContext, useEffect, useState } from 'react'
+import React, { ReactNode, createContext } from 'react'
 
-import HealthPoint from '../../utils/HealthPoint'
-import { getNowYMDhmsStr } from '../../utils/common'
-import {
-  shouldFetchHP,
-  updateCoreHP,
-  updateCoreLastLogin,
-} from '../../utils/model'
+import useHealth from '../../hooks/useHealth'
 
 type Props = {
   children: ReactNode
 }
 
-type HealthContextType = {
+type GameContextType = {
   health: number
-  plusHealth: (n: number) => void
+  plusHealthInStateAndDB: (n: number) => Promise<void>
+  coin: number
+  plusCoinInStateAndDB: (n: number) => Promise<void>
+  experiencePoint: number
+  plusExInStateAndDB: (n: number) => Promise<void>
+  fish: number
+  plusFishInStateAndDB: (n: number) => Promise<void>
 }
 
-export const HealthContext = createContext<HealthContextType>({
+export const GameContext = createContext<GameContextType>({
   health: -1,
-  plusHealth: () => {},
+  plusHealthInStateAndDB: async () => {},
+  coin: -1,
+  plusCoinInStateAndDB: async () => {},
+  experiencePoint: -1,
+  plusExInStateAndDB: async () => {},
+  fish: -1,
+  plusFishInStateAndDB: async () => {},
 })
 
 const CanvasContext = ({ children }: Props) => {
   const router = useRouter()
-  const [health, setHealth] = useState(-1)
-  const plusHealth = (n: number) => {
-    setHealth((prev) => {
-      const hp = new HealthPoint(prev)
-      hp.update_health_point(n)
-      return hp.health_point
-    })
+  const [health, plusHealthInStateAndDB] = useHealth()
+
+  const isLoading = health === -1
+
+  if (isLoading) {
+    return null
   }
 
-  useEffect(() => {
-    const intervalMillSec = 1000
-    const fetchHealthPoint = async () => {
-      setHealth(await shouldFetchHP())
-    }
-
-    fetchHealthPoint()
-
-    const timerID = setInterval(() => {
-      setHealth((prev: number) => {
-        const hp = new HealthPoint(prev)
-        hp.update_health_point(-1)
-        if (hp.health_point === 0) {
-          router.push('/gameover')
-        }
-        updateCoreHP(hp.health_point)
-        updateCoreLastLogin(getNowYMDhmsStr()) // shutdown対策で毎秒更新
-        return hp.health_point
-      })
-    }, intervalMillSec)
-    return () => {
-      clearInterval(timerID)
-    }
-  }, [])
+  // gameover処理
+  if (health === 0) {
+    router.push('/gameover')
+  }
 
   return (
-    <HealthContext.Provider
+    <GameContext.Provider
       value={{
         health: health,
-        plusHealth: plusHealth,
+        plusHealthInStateAndDB: plusHealthInStateAndDB,
+        coin: -1,
+        plusCoinInStateAndDB: async () => {},
+        experiencePoint: -1,
+        plusExInStateAndDB: async () => {},
+        fish: -1,
+        plusFishInStateAndDB: async () => {},
       }}
     >
       {children}
-    </HealthContext.Provider>
+    </GameContext.Provider>
   )
 }
 

@@ -7,7 +7,7 @@ import EndBtn from '../components/buttons/EndBtn'
 import FishBtn from '../components/buttons/FIshBtn'
 import MiniCat from '../components/characters/MiniCat'
 import TargetFish from '../components/characters/TargetFish'
-import { HealthContext } from '../components/containers/CanvasContext'
+import { GameContext } from '../components/containers/CanvasContext'
 import CuteFish from '../components/items/CuteFish'
 import LifeGauge from '../components/items/LifeGauge'
 import HealthPoint from '../utils/HealthPoint'
@@ -18,7 +18,7 @@ type ISprite = PixiRef<typeof Sprite>
 
 const Feed = () => {
   const router = useRouter()
-  const { health, plusHealth } = useContext(HealthContext)
+  const { health, plusHealthInStateAndDB } = useContext(GameContext)
   const spriteRef = useRef<ISprite>(null)
   const [targetItemScale, setTargetItemScale] = useState(0.2)
   const [targetVisible, setTargetVisible] = useState(false)
@@ -85,7 +85,7 @@ const Feed = () => {
             const end = 4
             if (index === end) {
               setTargetVisible(false)
-              plusHealth(Math.floor(HealthPoint.MAX_TIME / 10)) // ハート一つ分
+              plusHealthInStateAndDB(Math.floor(HealthPoint.MAX_TIME / 10)) // ハート一つ分
               return 0
             }
             return index
