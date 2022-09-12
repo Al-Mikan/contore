@@ -1,6 +1,5 @@
 import { Container } from '@inlet/react-pixi'
 import { useRouter } from 'next/router'
-import { InteractionEvent } from 'pixi.js'
 import { useContext, useEffect, useState } from 'react'
 
 import OptionBtn from '../components/buttons/OptionBtn'
@@ -10,10 +9,10 @@ import StartBtn from '../components/buttons/StartBtn'
 import MiniCat from '../components/characters/MiniCat'
 import { GameContext } from '../components/containers/CanvasContext'
 import BackGround from '../components/items/BackGround'
+import BlackOverlay from '../components/items/BlackOverlay'
 import Board from '../components/items/CorkBoard'
 import StatusBox from '../components/items/StatusBox'
 import TitleBar from '../components/items/TitleBar'
-import Black from '../components/items/black'
 import ReceiveCatModal from '../components/modals/ReceiveCatModal'
 import SettingModal from '../components/modals/SettingModal'
 import ShopModal from '../components/modals/ShopModal'
@@ -22,17 +21,13 @@ import { getNowYMDhmsStr } from '../utils/common'
 
 const IndexPage = () => {
   const router = useRouter()
-  const { startDate } = useContext(GameContext)
+  const { startDate, setStartDateInStateAndDB } = useContext(GameContext)
   const [windowPosition, setWindowPosition] = useState<Position>({
     x: 350,
     y: 200,
   })
   const [minicatScale, setMinicatScale] = useState(0.7)
-  const [isShop, setIsShop] = useState(false)
-  const [isSetting, setIsSetting] = useState(false)
-  const [isBlack, setIsBlack] = useState(false)
-  const [playTime, setPlayTime] = useState(0)
-  const [isFirstLogin, setIsFirstLogin] = useState(false)
+  const [openingModalName, setOpeningModalName] = useState('')
 
   // 背景画像のサイズを元に調整する
   // 1600 × 900
@@ -45,43 +40,10 @@ const IndexPage = () => {
     randomTargetMaxX: 900 - 20,
   }
 
-  const handleStartClick = (event: InteractionEvent) => {
-    router.push('/concentrate')
-  }
-
-  const handleSettingClick = (event: InteractionEvent) => {
-    setIsSetting(true)
-    setIsBlack(true)
-  }
-
-  const handlePlayClick = (event: InteractionEvent) => {
-    router.push('/feed')
-  }
-  const handleShopClick = (event: InteractionEvent) => {
-    setIsShop(true)
-    setIsBlack(true)
-  }
-
-  const shopHandleClickToHome = () => {
-    setIsShop(false)
-    setIsBlack(false)
-  }
-
-  const settingHandleClickToHome = () => {
-    setIsSetting(false)
-    setIsBlack(false)
-  }
-
-  const ReceiveCatHandleClickToHome = () => {
-    setIsFirstLogin(false)
-    setIsBlack(false)
-  }
-
   useEffect(() => {
     if (startDate === 'default') {
-      setIsBlack(true)
-      setIsFirstLogin(true)
-      window.database.update('core.start_date', getNowYMDhmsStr())
+      setOpeningModalName('receive-cat')
+      setStartDateInStateAndDB(getNowYMDhmsStr())
     }
   }, [])
 
@@ -97,19 +59,29 @@ const IndexPage = () => {
         <StatusBox x={1170} y={180} />
         <Board x={50} scale={0.8} />
         <OptionBtn
-          handleSettingClick={handleSettingClick}
+          handleSettingClick={() => setOpeningModalName('setting')}
           x={60}
           y={782}
           scale={0.6}
         />
         <StartBtn
-          handleStartClick={handleStartClick}
+          handleStartClick={() => router.push('/concentrate')}
           x={1250}
           y={737}
           scale={2.3}
         />
-        <PlayBtn handleClick={handlePlayClick} x={1050} y={770} scale={0.75} />
-        <ShopBtn handleClick={handleShopClick} x={860} y={770} scale={0.73} />
+        <PlayBtn
+          handleClick={() => router.push('/feed')}
+          x={1050}
+          y={770}
+          scale={0.75}
+        />
+        <ShopBtn
+          handleClick={() => setOpeningModalName('shop')}
+          x={860}
+          y={770}
+          scale={0.73}
+        />
         <MiniCat
           defaultX={200}
           defaultY={miniCatBorder.maxY}
@@ -118,23 +90,33 @@ const IndexPage = () => {
         />
       </BackGround>
 
-      {isBlack && <Black x={350} y={windowPosition.y} />}
-      {isShop && (
-        <ShopModal x={650} y={300} handleClickToHome={shopHandleClickToHome} />
-      )}
-      {isSetting && (
-        <SettingModal
-          x={650}
-          y={300}
-          handleClickToHome={settingHandleClickToHome}
-        />
-      )}
-      {isFirstLogin && (
-        <ReceiveCatModal
-          x={650}
-          y={300}
-          handleClickToHome={ReceiveCatHandleClickToHome}
-        />
+      {openingModalName !== '' && (
+        <BlackOverlay>
+          {openingModalName === 'shop' && (
+            <ShopModal
+              x={800}
+              y={400}
+              scale={1.2}
+              handleClickToHome={() => setOpeningModalName('')}
+            />
+          )}
+          {openingModalName === 'setting' && (
+            <SettingModal
+              x={800}
+              y={400}
+              scale={1.2}
+              handleClickToHome={() => setOpeningModalName('')}
+            />
+          )}
+          {openingModalName === 'receive-cat' && (
+            <ReceiveCatModal
+              x={1000}
+              y={300}
+              scale={1.2}
+              handleClickToHome={() => setOpeningModalName('')}
+            />
+          )}
+        </BlackOverlay>
       )}
     </Container>
   )
