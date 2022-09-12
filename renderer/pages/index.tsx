@@ -1,7 +1,7 @@
-import { Container, Graphics, PixiRef, Sprite } from '@inlet/react-pixi'
+import { Container, Sprite } from '@inlet/react-pixi'
 import { useRouter } from 'next/router'
 import { InteractionEvent } from 'pixi.js'
-import { useContext, useEffect, useRef, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 
 import OptionBtn from '../components/buttons/OptionBtn'
 import PlayBtn from '../components/buttons/PlayBtn'
@@ -15,14 +15,12 @@ import CuteFish from '../components/items/CuteFish'
 import Level from '../components/items/Level'
 import LevelBar from '../components/items/LevelBar'
 import LifeGauge from '../components/items/LifeGauge'
-import Mask from '../components/items/Mask'
 import NumText from '../components/items/NumText'
 import TitleBar from '../components/items/TitleBar'
 import Black from '../components/items/black'
 import ReceiveCatModal from '../components/modals/ReceiveCatModal'
 import SettingModal from '../components/modals/SettingModal'
 import ShopModal from '../components/modals/ShopModal'
-import CodeText from '../components/texts/CodeText'
 import { Position } from '../types/character'
 import ExperiencePoint from '../utils/ExperiencePoint'
 import HealthPoint from '../utils/HealthPoint'
@@ -34,12 +32,9 @@ import {
   shouldFetchFish,
 } from '../utils/model'
 
-type IGraphics = PixiRef<typeof Graphics>
-
 const IndexPage = () => {
   const router = useRouter()
   const { health } = useContext(HealthContext)
-  const maskRef = useRef<IGraphics>(null)
 
   const [windowPosition, setWindowPosition] = useState<Position>({
     x: 350,
@@ -148,10 +143,6 @@ const IndexPage = () => {
         }}
       />
       <BackGround>
-        <Container x={715} y={100} mask={maskRef.current}>
-          <Mask width={400} height={508} ref={maskRef} />
-          <CodeText />
-        </Container>
         <Container x={1170} y={180} scale={1}>
           <LevelBar n={ex.progress(8)} x={-60} y={-30} scale={0.75} />
           <Level x={130} y={170} scale={0.7} />
