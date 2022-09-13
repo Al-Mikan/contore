@@ -2,7 +2,7 @@ import { Container, Text } from '@inlet/react-pixi'
 import { InteractionEvent, TextStyle } from 'pixi.js'
 
 import { BasicSpriteProps } from '../../types/sprite'
-import Toggle from '../buttons/Toggle'
+import Toggle from '../buttons/original/Toggle'
 
 interface Props extends BasicSpriteProps {
   text: string

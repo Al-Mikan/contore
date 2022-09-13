@@ -1,9 +1,9 @@
 import { Sprite } from '@inlet/react-pixi'
 import { InteractionEvent } from 'pixi.js'
 
-import useHover from '../../hooks/useHover'
-import { BasicSpriteProps } from '../../types/sprite'
-import { containsPoint } from '../../utils/PixiAPI'
+import useHover from '../../../hooks/useHover'
+import { BasicSpriteProps } from '../../../types/sprite'
+import { containsPoint } from '../../../utils/PixiAPI'
 
 interface Props extends BasicSpriteProps {
   isOn: boolean
@@ -15,7 +15,7 @@ const Toggle = ({
   x = 0,
   y = 0,
   scale = 1,
-  isOn = false,
+  isOn,
   handleClick,
   name,
 }: Props) => {

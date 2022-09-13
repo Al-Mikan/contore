@@ -1,10 +1,10 @@
 import { Container, Text } from '@inlet/react-pixi'
 import { InteractionEvent, TextStyle } from 'pixi.js'
 
-import { BasicSpriteProps } from '../../types/sprite'
-import NumBox from '../items/NumBox'
-import MinusBtn from './MinusBtn'
-import PlusBtn from './PlusBtn'
+import { BasicSpriteProps } from '../../../types/sprite'
+import NumBox from '../../items/NumBox'
+import MinusBtn from '../MinusBtn'
+import PlusBtn from '../PlusBtn'
 
 interface Props extends BasicSpriteProps {
   count: number

@@ -1,9 +1,7 @@
-import { Sprite } from '@inlet/react-pixi'
 import { InteractionEvent } from 'pixi.js'
 
-import useHover from '../../hooks/useHover'
 import { BasicSpriteProps } from '../../types/sprite'
-import { containsPoint, containsPointClickThrouth } from '../../utils/PixiAPI'
+import ButtonTemplate from './template/ButtonTemplate'
 
 interface Props extends BasicSpriteProps {
   isClickThrouth?: boolean
@@ -17,21 +15,14 @@ const CloseBtn = ({
   isClickThrouth = false,
   handleClick,
 }: Props) => {
-  const [alpha, { mouseOver, mouseOut }] = useHover()
-
   return (
-    <Sprite
+    <ButtonTemplate
       image="/static/img/close.png"
       x={x}
       y={y}
       scale={scale}
-      interactive={true}
-      buttonMode={true}
-      alpha={alpha}
-      click={handleClick}
-      mouseover={mouseOver}
-      mouseout={mouseOut}
-      containsPoint={isClickThrouth ? containsPointClickThrouth : containsPoint}
+      handleClick={handleClick}
+      isClickThrouth={isClickThrouth}
     />
   )
 }

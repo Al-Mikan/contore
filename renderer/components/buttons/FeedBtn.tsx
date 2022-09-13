@@ -8,7 +8,7 @@ interface Props extends BasicSpriteProps {
   handleClick: (event: InteractionEvent) => void
 }
 
-const NewGameBtn = ({
+const FeedBtn = ({
   x = 0,
   y = 0,
   scale = 1,
@@ -17,7 +17,7 @@ const NewGameBtn = ({
 }: Props) => {
   return (
     <ButtonTemplate
-      image="/static/img/new-game-btn.png"
+      image="/static/img/feed-btn.png"
       x={x}
       y={y}
       scale={scale}
@@ -27,4 +27,4 @@ const NewGameBtn = ({
   )
 }
 
-export default NewGameBtn
+export default FeedBtn

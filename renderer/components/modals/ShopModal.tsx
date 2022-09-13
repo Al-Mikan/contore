@@ -9,7 +9,7 @@ import { BasicSpriteProps } from '../../types/sprite'
 import { containsPointClickThrouth } from '../../utils/PixiAPI'
 import BuyBtn from '../buttons/BuyBtn'
 import CloseBtn from '../buttons/CloseBtn'
-import CountBtn from '../buttons/CountBtn'
+import CountBtn from '../buttons/original/CountBtn'
 import { GameContext } from '../containers/CanvasContext'
 import Coin from '../items/Coin'
 import CuteFish from '../items/CuteFish'
@@ -103,7 +103,7 @@ const SettingModal = ({ x = 0, y = 0, scale = 1, handleCloseClcik }: Props) => {
           x={-20}
           y={150}
           scale={0.7}
-          handleStartClick={() => {
+          handleClick={() => {
             BuyFish(buyFishCount)
           }}
         />

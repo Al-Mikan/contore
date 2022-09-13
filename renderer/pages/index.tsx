@@ -2,8 +2,8 @@ import { Container } from '@inlet/react-pixi'
 import { useRouter } from 'next/router'
 import { useContext, useEffect, useState } from 'react'
 
+import FeedBtn from '../components/buttons/FeedBtn'
 import OptionBtn from '../components/buttons/OptionBtn'
-import PlayBtn from '../components/buttons/PlayBtn'
 import ShopBtn from '../components/buttons/ShopBtn'
 import StartBtn from '../components/buttons/StartBtn'
 import MiniCat from '../components/characters/MiniCat'
@@ -59,18 +59,18 @@ const IndexPage = () => {
         <StatusBox x={1170} y={180} />
         <Board x={50} scale={0.8} />
         <OptionBtn
-          handleSettingClick={() => setOpeningModalName('setting')}
+          handleClick={() => setOpeningModalName('setting')}
           x={60}
           y={782}
           scale={0.6}
         />
         <StartBtn
-          handleStartClick={() => router.push('/concentrate')}
+          handleClick={() => router.push('/concentrate')}
           x={1250}
           y={737}
           scale={2.3}
         />
-        <PlayBtn
+        <FeedBtn
           handleClick={() => router.push('/feed')}
           x={1050}
           y={770}
@@ -110,9 +110,9 @@ const IndexPage = () => {
           )}
           {openingModalName === 'receive-cat' && (
             <ReceiveCatModal
-              x={1000}
-              y={300}
-              scale={1.5}
+              x={800}
+              y={400}
+              scale={1.8}
               handleCloseClcik={() => setOpeningModalName('')}
             />
           )}
