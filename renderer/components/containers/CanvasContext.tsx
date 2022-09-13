@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import React, { ReactNode, createContext } from 'react'
+import React, { ReactNode, createContext, useEffect } from 'react'
 
 import useCoin from '../../hooks/useCoin'
 import useExperience from '../../hooks/useExperience'
@@ -52,14 +52,17 @@ const CanvasContext = ({ children }: Props) => {
     fish === -1 ||
     startDate === ''
 
+  useEffect(() => {
+    if (health === 0) {
+      router.push('/gameover')
+    }
+  }, [health])
+
   if (isLoading) {
     return null
   }
 
   // gameover処理
-  if (health === 0) {
-    router.push('/gameover')
-  }
 
   return (
     <GameContext.Provider

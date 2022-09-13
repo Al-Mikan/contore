@@ -12,6 +12,7 @@ import {
   updateCoreEX,
   updateCoreHP,
   updateCoreLastLogin,
+  updateCoreStartDate,
   updateShopFish,
 } from '../utils/model'
 
@@ -24,6 +25,7 @@ const ConcentratePage = () => {
       updateCoreCoin(30),
       updateCoreHP(96 * 3600),
       updateCoreLastLogin(getNowYMDhmsStr()),
+      updateCoreStartDate('default'),
       updateShopFish(0),
     ])
     router.push('/')
@@ -35,6 +37,7 @@ const ConcentratePage = () => {
       updateCoreCoin(30),
       updateCoreHP(96 * 3600),
       updateCoreLastLogin(getNowYMDhmsStr()),
+      updateCoreStartDate('default'),
       updateShopFish(0),
     ])
     window.electronAPI.closeWindow()
@@ -52,13 +55,14 @@ const ConcentratePage = () => {
     <>
       <DeadMiniCat x={900} y={1040} isClickThrouth={true} />
       <GameOverText x={900} y={500} scale={1} />
-      <NewGameBtn
+      {/* NOTE: 一時的にバグが発生するのでコメントアウトする */}
+      {/* <NewGameBtn
         x={730}
         y={750}
         scale={0.8}
         handleClick={handleNewGame}
         isClickThrouth={true}
-      />
+      /> */}
       <EndBtn
         x={810}
         y={840}
