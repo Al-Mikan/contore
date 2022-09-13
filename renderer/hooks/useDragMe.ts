@@ -9,7 +9,7 @@ interface DragHandler {
   mouseUp: (event: InteractionEvent) => void
 }
 
-const useDrag = (
+const useDragMe = (
   setPositionHook: (position: Position) => void
 ): [boolean, DragHandler] => {
   const [isDragging, setIsDragging] = useState(false)
@@ -31,8 +31,8 @@ const useDrag = (
     /* nx,nyにセットするだけだと、端っこをクリックするとancharに瞬間移動する */
     const mouseGlobalX = event.data.global.x
     const mouseGlobalY = event.data.global.y
-    const targetParentLocalX = event.currentTarget.parent.x
-    const targetParentLocalY = event.currentTarget.parent.y
+    const targetParentLocalX = event.currentTarget.x
+    const targetParentLocalY = event.currentTarget.y
     setPositionHook({
       x: targetParentLocalX + (mouseGlobalX - beforeMousePos.x),
       y: targetParentLocalY + (mouseGlobalY - beforeMousePos.y),
@@ -47,4 +47,4 @@ const useDrag = (
   return [isDragging, { mouseDown, mouseMove, mouseUp }]
 }
 
-export default useDrag
+export default useDragMe

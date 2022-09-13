@@ -1,18 +1,14 @@
 import { Container, Sprite, Text } from '@inlet/react-pixi'
 import { InteractionEvent, TextStyle } from 'pixi.js'
-import { useEffect, useState } from 'react'
+import { useContext, useState } from 'react'
 
+import useDragMe from '../../hooks/useDragMe'
 import { Position } from '../../types/character'
 import { BasicSpriteProps } from '../../types/sprite'
 import { containsPointClickThrouth } from '../../utils/PixiAPI'
-import {
-  shouldFetchCoins,
-  shouldFetchFish,
-  updateCoreCoin,
-  updateShopFish,
-} from '../../utils/model'
 import BuyBtn from '../buttons/BuyBtn'
 import CloseBtn from '../buttons/CloseBtn'
+import { GameContext } from '../containers/CanvasContext'
 import Coin from '../items/Coin'
 import CuteFish from '../items/CuteFish'
 import Minus from '../items/Minus'
@@ -22,20 +18,18 @@ import Plus from '../items/Plus'
 import ShopTitle from '../items/ShopTitle'
 
 interface Props extends BasicSpriteProps {
-  handleClickToHome: (event: InteractionEvent) => void // Note: useRouterをResultModalから呼ぶとnullが返るのでpropsとして受け取る
+  handleCloseClcik: (e: InteractionEvent) => void
 }
 
-const SettingModal = ({
-  x = 0,
-  y = 0,
-  scale = 1,
-  handleClickToHome,
-}: Props) => {
-  const [coins, setCoins] = useState(0)
-  const [fish, setFish] = useState(0)
-  const [dragMode, setDragMode] = useState(false)
-  const [pos, setPos] = useState<Position>({ x: x, y: y })
-  const [beforeMousePos, setBeforeMousePos] = useState<Position>({ x: 0, y: 0 })
+const SettingModal = ({ x = 0, y = 0, scale = 1, handleCloseClcik }: Props) => {
+  const { coin, fish, plusCoinInStateAndDB, plusFishInStateAndDB } =
+    useContext(GameContext)
+  const [modalPosition, setModalPosition] = useState<Position>({ x: x, y: y })
+  const [isDragging, { mouseDown, mouseMove, mouseUp }] = useDragMe(
+    (position: Position) => {
+      setModalPosition(position)
+    }
+  )
   const [buyFish, setBuyFish] = useState(0)
 
   const minusHandleClick = () => {
@@ -43,74 +37,25 @@ const SettingModal = ({
   }
 
   const plusHandleClick = () => {
-    setBuyFish(Math.min(coins, buyFish + 1))
+    setBuyFish(Math.min(coin, buyFish + 1))
   }
 
   const BuyFish = async (price: number) => {
-    if (coins - price < 0) {
+    if (coin - price < 0) {
       // alertを表示する
       return
     }
-    await updateCoreCoin(coins - price)
-    setCoins((prev) => prev - price)
-    await updateShopFish(fish + price)
-    setFish((prev) => prev + price)
+    await plusCoinInStateAndDB(-price)
+    await plusFishInStateAndDB(price)
   }
-
-  // ドラッグ操作
-  const mouseDown = (event: InteractionEvent) => {
-    const nx = event.data.global.x
-    const ny = event.data.global.y
-    setDragMode(true)
-    setBeforeMousePos({ x: nx, y: ny })
-  }
-
-  const mouseMove = (event: InteractionEvent) => {
-    if (!dragMode) return
-    /* currentTargetがnullのバグが発生したので条件分岐する */
-    if (event.currentTarget === null || event.currentTarget === undefined)
-      return
-    /* クリックした場所から移動した差だけ移動する */
-    /* nx,nyにセットすると、端っこをクリックすると始め瞬間移動するので必要 */
-    const nx = event.data.global.x
-    const ny = event.data.global.y
-    const currentCharacterPosX = event.currentTarget.x
-    const currentCharacterPosY = event.currentTarget.y
-    setPos({
-      x: currentCharacterPosX + (nx - beforeMousePos.x),
-      y: currentCharacterPosY + (ny - beforeMousePos.y),
-    })
-    setBeforeMousePos({ x: nx, y: ny })
-  }
-
-  const mouseUp = (event: InteractionEvent) => {
-    setDragMode(false)
-  }
-
-  useEffect(() => {
-    const stateInitCoins = async () => {
-      // コイン枚数の設定
-      setCoins(await shouldFetchCoins())
-    }
-    const stateInitFish = async () => {
-      setFish(await shouldFetchFish())
-    }
-
-    // 並行に実行
-    stateInitCoins()
-    stateInitFish()
-    return () => {
-      window.location.reload()
-    }
-  }, [])
 
   return (
     <Sprite
       anchor={0.5}
       image="/static/img/modal.png"
       visible={true}
-      x={pos.x}
-      y={pos.y}
+      x={modalPosition.x}
+      y={modalPosition.y}
       scale={scale}
       interactive={true}
       containsPoint={containsPointClickThrouth}
@@ -121,30 +66,6 @@ const SettingModal = ({
     >
       <Container x={-100} y={-50}>
         <ShopTitle x={100} y={-80} />
-        {/* <Text
-          text="fish"
-          x={0}
-          y={0}
-          style={
-            new TextStyle({
-              fontSize: 50,
-              fontWeight: '700',
-              fontFamily: 'neue-pixel-sans',
-            })
-          }
-        /> */}
-        {/* <Text
-          text={`× ${fish}`}
-          x={60}
-          y={-25}
-          style={
-            new TextStyle({
-              fontSize: 20,
-              fontWeight: '700',
-              fontFamily: 'neue-pixel-sans',
-            })
-          }
-        /> */}
         <CuteFish x={5} y={14} scale={0.4} />
         <Container x={-55} y={-35} scale={1.3}>
           <Minus x={117} y={15} handleClick={minusHandleClick} />
@@ -204,10 +125,10 @@ const SettingModal = ({
       </Container>
       <Container x={70} y={140} scale={0.3}>
         <Coin />
-        <NumText n={coins} view_digits={4} x={70} y={-40} />
+        <NumText n={coin} view_digits={4} x={70} y={-40} />
       </Container>
       <CloseBtn
-        handleClick={handleClickToHome}
+        handleClick={handleCloseClcik}
         x={150}
         y={-175}
         scale={0.4}

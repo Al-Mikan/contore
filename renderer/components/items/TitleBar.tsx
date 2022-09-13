@@ -1,7 +1,7 @@
 import { Sprite } from '@inlet/react-pixi'
 import { InteractionEvent } from 'pixi.js'
 
-import useDrag from '../../hooks/useDrag'
+import useDragParent from '../../hooks/useDragParent'
 import { Position } from '../../types/character'
 import { BasicSpriteProps } from '../../types/sprite'
 import { containsPointClickThrouth } from '../../utils/PixiAPI'
@@ -12,7 +12,8 @@ interface Props extends BasicSpriteProps {
 }
 
 const TitleBar = ({ x = 0, y = 0, scale = 1, setPositionHook }: Props) => {
-  const [dragMode, { mouseDown, mouseMove, mouseUp }] = useDrag(setPositionHook)
+  const [dragMode, { mouseDown, mouseMove, mouseUp }] =
+    useDragParent(setPositionHook)
 
   const handleCloseClick = (event: InteractionEvent) => {
     window.electronAPI.closeWindow()

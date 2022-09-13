@@ -97,7 +97,7 @@ const IndexPage = () => {
               x={800}
               y={400}
               scale={1.2}
-              handleClickToHome={() => setOpeningModalName('')}
+              handleCloseClcik={() => setOpeningModalName('')}
             />
           )}
           {openingModalName === 'setting' && (
@@ -105,15 +105,15 @@ const IndexPage = () => {
               x={800}
               y={400}
               scale={1.2}
-              handleClickToHome={() => setOpeningModalName('')}
+              handleCloseClcik={() => setOpeningModalName('')}
             />
           )}
           {openingModalName === 'receive-cat' && (
             <ReceiveCatModal
               x={1000}
               y={300}
-              scale={1.2}
-              handleClickToHome={() => setOpeningModalName('')}
+              scale={1.5}
+              handleCloseClcik={() => setOpeningModalName('')}
             />
           )}
         </BlackOverlay>
