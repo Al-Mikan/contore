@@ -1,41 +1,44 @@
 import { Sprite } from '@inlet/react-pixi'
 import { InteractionEvent } from 'pixi.js'
-import { useState } from 'react'
 
-import { BasicSpriteProps } from '../../types/sprite'
-import { containsPoint, containsPointClickThrouth } from '../../utils/PixiAPI'
+import useHover from '../../../hooks/useHover'
+import { BasicSpriteProps } from '../../../types/sprite'
+import {
+  containsPoint,
+  containsPointClickThrouth,
+} from '../../../utils/PixiAPI'
 
 interface Props extends BasicSpriteProps {
+  image: string
   isClickThrouth?: boolean
   handleClick: (event: InteractionEvent) => void
 }
 
-const PlayBtn = ({
+const ButtonTemplate = ({
   x = 0,
   y = 0,
   scale = 1,
   isClickThrouth = false,
+  image,
   handleClick,
 }: Props) => {
-  const [alpha, setAlpha] = useState(1)
-  const mouseover = () => setAlpha(0.8)
-  const mouseout = () => setAlpha(1)
+  const [alpha, { mouseOver, mouseOut }] = useHover()
 
   return (
     <Sprite
-      image="/static/img/feed-btn.png"
+      image={image}
       x={x}
       y={y}
       scale={scale}
-      interactive={true}
-      alpha={alpha}
       click={handleClick}
-      mouseover={mouseover}
-      mouseout={mouseout}
+      alpha={alpha}
+      interactive={true}
+      mouseover={mouseOver}
+      mouseout={mouseOut}
       containsPoint={isClickThrouth ? containsPointClickThrouth : containsPoint}
       buttonMode={true}
     />
   )
 }
 
-export default PlayBtn
+export default ButtonTemplate

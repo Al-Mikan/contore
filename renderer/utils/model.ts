@@ -48,6 +48,14 @@ export const shouldFetchLastLogin = async () => {
   return lastLogin
 }
 
+export const shouldFetchStartDate = async () => {
+  const startDate: string = await window.database.read('core.start_date')
+  if (startDate === undefined) {
+    throw new Error('electron-store: core.start_dateが存在しません')
+  }
+  return startDate
+}
+
 export const updateSettingCamera = async (settingCamera: boolean) => {
   await window.database.update('setting.camera', settingCamera)
 }
@@ -74,4 +82,8 @@ export const updateCoreHP = async (healthPoint: number) => {
 
 export const updateCoreLastLogin = async (lastLogin: string) => {
   await window.database.update('core.last_login', lastLogin)
+}
+
+export const updateCoreStartDate = async (startDate: string) => {
+  await window.database.update('core.start_date', startDate)
 }

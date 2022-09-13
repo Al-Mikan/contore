@@ -1,7 +1,9 @@
 import { Container, Sprite } from '@inlet/react-pixi'
+import { useRouter } from 'next/router'
 import { InteractionEvent } from 'pixi.js'
 import { useCallback, useEffect, useState } from 'react'
 
+import useDragMe from '../../hooks/useDragMe'
 import { Position } from '../../types/character'
 import { Setting } from '../../types/other'
 import { BasicSpriteProps } from '../../types/sprite'
@@ -16,53 +18,21 @@ import OptionTitle from '../items/OptionTitle'
 import SettingItem from '../items/SettingItem'
 
 interface Props extends BasicSpriteProps {
-  handleClickToHome: (event: InteractionEvent) => void // Note: useRouterをResultModalから呼ぶとnullが返るのでpropsとして受け取る
+  handleCloseClcik: (e: InteractionEvent) => void
 }
 
-const SettingModal = ({
-  x = 0,
-  y = 0,
-  scale = 1,
-  handleClickToHome,
-}: Props) => {
-  const [dragMode, setDragMode] = useState(false)
-  const [pos, setPos] = useState<Position>({ x: x, y: y })
-  const [beforeMousePos, setBeforeMousePos] = useState<Position>({ x: 0, y: 0 })
+const SettingModal = ({ x = 0, y = 0, scale = 1, handleCloseClcik }: Props) => {
+  const [modalPosition, setModalPosition] = useState<Position>({ x: x, y: y })
+  const [isDragging, { mouseDown, mouseMove, mouseUp }] = useDragMe(
+    (position: Position) => {
+      setModalPosition(position)
+    }
+  )
   //toggleの処理
   const [setting, setSetting] = useState<Setting>({
     camera: true,
     drag: true,
   })
-
-  // ドラッグ操作
-  const mouseDown = (event: InteractionEvent) => {
-    const nx = event.data.global.x
-    const ny = event.data.global.y
-    setDragMode(true)
-    setBeforeMousePos({ x: nx, y: ny })
-  }
-
-  const mouseMove = (event: InteractionEvent) => {
-    if (!dragMode) return
-    /* currentTargetがnullのバグが発生したので条件分岐する */
-    if (event.currentTarget === null || event.currentTarget === undefined)
-      return
-    /* クリックした場所から移動した差だけ移動する */
-    /* nx,nyにセットすると、端っこをクリックすると始め瞬間移動するので必要 */
-    const nx = event.data.global.x
-    const ny = event.data.global.y
-    const currentCharacterPosX = event.currentTarget.x
-    const currentCharacterPosY = event.currentTarget.y
-    setPos({
-      x: currentCharacterPosX + (nx - beforeMousePos.x),
-      y: currentCharacterPosY + (ny - beforeMousePos.y),
-    })
-    setBeforeMousePos({ x: nx, y: ny })
-  }
-
-  const mouseUp = (event: InteractionEvent) => {
-    setDragMode(false)
-  }
 
   const handleToggleChange = useCallback(
     (event: InteractionEvent) => {
@@ -107,8 +77,8 @@ const SettingModal = ({
       anchor={0.5}
       image="/static/img/modal.png"
       visible={true}
-      x={pos.x}
-      y={pos.y}
+      x={modalPosition.x}
+      y={modalPosition.y}
       scale={scale}
       interactive={true}
       containsPoint={containsPointClickThrouth}
@@ -123,19 +93,19 @@ const SettingModal = ({
           x={0}
           y={0}
           text="camera"
-          isToggle={setting.camera}
+          isOn={setting.camera}
           handleClick={handleToggleChange}
         />
         <SettingItem
           x={0}
           y={50}
           text="drag"
-          isToggle={setting.drag}
+          isOn={setting.drag}
           handleClick={handleToggleChange}
         />
       </Container>
       <CloseBtn
-        handleClick={handleClickToHome}
+        handleClick={handleCloseClcik}
         x={150}
         y={-175}
         scale={0.4}

@@ -198,8 +198,6 @@ const ResultModal = ({
           />
         )}
       </Container>
-
-      {/* CLOSE BUTTON */}
       <CloseBtn
         handleClick={handleClickCloseBtn}
         x={150}
