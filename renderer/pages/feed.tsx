@@ -10,6 +10,7 @@ import TargetFish from '../components/characters/TargetFish'
 import { GameContext } from '../components/containers/CanvasContext'
 import CuteFish from '../components/items/CuteFish'
 import LifeGauge from '../components/items/LifeGauge'
+import useAudioDidMounted from '../hooks/useAudioDidMounted'
 import HealthPoint from '../utils/HealthPoint'
 import { getRandomInt } from '../utils/common'
 import { shouldFetchFish, updateShopFish } from '../utils/model'
@@ -18,6 +19,7 @@ type ISprite = PixiRef<typeof Sprite>
 
 const Feed = () => {
   const router = useRouter()
+  useAudioDidMounted('/static/sounds/bgm.mp3')
   const { health, plusHealthInStateAndDB } = useContext(GameContext)
   const spriteRef = useRef<ISprite>(null)
   const [targetItemScale, setTargetItemScale] = useState(0.2)

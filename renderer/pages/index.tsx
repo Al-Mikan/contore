@@ -16,11 +16,13 @@ import TitleBar from '../components/items/TitleBar'
 import ReceiveCatModal from '../components/modals/ReceiveCatModal'
 import SettingModal from '../components/modals/SettingModal'
 import ShopModal from '../components/modals/ShopModal'
+import useAudioDidMounted from '../hooks/useAudioDidMounted'
 import { Position } from '../types/character'
 import { getNowYMDhmsStr } from '../utils/common'
 
 const IndexPage = () => {
   const router = useRouter()
+  useAudioDidMounted('/static/sounds/bgm.mp3')
   const { startDate, setStartDateInStateAndDB } = useContext(GameContext)
   const [windowPosition, setWindowPosition] = useState<Position>({
     x: 350,
