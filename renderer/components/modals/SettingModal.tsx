@@ -93,14 +93,14 @@ const SettingModal = ({ x = 0, y = 0, scale = 1, handleCloseClcik }: Props) => {
           x={0}
           y={0}
           text="camera"
-          isToggle={setting.camera}
+          isOn={setting.camera}
           handleClick={handleToggleChange}
         />
         <SettingItem
           x={0}
           y={50}
           text="drag"
-          isToggle={setting.drag}
+          isOn={setting.drag}
           handleClick={handleToggleChange}
         />
       </Container>

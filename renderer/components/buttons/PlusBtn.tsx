@@ -7,21 +7,18 @@ interface Props extends BasicSpriteProps {
   handleClick: (event: InteractionEvent) => void
 }
 
-const Plus = ({ x, y, scale = 1, handleClick }: Props) => {
+const PlusBtn = ({ x, y, scale = 1, handleClick }: Props) => {
   return (
     <Sprite
       image="/static/img/ShopSelectNum/plus.png"
       x={x}
       y={y}
       scale={scale}
-      alpha={0.7}
       interactive={true}
+      buttonMode={true}
       click={handleClick}
-      mouseover={(e) => {
-        e.stopPropagation()
-      }}
     />
   )
 }
 
-export default Plus
+export default PlusBtn
