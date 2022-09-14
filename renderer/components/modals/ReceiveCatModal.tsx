@@ -5,6 +5,7 @@ import { useState } from 'react'
 import useDragMe from '../../hooks/useDragMe'
 import { Position } from '../../types/character'
 import { BasicSpriteProps } from '../../types/sprite'
+import { containsPointClickThrouth } from '../../utils/PixiAPI'
 import CloseBtn from '../buttons/CloseBtn'
 
 interface Props extends BasicSpriteProps {
@@ -33,6 +34,7 @@ const ReceiveCatModal = ({
       y={modalPosition.y}
       scale={scale}
       interactive={true}
+      containsPoint={containsPointClickThrouth}
       mousedown={mouseDown}
       mousemove={mouseMove}
       mouseup={mouseUp}
