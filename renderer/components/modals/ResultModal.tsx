@@ -1,14 +1,14 @@
-import { useState } from 'react'
 import { Container, Sprite, Text } from '@inlet/react-pixi'
 import { InteractionEvent, TextStyle } from 'pixi.js'
+import { useState } from 'react'
 
 import { Position } from '../../types/character'
+import { BasicSpriteProps } from '../../types/sprite'
 import { containsPointClickThrouth } from '../../utils/PixiAPI'
-import Num from '../items/Num'
 import { shouldStrTimeToSecondNum, shouldStrToNum } from '../../utils/common'
 import CloseBtn from '../buttons/CloseBtn'
 import Coin from '../items/Coin'
-import { BasicSpriteProps } from '../../types/sprite'
+import Num from '../items/Num'
 import NumText from '../items/NumText'
 
 interface Props extends BasicSpriteProps {
@@ -198,8 +198,6 @@ const ResultModal = ({
           />
         )}
       </Container>
-
-      {/* CLOSE BUTTON */}
       <CloseBtn
         handleClick={handleClickCloseBtn}
         x={150}

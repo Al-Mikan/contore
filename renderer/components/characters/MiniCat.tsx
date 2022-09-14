@@ -1,21 +1,21 @@
 import {
   AnimatedSprite,
   Container,
-  useTick,
-  Sprite,
   PixiRef,
+  Sprite,
+  useTick,
 } from '@inlet/react-pixi'
-import { useState, MutableRefObject } from 'react'
 import { InteractionEvent } from 'pixi.js'
+import { MutableRefObject, useState } from 'react'
 
-import { containsPoint, containsPointClickThrouth } from '../../utils/PixiAPI'
-import { getRandomInt } from '../../utils/common'
 import {
-  State,
-  Position,
   Border,
   CharacterCondition,
+  Position,
+  State,
 } from '../../types/character'
+import { containsPoint, containsPointClickThrouth } from '../../utils/PixiAPI'
+import { getRandomInt } from '../../utils/common'
 
 type ISprite = PixiRef<typeof Sprite>
 

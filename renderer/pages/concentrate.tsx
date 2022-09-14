@@ -1,22 +1,15 @@
-import { useEffect, useState, useRef } from 'react'
+import { useRouter } from 'next/router'
 import { InteractionEvent } from 'pixi.js'
+import { useContext, useEffect, useRef, useState } from 'react'
 
-import Layout from '../components/containers/Layout'
+import EndBtn from '../components/buttons/EndBtn'
+import MiniCat from '../components/characters/MiniCat'
+import { GameContext } from '../components/containers/CanvasContext'
+import Loading from '../components/items/Loading'
 import Timer from '../components/items/Timer'
 import ResultModal from '../components/modals/ResultModal'
-import MiniCat from '../components/characters/MiniCat'
-import EndBtn from '../components/buttons/EndBtn'
-import { useRouter } from 'next/router'
-import { shouldStrTimeToSecondNum } from '../utils/common'
-import ExperiencePoint from '../utils/ExperiencePoint'
-import Loading from '../components/items/Loading'
-import {
-  shouldFetchCoins,
-  shouldFetchExperience,
-  updateCoreCoin,
-  updateCoreEX,
-} from '../utils/model'
 import CameraHandle from '../utils/camera'
+import { shouldStrTimeToSecondNum } from '../utils/common'
 
 const timeToCoins = (time: string) => {
   // 1分 -> 1枚
@@ -32,6 +25,7 @@ const ConcentratePage = () => {
   let [isLoading, setIsLoading] = useState(true)
   const [minicatScale, setMinicatScale] = useState(0.6)
   let cameraHandleRef = useRef<CameraHandle>(null)
+  const { plusExInStateAndDB, plusCoinInStateAndDB } = useContext(GameContext)
 
   const miniCatBorder = {
     minX: 40,
@@ -64,23 +58,13 @@ const ConcentratePage = () => {
   }
 
   const handleClickOpenModal = (event: InteractionEvent) => {
-    const updateExperience = async () => {
-      const nowEx = await shouldFetchExperience()
-      const ex = new ExperiencePoint(nowEx)
-      ex.add_point(shouldStrTimeToSecondNum(time))
-      await updateCoreEX(ex.experience_point)
-    }
-    const updateCoins = async () => {
-      const nowCoins = await shouldFetchCoins()
-      await updateCoreCoin(nowCoins + timeToCoins(time))
-    }
-
     // カメラを起動しない場合はインスタンスが存在しない
     if (cameraHandleRef.current) {
       cameraHandleRef.current.stop_camera()
     }
-    updateExperience()
-    updateCoins()
+
+    plusExInStateAndDB(shouldStrTimeToSecondNum(time))
+    plusCoinInStateAndDB(timeToCoins(time))
     setResultTime(time)
     setIsOpen(true)
   }
@@ -109,15 +93,11 @@ const ConcentratePage = () => {
   }, [])
 
   if (isLoading) {
-    return (
-      <Layout title="集中画面｜こんとれ！！">
-        <Loading x={1000} y={480} />
-      </Layout>
-    )
+    return <Loading x={1000} y={480} />
   }
 
   return (
-    <Layout title="集中画面 | こんとれ！！">
+    <>
       {isOpen ? (
         // endボタンを推すとモーダル表示
         <ResultModal
@@ -162,7 +142,7 @@ const ConcentratePage = () => {
           />
         </>
       )}
-    </Layout>
+    </>
   )
 }
 

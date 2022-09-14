@@ -1,12 +1,12 @@
-import { Text, Container } from '@inlet/react-pixi'
+import { Container, Text } from '@inlet/react-pixi'
 import { InteractionEvent, TextStyle } from 'pixi.js'
 
 import { BasicSpriteProps } from '../../types/sprite'
-import Toggle from '../items/Toggle'
+import Toggle from '../buttons/original/Toggle'
 
 interface Props extends BasicSpriteProps {
   text: string
-  isToggle: boolean
+  isOn: boolean
   handleClick: (event: InteractionEvent) => void
 }
 
@@ -15,7 +15,7 @@ const SettingItem = ({
   y = 0,
   scale = 1,
   text,
-  isToggle,
+  isOn,
   handleClick,
 }: Props) => {
   return (
@@ -39,7 +39,7 @@ const SettingItem = ({
         x={160}
         y={0}
         scale={0.4}
-        isToggle={isToggle}
+        isOn={isOn}
       ></Toggle>
     </Container>
   )

@@ -1,14 +1,12 @@
-import { Sprite } from '@inlet/react-pixi'
 import { InteractionEvent } from 'pixi.js'
-import { useState } from 'react'
 
-import { containsPoint, containsPointClickThrouth } from '../../utils/PixiAPI'
 import { BasicSpriteProps } from '../../types/sprite'
+import ButtonTemplate from './template/ButtonTemplate'
 
 interface Props extends BasicSpriteProps {
   isClickThrouth?: boolean
-  isZero
-  handleClickFish: (event: InteractionEvent) => void
+  isZero: boolean
+  handleClick: (event: InteractionEvent) => void
 }
 
 const FishBtn = ({
@@ -17,46 +15,29 @@ const FishBtn = ({
   scale = 1,
   isClickThrouth = false,
   isZero = false,
-  handleClickFish,
+  handleClick,
 }: Props) => {
-  const [alpha, setAlpha] = useState(1)
-  const mouseover = () => setAlpha(0.8)
-  const mouseout = () => setAlpha(1)
-
   return (
     <>
-      <Sprite
-        image="/static/img/give-btn.png"
-        x={x}
-        y={y}
-        scale={scale}
-        interactive={true}
-        alpha={alpha}
-        mouseover={mouseover}
-        mouseout={mouseout}
-        containsPoint={
-          isClickThrouth ? containsPointClickThrouth : containsPoint
-        }
-        buttonMode={true}
-        click={handleClickFish}
-        visible={!isZero}
-      />
-      <Sprite
-        image="/static/img/cant-give-btn.png"
-        x={x}
-        y={y}
-        scale={scale}
-        interactive={true}
-        alpha={alpha}
-        mouseover={mouseover}
-        mouseout={mouseout}
-        containsPoint={
-          isClickThrouth ? containsPointClickThrouth : containsPoint
-        }
-        buttonMode={true}
-        click={handleClickFish}
-        visible={isZero}
-      />
+      {isZero ? (
+        <ButtonTemplate
+          image="/static/img/cant-give-btn.png"
+          x={x}
+          y={y}
+          scale={scale}
+          handleClick={handleClick}
+          isClickThrouth={isClickThrouth}
+        />
+      ) : (
+        <ButtonTemplate
+          image="/static/img/give-btn.png"
+          x={x}
+          y={y}
+          scale={scale}
+          handleClick={handleClick}
+          isClickThrouth={isClickThrouth}
+        />
+      )}
     </>
   )
 }

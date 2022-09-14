@@ -1,14 +1,14 @@
-import { Sprite, useTick, PixiRef } from '@inlet/react-pixi'
-import { useState, forwardRef } from 'react'
+import { PixiRef, Sprite, useTick } from '@inlet/react-pixi'
 import { InteractionEvent } from 'pixi.js'
+import { forwardRef, useState } from 'react'
 
-import { containsPoint, containsPointClickThrouth } from '../../utils/PixiAPI'
 import {
-  State,
-  Position,
   Border,
   CharacterCondition,
+  Position,
+  State,
 } from '../../types/character'
+import { containsPoint, containsPointClickThrouth } from '../../utils/PixiAPI'
 
 type ISprite = PixiRef<typeof Sprite>
 

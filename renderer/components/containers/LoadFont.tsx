@@ -1,7 +1,7 @@
 import { Container, useApp } from '@inlet/react-pixi'
-import { ReactNode, useEffect, useState } from 'react'
-import { Loader } from 'pixi.js'
 import { WebfontLoaderPlugin } from 'pixi-webfont-loader'
+import { Loader } from 'pixi.js'
+import { ReactNode, useEffect, useState } from 'react'
 
 type Props = {
   children: ReactNode
@@ -12,11 +12,15 @@ const LoadFont = ({ children }: Props) => {
   const [isFontLoaded, setIsFontLoaded] = useState(false)
   useEffect(() => {
     Loader.registerPlugin(WebfontLoaderPlugin)
-    app.loader.add({
+    Loader.shared.add({
       name: 'neue-pixel-sans',
       url: '/static/fonts/NeuePixelSans.ttf',
     })
-    app.loader.load(() => {
+    Loader.shared.add({
+      name: 'dot-gothic16',
+      url: '/static/fonts/DotGothic16.ttf',
+    })
+    Loader.shared.load(() => {
       setIsFontLoaded(true)
     })
   }, [])

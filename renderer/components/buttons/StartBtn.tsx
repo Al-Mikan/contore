@@ -1,13 +1,11 @@
-import { Sprite } from '@inlet/react-pixi'
 import { InteractionEvent } from 'pixi.js'
-import { useState } from 'react'
 
-import { containsPoint, containsPointClickThrouth } from '../../utils/PixiAPI'
 import { BasicSpriteProps } from '../../types/sprite'
+import ButtonTemplate from './template/ButtonTemplate'
 
 interface Props extends BasicSpriteProps {
   isClickThrouth?: boolean
-  handleStartClick: (event: InteractionEvent) => void
+  handleClick: (event: InteractionEvent) => void
 }
 
 const StartBtn = ({
@@ -15,25 +13,16 @@ const StartBtn = ({
   y = 0,
   scale = 1,
   isClickThrouth = false,
-  handleStartClick,
+  handleClick,
 }: Props) => {
-  const [alpha, setAlpha] = useState(1)
-  const mouseover = () => setAlpha(0.8)
-  const mouseout = () => setAlpha(1)
-
   return (
-    <Sprite
+    <ButtonTemplate
       image="/static/img/start-btn.png"
       x={x}
       y={y}
       scale={scale}
-      interactive={true}
-      alpha={alpha}
-      click={handleStartClick}
-      mouseover={mouseover}
-      mouseout={mouseout}
-      containsPoint={isClickThrouth ? containsPointClickThrouth : containsPoint}
-      buttonMode={true}
+      handleClick={handleClick}
+      isClickThrouth={isClickThrouth}
     />
   )
 }

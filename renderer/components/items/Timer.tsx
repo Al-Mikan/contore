@@ -1,9 +1,9 @@
-import { useEffect } from 'react'
 import { Container, Sprite } from '@inlet/react-pixi'
+import { useEffect } from 'react'
 
-import WhiteNum from './WhiteNum'
-import { shouldStrToNum } from '../../utils/common'
 import { BasicSpriteProps } from '../../types/sprite'
+import { shouldStrToNum } from '../../utils/common'
+import WhiteNum from './WhiteNum'
 
 interface Props extends BasicSpriteProps {
   time: String
