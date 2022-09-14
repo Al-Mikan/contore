@@ -11,7 +11,7 @@ const useAudioDidMounted = (soundPath: string) => {
     // 初回読み込み。srcを変えると最初からスタートになる
     if (audioElement.paused && audioElement.currentTime === 0) {
       audioElement.src = soundPath
-      audioElement.volume = 0.2
+      audioElement.volume = 0.02
       audioElement.loop = true
     }
 
