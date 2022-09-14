@@ -13,21 +13,19 @@ import LifeGauge from '../components/items/LifeGauge'
 import useAudioDidMounted from '../hooks/useAudioDidMounted'
 import HealthPoint from '../utils/HealthPoint'
 import { getRandomInt } from '../utils/common'
-import { shouldFetchFish, updateShopFish } from '../utils/model'
 
 type ISprite = PixiRef<typeof Sprite>
 
 const Feed = () => {
   const router = useRouter()
   useAudioDidMounted('/static/sounds/bgm.mp3')
-  const { health, plusHealthInStateAndDB } = useContext(GameContext)
+  const { health, plusHealthInStateAndDB, fish, plusFishInStateAndDB } =
+    useContext(GameContext)
   const spriteRef = useRef<ISprite>(null)
   const [targetItemScale, setTargetItemScale] = useState(0.2)
   const [targetVisible, setTargetVisible] = useState(false)
   const [minicatScale, setMinicatScale] = useState(0.6)
-  const [fish, setFish] = useState(0)
   const [spriteAnimationIndex, setSpriteAnimationIndex] = useState(0)
-  const [isEmpty, setIsEmpty] = useState(false)
   const miniCatBorder = {
     minX: 40,
     maxX: 1900,
@@ -44,27 +42,14 @@ const Feed = () => {
   }
   const handleClickFish = async (event: InteractionEvent) => {
     if (targetVisible) return
-    if (fish <= 0) {
-      setIsEmpty(true)
-      return
-    } else if (fish === 1) {
-      setIsEmpty(true)
-    }
+    if (fish <= 0) return
 
-    await updateShopFish(fish - 1)
-    setFish((prev) => prev - 1)
+    await plusFishInStateAndDB(-1)
     setTargetVisible(true)
     setTargetItemScale(0.3)
   }
 
   useEffect(() => {
-    const stateInitFish = async () => {
-      const fishNumber = await shouldFetchFish()
-      if (fishNumber <= 0) setIsEmpty(true)
-      setFish(fishNumber)
-    }
-
-    stateInitFish()
     window.electronAPI.setAlwaysOnTop(true)
 
     return () => {
@@ -117,7 +102,7 @@ const Feed = () => {
         x={1776}
         y={950}
         scale={0.5}
-        isZero={isEmpty}
+        isZero={fish <= 0}
         handleClick={handleClickFish}
       />
       <CuteFish x={1795} y={928} scale={0.2} />
@@ -126,7 +111,7 @@ const Feed = () => {
         x={1835}
         y={910}
         style={
-          isEmpty
+          fish <= 0
             ? new TextStyle({
                 fontSize: 25,
                 fontWeight: '700',
